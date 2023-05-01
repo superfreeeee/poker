@@ -1,0 +1,40 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "eslint-plugin-import",
+    "eslint-plugin-react",
+    "eslint-plugin-react-hooks"
+  ],
+  "extends": [
+    // js
+    "eslint:recommended",
+    // "eslint-config-airbnb", // kind of too strict
+
+    // ts
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+
+    // react
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": "18"
+    }
+  },
+  "rules": {
+    "no-console": 1
+  },
+  "ignorePatterns": ["node_modules/**", "webpack.config.js"]
+}
