@@ -1,7 +1,6 @@
 const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HandlebarsPlugin = require('handlebars-webpack-plugin');
 
 const IS_PROD = process.env.NODE_ENV === 'production';
 
