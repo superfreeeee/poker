@@ -28,11 +28,15 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
-    "stylelint": "^15.6.0"
+    "stylelint": "^15.6.0",
+    "stylelint-config-standard-scss": "^9.0.0"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint ."
+      "eslint"
+    ],
+    "*.{css,scss,less}": [
+      "stylelint"
     ]
   }
 }
