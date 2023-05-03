@@ -27,6 +27,11 @@
   "settings": {
     "react": {
       "version": "18"
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx", "json"]
+      }
     }
   },
   "rules": {
