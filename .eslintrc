@@ -11,15 +11,11 @@
     "eslint-plugin-react-hooks"
   ],
   "extends": [
-    // js
     "eslint:recommended",
     // "eslint-config-airbnb", // kind of too strict
-
-    // ts
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-
-    // react
+    "plugin:import/recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended"
   ],
