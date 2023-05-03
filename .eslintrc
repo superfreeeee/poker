@@ -36,5 +36,9 @@
   "rules": {
     "no-console": 1
   },
-  "ignorePatterns": ["node_modules/**", "webpack.config.js"]
+  "ignorePatterns": [
+    "node_modules/**",
+    "webpack.config.js",
+    "commitlint.config.js"
+  ]
 }
