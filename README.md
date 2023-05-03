@@ -29,3 +29,4 @@ pnpm build:pc
   - `commit-msg` 阶段配置 `commitlint` 检测
     - commit message 规则应符合 `<type>: <message>`
     - type 分类详见 `commitlint.config.js` 配置
+- `main` 分支开启了保护分支，需要在 github 上提交 pull request 进行合并
