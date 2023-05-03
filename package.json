@@ -8,7 +8,7 @@
     "start:pc": "pnpm --filter @youxian/poker-pc start",
     "build:pc": "pnpm --filter @youxian/poker-pc build",
     "build:pc:dev": "pnpm --filter @youxian/poker-pc build:dev",
-    "test": "echo 'no tests right now'",
+    "test": "echo '[custom] no tests'",
     "lint": "eslint .",
     "lint:quiet": "eslint . --quiet",
     "reinstall": "make reinstall",
