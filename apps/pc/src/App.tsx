@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styles from './index.module.scss';
 import './others';
 
@@ -8,6 +8,13 @@ const App = () => {
   useEffect(() => {
     console.log('state', state);
   }, []);
+
+  const name = 'suprefree';
+  const fullName = `__${name}`;
+
+  const greeting = useCallback(() => {
+    console.log(`fullName = ${fullName}`);
+  }, [fullName]);
 
   return (
     <div className={styles.container}>

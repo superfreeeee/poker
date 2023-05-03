@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prepare": "husky install",
     "start:pc": "pnpm --filter @youxian/poker-pc start",
     "build:pc": "pnpm --filter @youxian/poker-pc build",
     "build:pc:dev": "pnpm --filter @youxian/poker-pc build:dev",
     "lint": "eslint .",
+    "lint:quiet": "eslint . --quiet",
     "reinstall": "make reinstall",
     "clean:deps": "make clean-deps",
     "clean:build": "make clean-build"
@@ -22,6 +24,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.3",
     "stylelint": "^15.6.0"
   }
 }
