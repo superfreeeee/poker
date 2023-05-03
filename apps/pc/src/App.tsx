@@ -10,7 +10,11 @@ const App = () => {
   }, []);
 
   const name = 'suprefree';
-  const fullName = `__${name}`;
+  let fullName = `__${name}`;
+
+  if (name) {
+    fullName = `${name}__`;
+  }
 
   const greeting = useCallback(() => {
     console.log(`fullName = ${fullName}`);
