@@ -39,5 +39,5 @@
     "no-empty-pattern": 1,
     "@typescript-eslint/no-empty-interface": 1
   },
-  "ignorePatterns": ["node_modules/**", "webpack.config.js", "commitlint.config.js"]
+  "ignorePatterns": ["node_modules/**", "dist", "webpack.config.js", "commitlint.config.js"]
 }
