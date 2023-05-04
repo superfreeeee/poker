@@ -7,8 +7,7 @@
     "start": "NODE_ENV=development webpack serve --progress",
     "build:dev": "NODE_ENV=development webpack",
     "build": "NODE_ENV=production webpack",
-    "test": "jest",
-    "test:cov": "jest --coverage"
+    "test": "jest --maxWorkers=20% --coverage"
   },
   "keywords": [],
   "author": "suprefree",

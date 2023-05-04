@@ -10,7 +10,6 @@
     "build:pc": "pnpm --filter @youxian/poker-pc build",
     "build:pc:dev": "pnpm --filter @youxian/poker-pc build:dev",
     "test": "pnpm --filter @youxian/poker-pc test",
-    "test:cov": "pnpm --filter @youxian/poker-pc test:cov",
     "lint": "eslint .",
     "lint:quiet": "eslint . --quiet",
     "reinstall": "make reinstall",
