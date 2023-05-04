@@ -1,20 +1,23 @@
+import { Button } from 'antd';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLoginCheck } from '../../hooks/useLoginCheck';
-import { useCurrentUserAtom } from '../../models/user';
+import { useCurrentUser } from '../../models/user';
 import styles from './index.module.scss';
 
 const Home = () => {
   useLoginCheck();
 
-  const [currentUser, setCurrentUser] = useCurrentUserAtom();
+  const currentUser = useCurrentUser();
+  const navigate = useNavigate();
 
   return (
     <div>
       <div className={styles.header}>
         <h1>Home</h1>
-        <button className={styles.switchUser} onClick={() => setCurrentUser()}>
+        <Button type="primary" danger className={styles.switchUser} onClick={() => navigate('/login')}>
           Switch User
-        </button>
+        </Button>
       </div>
       <div>currentUser: {JSON.stringify(currentUser)}</div>
     </div>

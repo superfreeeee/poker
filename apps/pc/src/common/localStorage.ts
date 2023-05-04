@@ -38,8 +38,12 @@ export const getItem = <K extends ELocalStorageKey>(key: K): ILocalStorage[K] | 
  */
 export const setItem = <K extends ELocalStorageKey>(key: K, data?: ILocalStorage[K]): void => {
   try {
-    const content = JSON.stringify(data);
-    localStorage.setItem(key, content);
+    if (data === undefined) {
+      localStorage.removeItem(key);
+    } else {
+      const content = JSON.stringify(data);
+      localStorage.setItem(key, content);
+    }
   } catch {
     logger.error('setItem failed', { key, data });
   }

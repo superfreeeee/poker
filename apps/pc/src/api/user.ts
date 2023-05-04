@@ -1,4 +1,5 @@
 import { createLogger } from '../common/commonLogger';
+import { ELocalStorageKey, getItem, setItem } from '../common/localStorage';
 import { IUser } from '../models/user';
 import { Response } from './interface';
 
@@ -9,12 +10,21 @@ interface ILoginParams {
   name: string;
 }
 
-export const mockloginAPI = (params: ILoginParams) => {
+const userList = getItem(ELocalStorageKey.UserList) ?? [];
+
+export const mockloginAPI = (params: ILoginParams): Promise<Response<IUser>> => {
   userApiLogger.log('mockloginAPI:', params);
+
+  const existUser = userList.find((user) => user.name === params.name);
+  const data = existUser ? { ...existUser } : { ...params };
+  if (!existUser) {
+    userList.push(data);
+    setItem(ELocalStorageKey.UserList, userList);
+  }
 
   return Promise.resolve({
     code: 200,
-    data: { ...params },
+    data,
   } as Response<IUser>);
 };
 
