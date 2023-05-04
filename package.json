@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prepare": "husky install",
+    "start": "pnpm start:pc",
     "start:pc": "pnpm --filter @youxian/poker-pc start",
     "build:pc": "pnpm --filter @youxian/poker-pc build",
     "build:pc:dev": "pnpm --filter @youxian/poker-pc build:dev",

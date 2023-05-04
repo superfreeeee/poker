@@ -1,11 +1,19 @@
 import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
+import LogIn from './pages/LogIn';
+import Redirect from './components/Redirect';
 import styles from './index.module.scss';
 
 const App = () => {
   return (
-    <div className={styles.container}>
-      <h1>Poker PC</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<LogIn />} />
+        <Route path="*" element={<Redirect path="/" />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
