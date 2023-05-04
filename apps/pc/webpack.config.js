@@ -82,6 +82,11 @@ const config = {
     }),
   ],
 
+  externals: {
+    react: 'React',
+    'react-dom': 'ReactDOM',
+  },
+
   optimization: {
     usedExports: true,
     splitChunks: {},

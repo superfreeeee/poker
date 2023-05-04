@@ -13,8 +13,6 @@ interface ILoginParams {
 const userList = getItem(ELocalStorageKey.UserList) ?? [];
 
 export const mockloginAPI = (params: ILoginParams): Promise<Response<IUser>> => {
-  userApiLogger.log('mockloginAPI:', params);
-
   const existUser = userList.find((user) => user.name === params.name);
   const data = existUser ? { ...existUser } : { ...params };
   if (!existUser) {
@@ -22,6 +20,7 @@ export const mockloginAPI = (params: ILoginParams): Promise<Response<IUser>> => 
     setItem(ELocalStorageKey.UserList, userList);
   }
 
+  userApiLogger.log('mockloginAPI:', data);
   return Promise.resolve({
     code: 200,
     data,

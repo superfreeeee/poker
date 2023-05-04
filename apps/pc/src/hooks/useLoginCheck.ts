@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCurrentUser } from '../models/user';
+import { ERouteName, getPath } from '../routes';
 
 export const useLoginCheck = () => {
   const currentUser = useCurrentUser();
@@ -9,7 +10,7 @@ export const useLoginCheck = () => {
 
   useEffect(() => {
     if (!currentUser) {
-      navigate('/login');
+      navigate(getPath(ERouteName.Login));
     }
   }, [currentUser, navigate]);
 };

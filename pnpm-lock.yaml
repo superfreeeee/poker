@@ -46,6 +46,9 @@ importers:
       antd:
         specifier: ^5.4.6
         version: 5.4.6(react-dom@18.2.0)(react@18.2.0)
+      classnames:
+        specifier: ^2.3.2
+        version: 2.3.2
       jotai:
         specifier: ^2.0.4
         version: 2.0.4(react@18.2.0)
