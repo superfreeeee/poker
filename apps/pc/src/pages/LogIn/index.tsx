@@ -6,6 +6,7 @@ import { useInput } from '../../hooks/useInput';
 import { useCurrentUserAtom } from '../../models/user';
 import { loginService } from '../../services/user';
 import styles from './index.module.scss';
+import { ERouteName, getPath } from '../../routes';
 
 const loginPageLogger = createLogger('pages/LogIn');
 
@@ -22,7 +23,7 @@ const LogIn = () => {
     const user = await loginService(name);
     if (user) {
       setCurrentUser(user);
-      navigate('/');
+      navigate(getPath(ERouteName.Home));
     }
   };
 

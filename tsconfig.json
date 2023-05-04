@@ -11,5 +11,5 @@
     "noImplicitAny": false
   },
   "include": ["apps/**/*", "packages/**/*"],
-  "exclude": ["node_modules", "**/webpack.config.js"]
+  "exclude": ["node_modules", "apps/**/dist", "packages/**/lib", "**/webpack.config.js"]
 }
