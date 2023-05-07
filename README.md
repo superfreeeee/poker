@@ -27,7 +27,7 @@ pnpm build:pc
     - 样式使用 `stylelint` 检查
     - 暂不启用 `--fix` 的自动修正或是 `prettier --fix` 的自动格式化
   - `commit-msg` 阶段配置 `commitlint` 检测
-    - commit message 规则应符合 `<type>: <message>`
+    - feat/
     - type 分类详见 `commitlint.config.js` 配置
 - `main` 分支开启了保护分支，需要在 github 上提交 pull request 进行合并
 
