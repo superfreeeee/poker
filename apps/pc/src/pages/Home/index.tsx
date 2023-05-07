@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { useLoginCheck } from '../../hooks/useLoginCheck';
 import { useCurrentUser } from '../../models/user';
-import { ERouteName, getPath } from '../../routes';
+import { ERouteName } from '../../routes/constants';
+import { getPath } from '../../routes/utils';
 import styles from './index.module.scss';
 
 const Home = () => {

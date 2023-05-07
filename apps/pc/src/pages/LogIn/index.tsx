@@ -5,8 +5,9 @@ import { createLogger } from '../../common/commonLogger';
 import { useInput } from '../../hooks/useInput';
 import { useCurrentUserAtom } from '../../models/user';
 import { loginService } from '../../services/user';
+import { ERouteName } from '../../routes/constants';
+import { getPath } from '../../routes/utils';
 import styles from './index.module.scss';
-import { ERouteName, getPath } from '../../routes';
 
 const loginPageLogger = createLogger('pages/LogIn');
 

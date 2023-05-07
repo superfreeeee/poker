@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { routes } from './routes';
-import styles from './index.module.scss';
 
 const App = () => {
   return (
