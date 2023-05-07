@@ -1,4 +1,4 @@
-import { IUser } from '../models/user';
+import type { IUser } from '../models/user';
 import { createLogger } from './commonLogger';
 
 const logger = createLogger('common/localStorage');
