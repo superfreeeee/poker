@@ -16,6 +16,7 @@
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:import/recommended",
+    "plugin:import/typescript",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended"
   ],
@@ -37,7 +38,13 @@
   "rules": {
     "no-console": 1,
     "no-empty-pattern": 1,
-    "@typescript-eslint/no-empty-interface": 1
+    "@typescript-eslint/no-unused-vars": 2,
+    "@typescript-eslint/no-empty-interface": 1,
+    "import/no-duplicates": 2,
+    "import/no-unresolved": 2,
+    "import/no-self-import": 2,
+    "import/no-cycle": 2,
+    "import/order": 2
   },
   "ignorePatterns": ["node_modules/**", "dist", "webpack.config.js", "commitlint.config.js"]
 }
