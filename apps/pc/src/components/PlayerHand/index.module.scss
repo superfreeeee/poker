@@ -1,0 +1,62 @@
+.container {
+  border-radius: 10px;
+  background-color: white;
+  width: 20vw;
+  height: 11vh;
+  padding: 1vw;
+  margin-bottom: 2vh;
+}
+
+.firstLine {
+  display: flex;
+  justify-content: space-around;
+}
+
+.leftWrap {
+  display: flex;
+}
+
+.inputUnderLine {
+  border-bottom: 1px solid #cdc8c8;
+}
+
+.secondLine {
+  margin-top: 2vh;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.inputDecorate {
+  border-radius: 10px;
+  border: 2px solid #cdc8c8;
+  width: 10vw;
+  height: 4vh;
+
+  input {
+    margin-left: 1vw;
+  }
+}
+
+.buttonWrap {
+  border-radius: 20px;
+  border: 2px solid #cdc8c8;
+  width: 5vw;
+  height: 4vh;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+
+  .svg {
+    padding-top: 1vh;
+  }
+
+  .btnSplitLine {
+    width: 1.8vw;
+    border-right: 1px solid #cdc8c8;
+  }
+}
+
+.btnBG {
+  background-color: #cdc8c8;
+}

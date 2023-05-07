@@ -1,0 +1,91 @@
+.container {
+  border-radius: 10px;
+  border: 0;
+  background-color: whitesmoke;
+  width: 25vw;
+  margin-left: 10vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 3vh;
+}
+
+.title {
+  background-color: #a1e6b0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+
+  .leftWrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: start;
+    padding-left: 1vw;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+  }
+
+  .sumData {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    gap: 1vh;
+    padding-right: 1vw;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+  }
+}
+
+.inputContainer {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+
+  .inputHand {
+    border-bottom: 1px solid;
+    width: 4vw;
+    font-size: 10px;
+  }
+}
+
+.iconMargin {
+  margin-right: 0.5vw;
+}
+
+.amountSum {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: large;
+}
+
+.playerList {
+  margin-top: 3vh;
+  max-height: 50vh;
+  overflow: scroll;
+}
+
+.addBtn {
+  width: 11vw;
+  height: 4vh;
+  border-radius: 10px;
+
+  .btnSvg {
+    color: #a1e6b0;
+  }
+}
+
+.nextBtn {
+  margin-left: 2vw;
+  height: 4vh;
+  background-color: #a1e6b0;
+  border-radius: 10px;
+
+  :where(.css-dev-only-do-not-override-yp8pcc).ant-btn-default:not(:disabled):active {
+    color: #a1e6b0 !important;
+    border-color: #a1e6b0 !important;
+  }
+}
