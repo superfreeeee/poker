@@ -32,7 +32,8 @@ const Home = () => {
         <div>name: {currentUser?.name}</div>
         <div style={{ marginTop: 12 }}>
           <h3>Tabs</h3>
-          <Button size="large" onClick={() => navigate(getPath(ERouteName.BuyIn))}>
+          {/* <Button size="large" onClick={() => navigate(getPath(ERouteName.BuyIn))}> */}
+          <Button size="large" onClick={() => navigate('/buyin/prepare')}>
             Buy in
           </Button>
         </div>

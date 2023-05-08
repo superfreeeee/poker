@@ -16,6 +16,7 @@ import {
   useAmountPerHand,
   useBuyInPlayers,
   defaultBuyIn,
+  // useCurrentBuyInData,
 } from '../../../../models/buyIn';
 import { ERouteName } from '../../../../routes/constants';
 import { getPath } from '../../../../routes/utils';
@@ -37,6 +38,12 @@ const calSumData = (details: BuyInPlayer, amoutPerHand: number): ISumData => {
 };
 
 const WaitState = () => {
+  // const {
+  //   currentBuyInData: { amountPerhand, players: buyInPlayers },
+  //   sumData,
+  //   addPlayer,
+  // } = useCurrentBuyInData();
+
   const [amountPerHand, setAmoutPerHand] = useAmountPerHand();
   const [buyInPlayers, setBuyInPlayers] = useBuyInPlayers();
   const sumData = calSumData(buyInPlayers, amountPerHand);
@@ -96,14 +103,17 @@ const WaitState = () => {
             <Button
               className={styles.nextBtn}
               icon={<BackwardFilled className={styles.btnSvg} />}
-              onClick={() => navigate(getPath(ERouteName.BuyInEdit))}
+              // onClick={() => navigate(getPath(ERouteName.BuyInEdit))}
+              onClick={() => navigate('/buyin/prepare')}
             >
               Reset Setting
             </Button>
           </div>
         </div>
         <div>
-          <Button className={ownStyles.nextBtn}> Enter Settlement Stage</Button>
+          <Button className={ownStyles.nextBtn} onClick={() => navigate('/buyin/settle')}>
+            Enter Settlement Stage
+          </Button>
         </div>
       </div>
     </div>

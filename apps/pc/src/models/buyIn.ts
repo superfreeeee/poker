@@ -1,11 +1,68 @@
 import { atom, useAtom, useAtomValue } from 'jotai';
 import { nanoid } from 'nanoid';
+import { useMemo } from 'react';
+
+export interface IBuyInData {
+  amountPerhand: number;
+  players: IPlayer[];
+}
+
+export const defaultBuyInData: IBuyInData = {
+  amountPerhand: 0,
+  players: [],
+};
+
+const currentBuyInDataAtom = atom(defaultBuyInData);
+
+export const useCurrentBuyInData = () => {
+  const [currentBuyInData, setCurrentBuyInData] = useAtom(currentBuyInDataAtom);
+
+  const sumData = useMemo(() => {
+    return calcSumData(currentBuyInData);
+  }, [currentBuyInData]);
+
+  const addPlayer = () => {
+    setCurrentBuyInData({
+      ...currentBuyInData,
+      players: [
+        ...currentBuyInData.players,
+        {
+          id: nanoid(),
+          name: '',
+          hands: 1,
+          rest: 0,
+        },
+      ],
+    });
+  };
+
+  return {
+    currentBuyInData,
+    sumData,
+    addPlayer,
+  };
+};
+
+/**
+ * 计算 BuyIn 面板导出量
+ * @param param0
+ * @returns
+ */
+const calcSumData = ({ amountPerhand, players }: IBuyInData): ISumData => {
+  const handSum = players.reduce((sum, player) => sum + player.hands, 0);
+  const sumData: ISumData = {
+    playerSum: players.length,
+    handSum: handSum,
+    amountSum: handSum * amountPerhand,
+  };
+  return sumData;
+};
 
 export interface IPlayer {
   id: string;
   name: string;
-  hands: number;
-  rest:number;
+  hands: number; // 买入手数
+  rest: number; // 剩余筹码
 }
 
 export interface ISumData {
@@ -27,7 +84,7 @@ export const defaultBuyIn: BuyInPlayer = [
     id: '12345678',
     name: 'hello', //这里还没加入目前用户名
     hands: 1,
-    rest:0
+    rest: 0,
   },
 ];
 const buyInPlayersAtom = atom(defaultBuyIn);
@@ -38,9 +95,9 @@ export const addPlayer = (players: BuyInPlayer): BuyInPlayer => {
   const newPlayerList: BuyInPlayer = Array.from(players);
   const newPlayer: IPlayer = {
     id: nanoid(),
-    name: "",
+    name: '',
     hands: 1,
-    rest:0
+    rest: 0,
   };
   newPlayerList.push(newPlayer);
   return newPlayerList;
@@ -73,4 +130,3 @@ export const changeHandPlayer = (players: BuyInPlayer, id: string, hand: number)
   });
   return newPlayerList;
 };
-
