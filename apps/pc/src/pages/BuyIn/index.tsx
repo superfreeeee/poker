@@ -1,13 +1,18 @@
 import React, { FC } from 'react';
-import InitialState from './components/InitialState';
+import { Outlet } from 'react-router-dom';
+import { IBuyInData } from '../../models/buyIn';
+// import InitialState from './components/InitialState';
 
-interface IBuyInProps {}
+interface IBuyInProps {
+  data?: IBuyInData;
+}
 
 const BuyIn: FC<IBuyInProps> = () => {
   return (
     <div>
       <h1>Buy-in page</h1>
-      <InitialState></InitialState>
+      {/* <InitialState></InitialState> */}
+      <Outlet />
     </div>
   );
 };
