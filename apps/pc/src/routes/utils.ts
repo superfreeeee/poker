@@ -14,6 +14,5 @@ export const getPath = (name: ERouteName) => {
     routerLogger.warn(`unknown route ${name}, redirect to ${path}`);
     return path;
   }
-
   return path;
 };

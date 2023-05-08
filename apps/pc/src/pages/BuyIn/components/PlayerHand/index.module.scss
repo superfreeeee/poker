@@ -1,15 +1,6 @@
-.container {
-  border-radius: 10px;
-  background-color: white;
-  width: 20vw;
-  height: 11vh;
-  padding: 1vw;
-  margin-bottom: 2vh;
-}
-
 .firstLine {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .leftWrap {
@@ -23,7 +14,7 @@
 .secondLine {
   margin-top: 2vh;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 }
 

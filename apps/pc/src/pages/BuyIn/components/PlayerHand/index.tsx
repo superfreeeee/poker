@@ -1,7 +1,5 @@
-import React from 'react';
-import { ChangeEvent } from 'react';
-import { IPlayer } from '../../models/buyIn';
-import { Button, Input, Radio } from 'antd';
+import React, { FC, ChangeEvent } from 'react';
+import { Button, Input } from 'antd';
 import {
   DeleteOutlined,
   UserOutlined,
@@ -9,23 +7,21 @@ import {
   PlusOutlined,
   MinusOutlined,
 } from '@ant-design/icons';
-import { useInput } from '../../hooks/useInput';
+import { IPlayer } from '../../../../models/buyIn';
 import styles from './index.module.scss';
-import { isNumber } from '../../utils/type';
 
-interface IPlayerHand {
+interface IPlayerHandProps {
   player: IPlayer;
   remove: (id: string) => void;
   changeName: (id: string, name: string) => void;
   changeHand: (id: string, hand: number) => void;
 }
 
-const PlayerHand = (params: IPlayerHand) => {
-  const { id, name, hands } = params.player;
-  // const [inputName, setInputName] = useInput(name);
+const PlayerHand: FC<IPlayerHandProps> = (props) => {
+  const { id, name, hands } = props.player;
 
   return (
-    <div className={styles.container}>
+    <>
       <div className={styles.firstLine}>
         <div className={styles.leftWrap}>
           <Button shape="circle" icon={<UserOutlined />} className={styles.btnBG} />
@@ -39,7 +35,7 @@ const PlayerHand = (params: IPlayerHand) => {
               defaultValue={name}
               bordered={false}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                params.changeName(id, e.target.value);
+                props.changeName(id, e.target.value);
               }}
             />
           </div>
@@ -49,7 +45,7 @@ const PlayerHand = (params: IPlayerHand) => {
           icon={<DeleteOutlined />}
           className={styles.btnBG}
           onClick={() => {
-            params.remove(id);
+            props.remove(id);
           }}
         />
       </div>
@@ -57,6 +53,7 @@ const PlayerHand = (params: IPlayerHand) => {
         <Input
           className={styles.inputDecorate}
           defaultValue={hands}
+          value={hands}
           type="number"
           prefix={<RedEnvelopeOutlined />}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -64,28 +61,28 @@ const PlayerHand = (params: IPlayerHand) => {
             //   params.changeHand(id, e.target.value);
             // }
             const num = Number(e.target.value);
-            params.changeHand(id,num);
+            props.changeHand(id, num);
           }}
         />
         <div className={styles.buttonWrap}>
           <div
             className={styles.btnSplitLine}
             onClick={() => {
-              params.changeHand(id, hands-1);
+              props.changeHand(id, hands - 1);
             }}
           >
             <MinusOutlined />
           </div>
           <div
             onClick={() => {
-              params.changeHand(id, hands+1)
+              props.changeHand(id, hands + 1);
             }}
           >
             <PlusOutlined />
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 export default PlayerHand;

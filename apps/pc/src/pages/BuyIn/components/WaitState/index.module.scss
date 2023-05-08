@@ -1,0 +1,21 @@
+.buttonList {
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+  justify-content: center;
+  align-items: stretch;
+  width: 50%;
+}
+
+.twoBtnContainer{
+    display: flex;
+    justify-content:space-between;
+
+}
+
+.nextBtn {
+  border-radius: 10px;
+  background-color: #a1e6b0;
+  height: 4vh;
+  width: 100%;
+}
