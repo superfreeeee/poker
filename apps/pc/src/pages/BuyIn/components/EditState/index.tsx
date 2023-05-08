@@ -1,4 +1,4 @@
-import React, { useMemo, ChangeEvent, useState } from 'react';
+import React, { useMemo, ChangeEvent, useState, FC } from 'react';
 import { Input, Button } from 'antd';
 import {
   DownCircleFilled,
@@ -7,7 +7,7 @@ import {
   SmileOutlined,
   TransactionOutlined,
 } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import PlayerHand from '../PlayerHand';
 import {
   IPlayer,
@@ -20,8 +20,8 @@ import {
   useBuyInPlayers,
   ISumData,
 } from '../../../../models/buyIn';
-import { ERouteName } from '../../../../routes/constants';
-import { getPath } from '../../../../routes/utils';
+// import { ERouteName } from '../../../../routes/constants';
+// import { getPath } from '../../../../routes/utils';
 import styles from '../InitialState/index.module.scss';
 import ownStyles from './index.module.scss';
 
@@ -38,7 +38,12 @@ const calSumData = (details: BuyInPlayer, amoutPerHand: number): ISumData => {
   return sumData;
 };
 
-const EditState = () => {
+interface IEditStateProps {
+  onConfirm?: () => void;
+  onCancel?: () => void;
+}
+
+const EditState: FC<IEditStateProps> = ({ onConfirm, onCancel }) => {
   const [amountPerHand, setAmountPerHand] = useAmountPerHand();
   const [buyInPlayers, setBuyInPlayers] = useBuyInPlayers();
   const [editAmountPerHand, setEditAmountPerHand] = useState(amountPerHand);
@@ -47,7 +52,7 @@ const EditState = () => {
   const sumData = useMemo(() => {
     return calSumData(editBuyInPlayers, editAmountPerHand);
   }, [editAmountPerHand, editBuyInPlayers]);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <div className={styles.container}>
@@ -126,6 +131,7 @@ const EditState = () => {
                 setBuyInPlayers(editBuyInPlayers);
                 setAmountPerHand(editAmountPerHand);
                 // navigate(getPath(ERouteName.BuyInWait))
+                onConfirm?.();
               }}
             >
               Confirm Change
@@ -134,7 +140,10 @@ const EditState = () => {
           <div>
             <Button
               className={styles.nextBtn}
-              onClick={() => navigate(getPath(ERouteName.BuyInWait))}
+              // onClick={() => navigate(getPath(ERouteName.BuyInWait))}
+              onClick={() => {
+                onCancel?.();
+              }}
             >
               Cancel Change
             </Button>
