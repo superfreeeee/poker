@@ -7,7 +7,19 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         {routes.map((route) => (
-          <Route key={route.name} path={route.path} element={route.element} />
+          <Route key={route.name} path={route.path} element={route.element}>
+            {route.children ? (
+              <>
+                {route.children.map((subRoute) => (
+                  <Route
+                    key={subRoute.name}
+                    path={subRoute.path}
+                    element={subRoute.element}
+                  ></Route>
+                ))}
+              </>
+            ) : null}
+          </Route>
         ))}
       </Routes>
     </BrowserRouter>

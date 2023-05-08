@@ -7,52 +7,46 @@ import {
   SmileOutlined,
   TransactionOutlined,
 } from '@ant-design/icons';
-import { createLogger } from '../../common/commonLogger';
+import { useNavigate } from 'react-router-dom';
+import { createLogger } from '../../../../common/commonLogger';
 import PlayerHand from '../PlayerHand';
 import {
   IPlayer,
+  BuyInPlayer,
   changeHandPlayer,
   changeNamePlayer,
   addPlayer,
   removePlayer,
   useAmountPerHand,
-  useBuyInPlayer,
+  useBuyInPlayers,
   ISumData,
-} from '../../models/buyIn';
-import styles from "./index.module.scss"
+} from '../../../../models/buyIn';
+import { ERouteName } from '../../../../routes/constants';
+import { getPath } from '../../../../routes/utils';
+import styles from './index.module.scss';
 
 const buyInlogger = createLogger('pages/BuyIn');
-const defaultSumData: ISumData = {
-  playerSum: 1,
-  handSum: 1,
-  amountSum: 0,
-};
 
-const calSumData = (details: IPlayer[], amoutPerHand: number): ISumData => {
-  const sumData: ISumData = defaultSumData;
-  sumData.playerSum = details.length;
+const calSumData = (details: BuyInPlayer, amoutPerHand: number): ISumData => {
   let handSum = 0;
   details.forEach((element: IPlayer) => {
     handSum += element.hands;
   });
-  sumData.handSum = handSum;
-  sumData.amountSum = handSum * amoutPerHand;
+  const sumData: ISumData = {
+    playerSum: details.length,
+    handSum: handSum,
+    amountSum: handSum * amoutPerHand,
+  };
   return sumData;
 };
 
 const InitialState = () => {
   const [amountPerHand, setAmountPerHand] = useAmountPerHand(); //这里关于useInput的复用
-  const [buyInPlayers, setBuyInPlayers] = useBuyInPlayer();
+  const [buyInPlayers, setBuyInPlayers] = useBuyInPlayers();
   const sumData = useMemo(() => {
     return calSumData(buyInPlayers, amountPerHand);
   }, [amountPerHand, buyInPlayers]);
-
-  // 计算规则
-
-  // useEffect(() => {
-  //   const newSumData: ISumData = calSumData(buyInPlayers, amountPerHand);
-  //   setSumData(newSumData);
-  // }, [amountPerHand, buyInPlayers]);
+  const navigate = useNavigate();
 
   return (
     <div className={styles.container}>
@@ -77,10 +71,6 @@ const InitialState = () => {
                 defaultValue={amountPerHand}
                 bordered={false}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  // if (isNumber(e.target.value)) {
-                  //   buyInlogger.log(`amount = ${e.target.value}`);
-                  //   setAmountPerHand(e.target.value);
-                  // }
                   const num = Number(e.target.value);
                   setAmountPerHand(num);
                   buyInlogger.log(`amountPerHand = ${amountPerHand}`);
@@ -100,33 +90,43 @@ const InitialState = () => {
       </div>
       <div className={styles.playerList}>
         {buyInPlayers.map((element: IPlayer) => (
-          <PlayerHand
-            key={element.id}
-            player={element}
-            remove={(id: string) => {
-              setBuyInPlayers(removePlayer(buyInPlayers, id));
-            }}
-            changeName={(id: string, name: string) => {
-              setBuyInPlayers(changeNamePlayer(buyInPlayers, id, name));
-            }}
-            changeHand={(id: string, hand: number) => {
-              buyInlogger.log(`Hand = ${hand}`);
-              setBuyInPlayers(changeHandPlayer(buyInPlayers, id, hand));
-            }}
-          ></PlayerHand>
+          <div key={element.id} className={styles.playerContainer}>
+            <PlayerHand
+              player={element}
+              remove={(id: string) => {
+                setBuyInPlayers(removePlayer(buyInPlayers, id));
+              }}
+              changeName={(id: string, name: string) => {
+                setBuyInPlayers(changeNamePlayer(buyInPlayers, id, name));
+              }}
+              changeHand={(id: string, hand: number) => {
+                buyInlogger.log(`Hand = ${hand}`);
+                setBuyInPlayers(changeHandPlayer(buyInPlayers, id, hand));
+              }}
+            ></PlayerHand>
+          </div>
         ))}
       </div>
-      <div>
-        <Button
-          className={styles.addBtn}
-          icon={<DownCircleFilled className={styles.btnSvg} />}
-          onClick={() => {
-            setBuyInPlayers(addPlayer(buyInPlayers));
-          }}
-        >
-          Add more player
-        </Button>
-        <Button className={styles.nextBtn}>Start play</Button>
+      <div className={styles.buttonList}>
+        <div>
+          <Button
+            className={styles.addBtn}
+            icon={<DownCircleFilled className={styles.btnSvg} />}
+            onClick={() => {
+              setBuyInPlayers(addPlayer(buyInPlayers));
+            }}
+          >
+            Add more player
+          </Button>
+        </div>
+        <div>
+          <Button
+            className={styles.nextBtn}
+            onClick={() => navigate(getPath(ERouteName.BuyInWait))}
+          >
+            Start play
+          </Button>
+        </div>
       </div>
     </div>
   );

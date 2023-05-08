@@ -1,0 +1,22 @@
+.buttonList {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  width: 50%;
+  gap: 1vh;
+}
+
+.twoBtnContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.singleBtn {
+  width: 100%;
+  border-radius: 10px;
+
+  .btnSvg {
+    color: #a1e6b0;
+  }
+}

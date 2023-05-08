@@ -2,7 +2,7 @@
   border-radius: 10px;
   border: 0;
   background-color: whitesmoke;
-  width: 25vw;
+  width: 50vw;
   margin-left: 10vw;
   display: flex;
   flex-direction: column;
@@ -65,11 +65,26 @@
 .playerList {
   margin-top: 3vh;
   max-height: 50vh;
-  overflow: scroll;
+  overflow: auto;
+  width: 80%;
+
+  .playerContainer {
+    border-radius: 10px;
+    background-color: white;
+    padding: 1vw 4vw;
+    margin-bottom: 2vh;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.buttonList {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .addBtn {
-  width: 11vw;
   height: 4vh;
   border-radius: 10px;
 
@@ -79,7 +94,6 @@
 }
 
 .nextBtn {
-  margin-left: 2vw;
   height: 4vh;
   background-color: #a1e6b0;
   border-radius: 10px;
