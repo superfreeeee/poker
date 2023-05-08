@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'antd';
 import {
   DollarOutlined,
@@ -21,8 +21,9 @@ import {
 import { ERouteName } from '../../../../routes/constants';
 import { getPath } from '../../../../routes/utils';
 import PlayerHandView from '../PlayerHandView';
-import styles from '../InitialState/index.module.scss';
-import ownStyles from './index.module.scss';
+import EditState from '../EditState';
+import initStateStyles from '../InitialState/index.module.scss';
+import styles from './index.module.scss';
 
 const calSumData = (details: BuyInPlayer, amoutPerHand: number): ISumData => {
   let handSum = 0;
@@ -44,6 +45,8 @@ const WaitState = () => {
   //   addPlayer,
   // } = useCurrentBuyInData();
 
+  const [isEdit, setIsEdit] = useState(false);
+
   const [amountPerHand, setAmoutPerHand] = useAmountPerHand();
   const [buyInPlayers, setBuyInPlayers] = useBuyInPlayers();
   const sumData = calSumData(buyInPlayers, amountPerHand);
@@ -55,12 +58,23 @@ const WaitState = () => {
     navigate(getPath(ERouteName.BuyInInit));
   };
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.title}>
-        <div className={styles.leftWrap}>
+  return isEdit ? (
+    <EditState
+      onConfirm={() => {
+        console.log('confirm edit');
+        setIsEdit(false);
+      }}
+      onCancel={() => {
+        console.log('cancel edit');
+        setIsEdit(false);
+      }}
+    />
+  ) : (
+    <div className={initStateStyles.container}>
+      <div className={initStateStyles.title}>
+        <div className={initStateStyles.leftWrap}>
           <div style={{ fontSize: 20 }}>等待状态</div>
-          <div className={styles.amountSum}>
+          <div className={initStateStyles.amountSum}>
             <div>
               <DollarOutlined /> 总买入金额
             </div>
@@ -68,41 +82,42 @@ const WaitState = () => {
           </div>
         </div>
 
-        <div className={styles.sumData}>
-          <div className={styles.inputContainer}>
-            <TransactionOutlined className={styles.iconMargin} /> 一手金额 {amountPerHand}
+        <div className={initStateStyles.sumData}>
+          <div className={initStateStyles.inputContainer}>
+            <TransactionOutlined className={initStateStyles.iconMargin} /> 一手金额 {amountPerHand}
           </div>
           <div>
-            <SmileOutlined className={styles.iconMargin} />
+            <SmileOutlined className={initStateStyles.iconMargin} />
             总玩家数 {sumData.playerSum}
           </div>
           <div>
-            <SelectOutlined className={styles.iconMargin} />
+            <SelectOutlined className={initStateStyles.iconMargin} />
             总买入手数 {sumData.handSum}
           </div>
         </div>
       </div>
-      <div className={styles.playerList}>
+      <div className={initStateStyles.playerList}>
         {buyInPlayers.map((player: IPlayer) => (
-          <div key={player.id} className={styles.playerContainer}>
+          <div key={player.id} className={initStateStyles.playerContainer}>
             <PlayerHandView player={player} />
           </div>
         ))}
       </div>
-      <div className={ownStyles.buttonList}>
-        <div className={ownStyles.twoBtnContainer}>
+      <div className={styles.buttonList}>
+        <div className={styles.twoBtnContainer}>
           <div>
             <Button
-              className={styles.addBtn}
-              icon={<EditFilled className={styles.btnSvg} onClick={reset} />}
+              className={initStateStyles.addBtn}
+              icon={<EditFilled className={initStateStyles.btnSvg} onClick={reset} />}
+              onClick={() => setIsEdit(true)}
             >
               Edit Setting
             </Button>
           </div>
           <div>
             <Button
-              className={styles.nextBtn}
-              icon={<BackwardFilled className={styles.btnSvg} />}
+              className={initStateStyles.nextBtn}
+              icon={<BackwardFilled className={initStateStyles.btnSvg} />}
               // onClick={() => navigate(getPath(ERouteName.BuyInEdit))}
               onClick={() => navigate('/buyin/prepare')}
             >
@@ -111,7 +126,7 @@ const WaitState = () => {
           </div>
         </div>
         <div>
-          <Button className={ownStyles.nextBtn} onClick={() => navigate('/buyin/settle')}>
+          <Button className={styles.nextBtn} onClick={() => navigate('/buyin/settle')}>
             Enter Settlement Stage
           </Button>
         </div>
