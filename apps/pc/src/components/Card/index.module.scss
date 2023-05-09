@@ -1,0 +1,23 @@
+.cardText {
+  .suit {
+    // Spade
+    &:global(.suit-s) {
+      color: black;
+    }
+
+    // Heart
+    &:global(.suit-h) {
+      color: red;
+    }
+
+    // Diamond
+    &:global(.suit-d) {
+      color: blue;
+    }
+
+    // Club
+    &:global(.suit-c) {
+      color: green;
+    }
+  }
+}

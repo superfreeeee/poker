@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { useLoginCheck } from '../../hooks/useLoginCheck';
 import { useCurrentUser } from '../../models/user';
+import { CardText } from '../../components/Card';
+import { ECardSuit } from '../../common/card';
 import styles from './index.module.scss';
 
 const Home = () => {
@@ -34,6 +36,13 @@ const Home = () => {
           <Button size="large" onClick={() => navigate('/buyin/prepare')}>
             Buy in
           </Button>
+        </div>
+        <div>
+          <h2>Home test</h2>
+          <CardText suit={ECardSuit.Spade} num={'A'} />
+          <CardText suit={ECardSuit.Heart} num={'Q'} />
+          <CardText suit={ECardSuit.Diamond} num={'T'} />
+          <CardText suit={ECardSuit.Club} num={'3'} />
         </div>
       </div>
     </div>
