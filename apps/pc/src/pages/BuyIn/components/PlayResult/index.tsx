@@ -8,15 +8,19 @@ import styles from './index.module.scss';
 interface IPlayerResultProps {
   player: IPlayer;
   amoutPerHand: number;
-  changeRest: (id: string, rest: number) => void;
+  changeRest: (player: IPlayer) => void;
 }
 
-const PlayResult: FC<IPlayerResultProps> = (props) => {
-  const { id, hands, rest } = props.player;
-  const benefit = rest - hands * props.amoutPerHand;
+const PlayResult: FC<IPlayerResultProps> = ({
+  player,
+  amoutPerHand,
+  changeRest,
+}: IPlayerResultProps) => {
+  const { hands, rest } = player;
+  const benefit = rest - hands * amoutPerHand;
   return (
     <>
-      <PlayerHandView player={props.player}></PlayerHandView>
+      <PlayerHandView player={player}></PlayerHandView>
       <div className={styles.restContainer}>
         <div className={styles.leftWarp}>
           <Input
@@ -25,8 +29,10 @@ const PlayResult: FC<IPlayerResultProps> = (props) => {
             type="number"
             prefix={<EyeOutlined />}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              const num = Number(e.target.value);
-              props.changeRest(id, num);
+              changeRest({
+                ...player,
+                rest: Number(e.target.value),
+              });
             }}
           />
         </div>

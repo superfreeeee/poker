@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC } from 'react';
 import { Button } from 'antd';
 import {
   DollarOutlined,
@@ -11,65 +11,36 @@ import {
 import { useNavigate } from 'react-router-dom';
 import {
   IPlayer,
-  BuyInPlayer,
-  ISumData,
-  useAmountPerHand,
-  useBuyInPlayers,
-  defaultBuyIn,
-  // useCurrentBuyInData,
+  // ISumData,
+  // useBuyInPlayers,
+  // defaultBuyIn,
+  useCurrentBuyInData,
 } from '../../../../models/buyIn';
-import { ERouteName } from '../../../../routes/constants';
-import { getPath } from '../../../../routes/utils';
 import PlayerHandView from '../PlayerHandView';
-import EditState from '../EditState';
-import initStateStyles from '../InitialState/index.module.scss';
+import initStateStyles from '../BuyInPrepare/index.module.scss';
 import styles from './index.module.scss';
 
-const calSumData = (details: BuyInPlayer, amoutPerHand: number): ISumData => {
-  let handSum = 0;
-  details.forEach((element: IPlayer) => {
-    handSum += element.hands;
-  });
-  const sumData: ISumData = {
-    playerSum: details.length,
-    handSum: handSum,
-    amountSum: handSum * amoutPerHand,
-  };
-  return sumData;
-};
+interface IContentProps {
+  enterEdit: () => void;
+}
 
-const WaitState = () => {
-  // const {
-  //   currentBuyInData: { amountPerhand, players: buyInPlayers },
-  //   sumData,
-  //   addPlayer,
-  // } = useCurrentBuyInData();
-
-  const [isEdit, setIsEdit] = useState(false);
-
-  const [amountPerHand, setAmoutPerHand] = useAmountPerHand();
-  const [buyInPlayers, setBuyInPlayers] = useBuyInPlayers();
-  const sumData = calSumData(buyInPlayers, amountPerHand);
+const Content: FC<IContentProps> = ({ enterEdit }: IContentProps) => {
+  const {
+    currentBuyInData: { amountPerhand, players: buyInPlayers },
+    sumData,
+    changeCurrentBuyInData,
+  } = useCurrentBuyInData();
   const navigate = useNavigate();
 
   const reset = () => {
-    setAmoutPerHand(0);
-    setBuyInPlayers(defaultBuyIn);
-    navigate(getPath(ERouteName.BuyInInit));
+    changeCurrentBuyInData({
+      amountPerhand: 0,
+      players: [],
+    });
+    navigate('/buyin/prepare');
   };
 
-  return isEdit ? (
-    <EditState
-      onConfirm={() => {
-        console.log('confirm edit');
-        setIsEdit(false);
-      }}
-      onCancel={() => {
-        console.log('cancel edit');
-        setIsEdit(false);
-      }}
-    />
-  ) : (
+  return (
     <div className={initStateStyles.container}>
       <div className={initStateStyles.title}>
         <div className={initStateStyles.leftWrap}>
@@ -84,7 +55,7 @@ const WaitState = () => {
 
         <div className={initStateStyles.sumData}>
           <div className={initStateStyles.inputContainer}>
-            <TransactionOutlined className={initStateStyles.iconMargin} /> 一手金额 {amountPerHand}
+            <TransactionOutlined className={initStateStyles.iconMargin} /> 一手金额 {amountPerhand}
           </div>
           <div>
             <SmileOutlined className={initStateStyles.iconMargin} />
@@ -108,8 +79,10 @@ const WaitState = () => {
           <div>
             <Button
               className={initStateStyles.addBtn}
-              icon={<EditFilled className={initStateStyles.btnSvg} onClick={reset} />}
-              onClick={() => setIsEdit(true)}
+              icon={<EditFilled className={initStateStyles.btnSvg} />}
+              onClick={() => {
+                enterEdit();
+              }}
             >
               Edit Setting
             </Button>
@@ -119,7 +92,9 @@ const WaitState = () => {
               className={initStateStyles.nextBtn}
               icon={<BackwardFilled className={initStateStyles.btnSvg} />}
               // onClick={() => navigate(getPath(ERouteName.BuyInEdit))}
-              onClick={() => navigate('/buyin/prepare')}
+              onClick={() => {
+                reset();
+              }}
             >
               Reset Setting
             </Button>
@@ -135,4 +110,4 @@ const WaitState = () => {
   );
 };
 
-export default WaitState;
+export default Content;

@@ -30,7 +30,3 @@ pnpm build:pc
     - feat/
     - type 分类详见 `commitlint.config.js` 配置
 - `main` 分支开启了保护分支，需要在 github 上提交 pull request 进行合并
-
-
-
-🫡收到
