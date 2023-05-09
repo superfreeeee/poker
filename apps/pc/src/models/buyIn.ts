@@ -54,10 +54,28 @@ export const useBuyInData = ({ buyInData, setBuyInData }: IBuyInDataProps) => {
     return calcStatisticsData(buyInData);
   }, [buyInData]);
 
-  const sumBenefit = useMemo(() => {
+  const totalBenefit = useMemo(() => {
     return calcBenfit(buyInData);
   }, [buyInData]);
 
+  const actions = useBuyInDataActions([buyInData, setBuyInData]);
+
+  return {
+    buyInData,
+    statisticsData,
+    totalBenefit,
+    ...actions,
+  };
+};
+
+type IBuyInDataEntry = [buyInData: IBuyInData, setBuyInData: (data: IBuyInData) => void];
+
+/**
+ * 基于 buyInData 返回可选操作
+ * @param param0
+ * @returns
+ */
+export const useBuyInDataActions = ([buyInData, setBuyInData]: IBuyInDataEntry) => {
   const addPlayer = () => {
     setBuyInData({
       ...buyInData,
@@ -101,9 +119,6 @@ export const useBuyInData = ({ buyInData, setBuyInData }: IBuyInDataProps) => {
   };
 
   return {
-    buyInData,
-    statisticsData,
-    sumBenefit,
     addPlayer,
     removePlayer,
     changePlayer,

@@ -13,7 +13,7 @@ const BuyInSetttle = () => {
   const {
     buyInData: { amountPerhand, players: buyInPlayers },
     statisticsData: { totalPlayer, totalHands, totalAmount },
-    sumBenefit,
+    totalBenefit,
     changePlayer,
   } = useCurrentBuyInData();
 
@@ -45,9 +45,9 @@ const BuyInSetttle = () => {
         ))}
       </div>
       <div className={styles.buttonList}>
-        <div className={styles.resUnderLine}>最终盈余总计 {sumBenefit}</div>
+        <div className={styles.resUnderLine}>最终盈余总计 {totalBenefit}</div>
         <div>
-          {sumBenefit == 0 ? (
+          {totalBenefit == 0 ? (
             <Button className={initialStyles.nextBtn}>Show final result</Button>
           ) : (
             <Button className={initialStyles.nextBtn} disabled>
