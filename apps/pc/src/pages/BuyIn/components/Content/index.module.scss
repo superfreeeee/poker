@@ -1,3 +1,25 @@
+.container {
+  // display
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  // position
+
+  // box
+  max-width: 800px;
+  padding-bottom: 32px;
+  margin: 0 auto;
+  border: 0;
+  border-radius: 10px;
+
+  // text
+
+  // color
+  background-color: whitesmoke;
+}
+
 .buttonList {
   display: flex;
   flex-direction: column;
@@ -7,10 +29,9 @@
   width: 50%;
 }
 
-.twoBtnContainer{
-    display: flex;
-    justify-content:space-between;
-
+.twoBtnContainer {
+  display: flex;
+  justify-content: space-between;
 }
 
 .nextBtn {

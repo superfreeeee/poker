@@ -24,19 +24,35 @@ const currentBuyInDataAtom = atom(defaultBuyInData);
 export const useCurrentBuyInData = () => {
   const [currentBuyInData, setCurrentBuyInData] = useAtom(currentBuyInDataAtom);
 
-  const sumData = useMemo(() => {
-    return calcSumData(currentBuyInData);
-  }, [currentBuyInData]);
+  const sumData = useBuyInSumData(currentBuyInData);
 
   const sumBenefit = useMemo(() => {
     return calcBenfit(currentBuyInData);
   }, [currentBuyInData]);
 
+  const actions = useBuyInDataActions([currentBuyInData, setCurrentBuyInData]);
+
+  return {
+    currentBuyInData,
+    sumData,
+    sumBenefit,
+    ...actions,
+  };
+};
+
+type IBuyInDataEntry = [buyInData: IBuyInData, setBuyInData: (data: IBuyInData) => void];
+
+/**
+ * 基于 buyInData 返回可选操作
+ * @param param0
+ * @returns
+ */
+export const useBuyInDataActions = ([buyInData, setBuyInData]: IBuyInDataEntry) => {
   const addPlayer = () => {
-    setCurrentBuyInData({
-      ...currentBuyInData,
+    setBuyInData({
+      ...buyInData,
       players: [
-        ...currentBuyInData.players,
+        ...buyInData.players,
         {
           id: nanoid(),
           name: '',
@@ -48,39 +64,45 @@ export const useCurrentBuyInData = () => {
   };
 
   const removePlayer = (targetId: string) => {
-    setCurrentBuyInData({
-      ...currentBuyInData,
-      players: currentBuyInData.players.filter((player) => player.id != targetId),
+    setBuyInData({
+      ...buyInData,
+      players: buyInData.players.filter((player) => player.id != targetId),
     });
   };
 
   const changePlayer = (targetPlayer: IPlayer, index: number) => {
-    const originPlayers = currentBuyInData.players.slice();
+    const originPlayers = buyInData.players.slice();
     if (index < 0 || index >= originPlayers.length) {
       throw new Error(`Invalid index=${index} at changePlayer`);
     }
 
     originPlayers.splice(index, 1, targetPlayer);
 
-    setCurrentBuyInData({
-      ...currentBuyInData,
+    setBuyInData({
+      ...buyInData,
       players: originPlayers,
     });
   };
 
   const changeCurrentBuyInData = (data: IBuyInData) => {
-    setCurrentBuyInData(data);
+    setBuyInData(data);
   };
 
   return {
-    currentBuyInData,
-    sumData,
-    sumBenefit,
     addPlayer,
     removePlayer,
     changePlayer,
     changeCurrentBuyInData,
   };
+};
+
+/**
+ * 基于 buyInData 返回统计数据
+ * @param data
+ * @returns
+ */
+export const useBuyInSumData = (data: IBuyInData) => {
+  return useMemo(() => calcSumData(data), [data]);
 };
 
 export interface ISumData {

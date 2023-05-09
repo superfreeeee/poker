@@ -1,16 +1,19 @@
-import React, { ChangeEvent, useState, FC, useMemo } from 'react';
+import React, { useState, FC } from 'react';
 import { Input, Button } from 'antd';
 import {
   DownCircleFilled,
-  DollarOutlined,
   SelectOutlined,
   SmileOutlined,
   TransactionOutlined,
 } from '@ant-design/icons';
-import { nanoid } from 'nanoid';
 import PlayerHand from '../PlayerHand';
-import { IPlayer, useCurrentBuyInData, calcSumData } from '../../../../models/buyIn';
+import {
+  useCurrentBuyInData,
+  useBuyInDataActions,
+  useBuyInSumData,
+} from '../../../../models/buyIn';
 import styles from '../BuyInPrepare/index.module.scss';
+import BuyInTitle from '../BuyInTitle';
 import ownStyles from './index.module.scss';
 
 interface IEditableProps {
@@ -18,30 +21,22 @@ interface IEditableProps {
 }
 
 const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
-  const {
-    currentBuyInData: { amountPerhand, players: buyInPlayers },
-    changeCurrentBuyInData,
-  } = useCurrentBuyInData();
-  const [editAmountPerhand, setEditAmoutPerhand] = useState(amountPerhand);
-  const [editBuyInPlayers, setEditBuyInPlayers] = useState(buyInPlayers);
-  const sumData = useMemo(
-    () => calcSumData({ amountPerhand: editAmountPerhand, players: editBuyInPlayers }),
-    [editAmountPerhand, editBuyInPlayers],
-  );
+  const { currentBuyInData } = useCurrentBuyInData();
+
+  const [editableData, setEditableData] = useState(currentBuyInData);
+  const sumData = useBuyInSumData(editableData);
+  const { addPlayer, removePlayer, changePlayer, changeCurrentBuyInData } = useBuyInDataActions([
+    editableData,
+    setEditableData,
+  ]);
+
+  const editAmountPerhand = editableData.amountPerhand;
+  const editBuyInPlayers = editableData.players;
 
   return (
     <div className={styles.container}>
-      <div className={styles.title}>
-        <div className={styles.leftWrap}>
-          <div style={{ fontSize: 20 }}>编辑状态</div>
-          <div className={styles.amountSum}>
-            <div>
-              <DollarOutlined /> 总买入金额
-            </div>
-            <div>{sumData.amountSum} </div>
-          </div>
-        </div>
-
+      <div className={styles.header}>
+        <BuyInTitle title="编辑状态" totalAmount={sumData.amountSum} />
         <div className={styles.sumData}>
           <div className={styles.inputContainer}>
             <TransactionOutlined className={styles.iconMargin} /> 一手金额
@@ -51,8 +46,16 @@ const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
                 maxLength={10}
                 defaultValue={editAmountPerhand}
                 bordered={false}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  setEditAmoutPerhand(Number(e.target.value));
+                onChange={(e) => {
+                  const amount = +e.target.value;
+                  if (isNaN(amount)) {
+                    return;
+                  }
+
+                  changeCurrentBuyInData({
+                    players: editBuyInPlayers,
+                    amountPerhand: amount,
+                  });
                 }}
               />
             </div>
@@ -68,19 +71,12 @@ const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
         </div>
       </div>
       <div className={styles.playerList}>
-        {editBuyInPlayers.map((element: IPlayer) => (
+        {editBuyInPlayers.map((element, i) => (
           <div key={element.id} className={styles.playerContainer}>
             <PlayerHand
               player={element}
-              onRemove={(id: string) => {
-                setEditBuyInPlayers(editBuyInPlayers.filter((player) => player.id != id));
-              }}
-              onChange={(targetPlayer: IPlayer) => {
-                setEditBuyInPlayers([
-                  ...editBuyInPlayers.filter((player) => player.id != targetPlayer.id),
-                  targetPlayer,
-                ]);
-              }}
+              onRemove={removePlayer}
+              onChange={(player) => changePlayer(player, i)}
             ></PlayerHand>
           </div>
         ))}
@@ -90,17 +86,7 @@ const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
           <Button
             className={ownStyles.singleBtn}
             icon={<DownCircleFilled className={ownStyles.btnSvg} />}
-            onClick={() => {
-              setEditBuyInPlayers([
-                ...editBuyInPlayers,
-                {
-                  id: nanoid(),
-                  name: '',
-                  hands: 1,
-                  rest: 0,
-                },
-              ]);
-            }}
+            onClick={addPlayer}
           >
             Add more player
           </Button>

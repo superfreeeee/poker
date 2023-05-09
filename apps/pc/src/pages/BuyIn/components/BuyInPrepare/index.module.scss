@@ -28,12 +28,6 @@
   padding: 14px 20px;
   background-color: #a1e6b0;
 
-  .leftWrap {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-  }
-
   .sumData {
     display: flex;
     flex-direction: column;
@@ -57,13 +51,6 @@
 
 .iconMargin {
   margin-right: 0.5vw;
-}
-
-.amountSum {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  font-size: large;
 }
 
 .playerList {

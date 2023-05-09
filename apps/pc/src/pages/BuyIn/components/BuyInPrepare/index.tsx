@@ -2,13 +2,13 @@ import React from 'react';
 import { Input, Button } from 'antd';
 import {
   DownCircleFilled,
-  DollarOutlined,
   SelectOutlined,
   SmileOutlined,
   TransactionOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import PlayerHand from '../PlayerHand';
+import BuyInTitle from '../BuyInTitle';
 import { useCurrentBuyInData } from '../../../../models/buyIn';
 import styles from './index.module.scss';
 
@@ -27,16 +27,7 @@ const BuyInPrepare = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <div className={styles.leftWrap}>
-          <div style={{ fontSize: 20 }}>初始状态</div>
-          <div className={styles.amountSum}>
-            <div>
-              <DollarOutlined /> 总买入金额
-            </div>
-            <div>{sumData.amountSum} </div>
-          </div>
-        </div>
-
+        <BuyInTitle title="初始状态" totalAmount={sumData.amountSum} />
         <div className={styles.sumData}>
           <div className={styles.inputContainer}>
             <TransactionOutlined className={styles.iconMargin} /> 一手金额

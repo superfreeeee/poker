@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { Button } from 'antd';
 import {
-  DollarOutlined,
   SelectOutlined,
   SmileOutlined,
   TransactionOutlined,
@@ -9,14 +8,9 @@ import {
   BackwardFilled,
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import {
-  IPlayer,
-  // ISumData,
-  // useBuyInPlayers,
-  // defaultBuyIn,
-  useCurrentBuyInData,
-} from '../../../../models/buyIn';
+import { IPlayer, useCurrentBuyInData } from '../../../../models/buyIn';
 import PlayerHandView from '../PlayerHandView';
+import BuyInTitle from '../BuyInTitle';
 import initStateStyles from '../BuyInPrepare/index.module.scss';
 import styles from './index.module.scss';
 
@@ -41,18 +35,9 @@ const Content: FC<IContentProps> = ({ enterEdit }: IContentProps) => {
   };
 
   return (
-    <div className={initStateStyles.container}>
-      <div className={initStateStyles.title}>
-        <div className={initStateStyles.leftWrap}>
-          <div style={{ fontSize: 20 }}>等待状态</div>
-          <div className={initStateStyles.amountSum}>
-            <div>
-              <DollarOutlined /> 总买入金额
-            </div>
-            <div>{sumData.amountSum} </div>
-          </div>
-        </div>
-
+    <div className={styles.container}>
+      <div className={initStateStyles.header}>
+        <BuyInTitle title="等待状态" totalAmount={sumData.amountSum} />
         <div className={initStateStyles.sumData}>
           <div className={initStateStyles.inputContainer}>
             <TransactionOutlined className={initStateStyles.iconMargin} /> 一手金额 {amountPerhand}

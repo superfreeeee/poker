@@ -15,10 +15,15 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/buyin" element={<LazyBuyIn />}>
+          {/* Edit => data */}
           <Route path="prepare" element={<BuyInPrepare />} />
           <Route path="playing" element={<BuyInPlaying />} />
           <Route path="settle" element={<BuyInSettle />} />
-          <Route path="*" element={<Redirect path="/buyin/prepare" />} />
+          {/* data => view: <BuyInPreview data={buyInRecord} /> */}
+          {/* <Route path="preview" element={<div />} /> */}
+          {/* default => view(recordList): <BuyInList /> */}
+          {/* <Route path="" element={<div />} /> */}
+          <Route path="" element={<Redirect path="/buyin/prepare" />} />
         </Route>
         <Route path="*" element={<Redirect path="/" />} />
       </Routes>
