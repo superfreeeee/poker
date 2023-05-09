@@ -47,20 +47,24 @@ export const useCurrentBuyInData = () => {
     });
   };
 
-  const removePlayer = (targetID: string) => {
+  const removePlayer = (targetId: string) => {
     setCurrentBuyInData({
       ...currentBuyInData,
-      players: currentBuyInData.players.filter((player) => player.id != targetID),
+      players: currentBuyInData.players.filter((player) => player.id != targetId),
     });
   };
 
-  const changePlayer = (targetPlayer: IPlayer) => {
+  const changePlayer = (targetPlayer: IPlayer, index: number) => {
+    const originPlayers = currentBuyInData.players.slice();
+    if (index < 0 || index >= originPlayers.length) {
+      throw new Error(`Invalid index=${index} at changePlayer`);
+    }
+
+    originPlayers.splice(index, 1, targetPlayer);
+
     setCurrentBuyInData({
       ...currentBuyInData,
-      players: [
-        ...currentBuyInData.players.filter((player) => player.id != targetPlayer.id),
-        targetPlayer,
-      ],
+      players: originPlayers,
     });
   };
 

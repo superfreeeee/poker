@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Outlet } from 'react-router-dom';
 import { IBuyInData } from '../../models/buyIn';
-// import InitialState from './components/InitialState';
+import styles from './index.module.scss';
 
 interface IBuyInProps {
   data?: IBuyInData;
@@ -9,9 +9,7 @@ interface IBuyInProps {
 
 const BuyIn: FC<IBuyInProps> = () => {
   return (
-    <div>
-      <h1>Buy-in page</h1>
-      {/* <InitialState></InitialState> */}
+    <div className={styles.container}>
       <Outlet />
     </div>
   );

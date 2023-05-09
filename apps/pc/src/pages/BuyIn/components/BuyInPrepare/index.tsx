@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import { Input, Button } from 'antd';
 import {
   DownCircleFilled,
@@ -9,18 +9,7 @@ import {
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import PlayerHand from '../PlayerHand';
-import {
-  IPlayer,
-  // BuyInPlayer,
-  // changeHandPlayer,
-  // changeNamePlayer,
-  // addPlayer,
-  // removePlayer,
-  // useAmountPerHand,
-  // useBuyInPlayers,
-  // ISumData,
-  useCurrentBuyInData,
-} from '../../../../models/buyIn';
+import { useCurrentBuyInData } from '../../../../models/buyIn';
 import styles from './index.module.scss';
 
 const BuyInPrepare = () => {
@@ -37,7 +26,7 @@ const BuyInPrepare = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.title}>
+      <div className={styles.header}>
         <div className={styles.leftWrap}>
           <div style={{ fontSize: 20 }}>初始状态</div>
           <div className={styles.amountSum}>
@@ -55,12 +44,17 @@ const BuyInPrepare = () => {
               <Input
                 placeholder="Input here"
                 maxLength={10}
-                defaultValue={amountPerhand}
+                value={amountPerhand}
                 bordered={false}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                onChange={(e) => {
+                  const amount = +e.target.value;
+                  if (isNaN(amount)) {
+                    return;
+                  }
+
                   changeCurrentBuyInData({
                     players: buyInPlayers,
-                    amountPerhand: Number(e.target.value),
+                    amountPerhand: amount,
                   });
                 }}
               />
@@ -77,12 +71,12 @@ const BuyInPrepare = () => {
         </div>
       </div>
       <div className={styles.playerList}>
-        {buyInPlayers.map((element: IPlayer) => (
-          <div key={element.id} className={styles.playerContainer}>
+        {buyInPlayers.map((player, i) => (
+          <div key={player.id} className={styles.playerContainer}>
             <PlayerHand
-              player={element}
-              remove={removePlayer}
-              change={changePlayer}
+              player={player}
+              onRemove={removePlayer}
+              onChange={(player) => changePlayer(player, i)}
             ></PlayerHand>
           </div>
         ))}
@@ -98,10 +92,7 @@ const BuyInPrepare = () => {
           </Button>
         </div>
         <div>
-          <Button
-            className={styles.nextBtn}
-            onClick={() => navigate('/buyin/playing')}
-          >
+          <Button className={styles.nextBtn} onClick={() => navigate('/buyin/playing')}>
             Start play
           </Button>
         </div>

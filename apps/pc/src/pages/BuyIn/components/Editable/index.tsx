@@ -72,10 +72,10 @@ const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
           <div key={element.id} className={styles.playerContainer}>
             <PlayerHand
               player={element}
-              remove={(id: string) => {
+              onRemove={(id: string) => {
                 setEditBuyInPlayers(editBuyInPlayers.filter((player) => player.id != id));
               }}
-              change={(targetPlayer: IPlayer) => {
+              onChange={(targetPlayer: IPlayer) => {
                 setEditBuyInPlayers([
                   ...editBuyInPlayers.filter((player) => player.id != targetPlayer.id),
                   targetPlayer,

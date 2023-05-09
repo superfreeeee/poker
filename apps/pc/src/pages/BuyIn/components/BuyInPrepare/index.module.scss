@@ -1,41 +1,45 @@
 .container {
-  border-radius: 10px;
-  border: 0;
-  background-color: whitesmoke;
-  width: 50vw;
-  margin-left: 10vw;
+  // display
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-bottom: 3vh;
+
+  // position
+
+  // box
+  max-width: 800px;
+  padding-bottom: 32px;
+  margin: 0 auto;
+  border: 0;
+  border-radius: 10px;
+
+  // text
+
+  // color
+  background-color: whitesmoke;
 }
 
-.title {
-  background-color: #a1e6b0;
-  width: 100%;
+.header {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
+  width: 100%;
+  padding: 14px 20px;
+  background-color: #a1e6b0;
 
   .leftWrap {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    align-items: start;
-    padding-left: 1vw;
-    padding-top: 1vh;
-    padding-bottom: 1vh;
   }
 
   .sumData {
     display: flex;
     flex-direction: column;
+    gap: 8px;
+    width: 200px;
     font-size: 14px;
-    gap: 1vh;
-    padding-right: 1vw;
-    padding-top: 1vh;
-    padding-bottom: 1vh;
   }
 }
 
@@ -46,7 +50,7 @@
 
   .inputHand {
     border-bottom: 1px solid;
-    width: 4vw;
+    width: 100px;
     font-size: 10px;
   }
 }
@@ -71,7 +75,7 @@
   .playerContainer {
     border-radius: 10px;
     background-color: white;
-    padding: 1vw 4vw;
+    padding: 12px 16px;
     margin-bottom: 2vh;
     display: flex;
     flex-direction: column;
