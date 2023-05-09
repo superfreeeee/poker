@@ -1,0 +1,96 @@
+.container {
+  // display
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  // position
+
+  // box
+  max-width: 800px;
+  padding-bottom: 32px;
+  margin: 0 auto;
+  border: 0;
+  border-radius: 10px;
+
+  // text
+
+  // color
+  background-color: whitesmoke;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  width: 100%;
+  padding: 14px 20px;
+  background-color: #a1e6b0;
+
+  .sumData {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 200px;
+    font-size: 14px;
+  }
+}
+
+.inputContainer {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+
+  .inputHand {
+    border-bottom: 1px solid;
+    width: 100px;
+    font-size: 10px;
+  }
+}
+
+.iconMargin {
+  margin-right: 0.5vw;
+}
+
+.playerList {
+  margin-top: 3vh;
+  max-height: 50vh;
+  overflow: auto;
+  width: 80%;
+
+  .playerContainer {
+    border-radius: 10px;
+    background-color: white;
+    padding: 12px 16px;
+    margin-bottom: 2vh;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.buttonList {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.addBtn {
+  height: 4vh;
+  border-radius: 10px;
+
+  .btnSvg {
+    color: #a1e6b0;
+  }
+}
+
+.nextBtn {
+  height: 4vh;
+  background-color: #a1e6b0;
+  border-radius: 10px;
+
+  :where(.css-dev-only-do-not-override-yp8pcc).ant-btn-default:not(:disabled):active {
+    color: #a1e6b0 !important;
+    border-color: #a1e6b0 !important;
+  }
+}

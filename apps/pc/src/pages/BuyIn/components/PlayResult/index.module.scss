@@ -1,0 +1,22 @@
+.restContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2vh;
+}
+
+.rightWrap{
+  width: 6vw;
+  overflow: auto;
+}
+
+.inputDecorate {
+  border-radius: 10px;
+  border: 2px solid #cdc8c8;
+  width: 10vw;
+  height: 4vh;
+
+  input{
+    margin-left: 1vw;
+  }
+}

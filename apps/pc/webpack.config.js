@@ -22,6 +22,7 @@ const config = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].js',
+    publicPath: '/',
     clean: true,
   },
 

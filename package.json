@@ -42,5 +42,8 @@
     "*.{css,scss,less}": [
       "stylelint"
     ]
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.0.1"
   }
 }

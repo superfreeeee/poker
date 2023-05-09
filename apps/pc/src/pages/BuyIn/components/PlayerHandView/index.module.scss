@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .leftContainer{
+    display: flex;
+    gap:0.5vw;
+    
+  }
+  
+  .rightContainer{
+    display: flex;
+    gap:0.5vw;
+  }
+}
+
+.text{
+    border-bottom: 1px solid #cdc8c8;
+    min-width: 3vw;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+

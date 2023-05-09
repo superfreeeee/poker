@@ -1,14 +1,31 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { routes } from './routes';
+import Home from './pages/Home';
+import LogIn from './pages/LogIn';
+import { LazyBuyIn } from './pages/BuyIn/lazy';
+import BuyInPrepare from './pages/BuyIn/components/BuyInPrepare';
+import BuyInPlaying from './pages/BuyIn/components/BuyInPlaying';
+import BuyInSettle from './pages/BuyIn/components/BuyInSettle';
+import Redirect from './components/Redirect';
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {routes.map((route) => (
-          <Route key={route.name} path={route.path} element={route.element} />
-        ))}
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<LogIn />} />
+        <Route path="/buyin" element={<LazyBuyIn />}>
+          {/* Edit => data */}
+          <Route path="prepare" element={<BuyInPrepare />} />
+          <Route path="playing" element={<BuyInPlaying />} />
+          <Route path="settle" element={<BuyInSettle />} />
+          {/* data => view: <BuyInPreview data={buyInRecord} /> */}
+          {/* <Route path="preview" element={<div />} /> */}
+          {/* default => view(recordList): <BuyInList /> */}
+          {/* <Route path="" element={<div />} /> */}
+          <Route path="" element={<Redirect path="/buyin/prepare" />} />
+        </Route>
+        <Route path="*" element={<Redirect path="/" />} />
       </Routes>
     </BrowserRouter>
   );

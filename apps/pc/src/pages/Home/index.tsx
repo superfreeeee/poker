@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { useLoginCheck } from '../../hooks/useLoginCheck';
 import { useCurrentUser } from '../../models/user';
-import { ERouteName } from '../../routes/constants';
-import { getPath } from '../../routes/utils';
 import styles from './index.module.scss';
 
 const Home = () => {
@@ -21,7 +19,7 @@ const Home = () => {
           type="primary"
           danger
           className={styles.switchUser}
-          onClick={() => navigate(getPath(ERouteName.Login))}
+          onClick={() => navigate('/login')}
         >
           Switch User
         </Button>
@@ -32,7 +30,8 @@ const Home = () => {
         <div>name: {currentUser?.name}</div>
         <div style={{ marginTop: 12 }}>
           <h3>Tabs</h3>
-          <Button size="large" onClick={() => navigate(getPath(ERouteName.BuyIn))}>
+          {/* <Button size="large" onClick={() => navigate(getPath(ERouteName.BuyIn))}> */}
+          <Button size="large" onClick={() => navigate('/buyin/prepare')}>
             Buy in
           </Button>
         </div>
