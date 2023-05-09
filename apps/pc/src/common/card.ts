@@ -20,6 +20,13 @@ const cardSuitMap: { [suit in ECardSuit]: ICardSuitStr } = {
   [ECardSuit.Club]: 'c',
 };
 
+const suitColorMap: { [suit in ECardSuit]: string } = {
+  [ECardSuit.Spade]: 'black',
+  [ECardSuit.Heart]: 'red',
+  [ECardSuit.Diamond]: 'blue',
+  [ECardSuit.Club]: 'green',
+};
+
 /**
  * Card Num text
  */
@@ -40,7 +47,9 @@ export type ICardNum =
   // unknown
   | 'x';
 
-type IEncodedCard = `${ICardNum}${ICardSuitStr}`;
+export type ICard = { suit: ECardSuit; num: ICardNum };
+
+export type IEncodedCard = `${ICardNum}${ICardSuitStr}`;
 
 /***************************************/
 /*          encoder / decoder          */
@@ -105,7 +114,7 @@ export const encodeNum = (num: number): ICardNum => {
  * @param num
  * @returns
  */
-export const encodeCard = (suit: ECardSuit, num: ICardNum): IEncodedCard => {
+export const encodeCard = ({ suit, num }: ICard): IEncodedCard => {
   return `${num}${encodeSuit(suit)}`;
 };
 
@@ -118,3 +127,8 @@ export const decodeCard = (card: IEncodedCard): { suit: ECardSuit; num: ICardNum
   const [suit, num] = card.split('') as [ICardSuitStr, ICardNum];
   return { suit: decodeSuit(suit), num };
 };
+
+/***************************************/
+/*                style                */
+/***************************************/
+export const getSuitColor = (suit: ECardSuit) => suitColorMap[suit] ?? 'inherit';

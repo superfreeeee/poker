@@ -5,6 +5,8 @@ import { useLoginCheck } from '../../hooks/useLoginCheck';
 import { useCurrentUser } from '../../models/user';
 import { CardText } from '../../components/Card';
 import { ECardSuit } from '../../common/card';
+import CardTable from '../../components/CardTable';
+import { useSelectCards } from '../../components/CardTable/useSelectCards';
 import styles from './index.module.scss';
 
 const Home = () => {
@@ -12,6 +14,8 @@ const Home = () => {
 
   const currentUser = useCurrentUser();
   const navigate = useNavigate();
+
+  const { selectedCards, select } = useSelectCards(3);
 
   return (
     <div className={styles.container}>
@@ -43,6 +47,7 @@ const Home = () => {
           <CardText suit={ECardSuit.Heart} num={'Q'} />
           <CardText suit={ECardSuit.Diamond} num={'T'} />
           <CardText suit={ECardSuit.Club} num={'3'} />
+          <CardTable selectedCards={selectedCards} onClick={select} />
         </div>
       </div>
     </div>
