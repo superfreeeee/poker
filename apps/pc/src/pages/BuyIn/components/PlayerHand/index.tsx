@@ -12,11 +12,11 @@ import styles from './index.module.scss';
 
 interface IPlayerHandProps {
   player: IPlayer;
-  remove: (id: string) => void;
-  change: (targetPlayer: IPlayer) => void;
+  onRemove: (id: string) => void;
+  onChange: (targetPlayer: IPlayer) => void;
 }
 
-const PlayerHand: FC<IPlayerHandProps> = ({player,remove,change}:IPlayerHandProps) => {
+const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlayerHandProps) => {
   const { id, name, hands } = player;
 
   return (
@@ -34,7 +34,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({player,remove,change}:IPlayerHandProp
               defaultValue={name}
               bordered={false}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                change({
+                onChange({
                   ...player,
                   name: e.target.value,
                 });
@@ -47,7 +47,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({player,remove,change}:IPlayerHandProp
           icon={<DeleteOutlined />}
           className={styles.btnBG}
           onClick={() => {
-            remove(id);
+            onRemove(id);
           }}
         />
       </div>
@@ -62,21 +62,21 @@ const PlayerHand: FC<IPlayerHandProps> = ({player,remove,change}:IPlayerHandProp
             // if (isNumber(e.target.value)) {
             //   params.changeHand(id, e.target.value);
             // }
-            change({ ...player, hands: Number(e.target.value) });
+            onChange({ ...player, hands: Number(e.target.value) });
           }}
         />
         <div className={styles.buttonWrap}>
           <div
             className={styles.btnSplitLine}
             onClick={() => {
-              change({ ...player, hands: hands - 1 });
+              onChange({ ...player, hands: hands - 1 });
             }}
           >
             <MinusOutlined />
           </div>
           <div
             onClick={() => {
-              change({ ...player, hands: hands + 1 });
+              onChange({ ...player, hands: hands + 1 });
             }}
           >
             <PlusOutlined />
