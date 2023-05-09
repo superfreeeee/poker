@@ -2,7 +2,10 @@ import React, { FC } from 'react';
 import { Col, Row } from 'antd';
 import classNames from 'classnames';
 import { ECardSuit, getSuitColor, ICardNum, ICard, encodeCard } from '../../common/card';
+import { createLogger } from '../../common/commonLogger';
 import styles from './index.module.scss';
+
+const tableLogger = createLogger('components/CardTable');
 
 const suits = [ECardSuit.Spade, ECardSuit.Heart, ECardSuit.Diamond, ECardSuit.Club];
 const nums: ICardNum[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'];
@@ -15,7 +18,7 @@ interface ICardTableProps {
 const CardTable: FC<ICardTableProps> = ({ selectedCards = [], onClick }) => {
   const selectedCardsSet = new Set(selectedCards.map(encodeCard));
 
-  console.log(selectedCardsSet);
+  tableLogger.log(selectedCardsSet);
 
   return (
     <div className={styles.container}>
@@ -29,7 +32,7 @@ const CardTable: FC<ICardTableProps> = ({ selectedCards = [], onClick }) => {
                 })}
                 style={{ color: getSuitColor(suit) }}
                 onClick={() => {
-                  console.log(`card: ${encodeCard({ suit, num })}`);
+                  tableLogger.log(`card: ${encodeCard({ suit, num })}`);
                   onClick?.({ suit, num });
                 }}
               >
