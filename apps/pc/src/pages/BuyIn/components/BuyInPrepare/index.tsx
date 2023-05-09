@@ -8,7 +8,6 @@ import {
   TransactionOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { createLogger } from '../../../../common/commonLogger';
 import PlayerHand from '../PlayerHand';
 import {
   IPlayer,
@@ -17,25 +16,23 @@ import {
   // changeNamePlayer,
   // addPlayer,
   // removePlayer,
-  useAmountPerHand,
+  // useAmountPerHand,
   // useBuyInPlayers,
   // ISumData,
   useCurrentBuyInData,
 } from '../../../../models/buyIn';
-// import { ERouteName } from '../../../../routes/constants';
-// import { getPath } from '../../../../routes/utils';
 import styles from './index.module.scss';
 
-const buyInlogger = createLogger('pages/BuyIn');
-
-const InitialState = () => {
+const BuyInPrepare = () => {
   const {
     currentBuyInData: { amountPerhand, players: buyInPlayers },
     sumData,
     addPlayer,
+    removePlayer,
+    changePlayer,
+    changeCurrentBuyInData,
   } = useCurrentBuyInData();
 
-  const [amountPerHand, setAmountPerHand] = useAmountPerHand(); //这里关于useInput的复用
   const navigate = useNavigate();
 
   return (
@@ -47,8 +44,7 @@ const InitialState = () => {
             <div>
               <DollarOutlined /> 总买入金额
             </div>
-            {/* <div>{sumData.amountSum} </div> */}
-            <div>{amountPerhand}</div>
+            <div>{sumData.amountSum} </div>
           </div>
         </div>
 
@@ -59,12 +55,13 @@ const InitialState = () => {
               <Input
                 placeholder="Input here"
                 maxLength={10}
-                defaultValue={amountPerHand}
+                defaultValue={amountPerhand}
                 bordered={false}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  const num = Number(e.target.value);
-                  setAmountPerHand(num);
-                  buyInlogger.log(`amountPerHand = ${amountPerHand}`);
+                  changeCurrentBuyInData({
+                    players: buyInPlayers,
+                    amountPerhand: Number(e.target.value),
+                  });
                 }}
               />
             </div>
@@ -84,22 +81,8 @@ const InitialState = () => {
           <div key={element.id} className={styles.playerContainer}>
             <PlayerHand
               player={element}
-              // eslint-disable-next-line @typescript-eslint/no-empty-function
-              remove={() => {}}
-              // eslint-disable-next-line @typescript-eslint/no-empty-function
-              changeName={() => {}}
-              // eslint-disable-next-line @typescript-eslint/no-empty-function
-              changeHand={() => {}}
-              // remove={(id: string) => {
-              //   setBuyInPlayers(removePlayer(buyInPlayers, id));
-              // }}
-              // changeName={(id: string, name: string) => {
-              //   setBuyInPlayers(changeNamePlayer(buyInPlayers, id, name));
-              // }}
-              // changeHand={(id: string, hand: number) => {
-              //   buyInlogger.log(`Hand = ${hand}`);
-              //   setBuyInPlayers(changeHandPlayer(buyInPlayers, id, hand));
-              // }}
+              remove={removePlayer}
+              change={changePlayer}
             ></PlayerHand>
           </div>
         ))}
@@ -110,10 +93,6 @@ const InitialState = () => {
             className={styles.addBtn}
             icon={<DownCircleFilled className={styles.btnSvg} />}
             onClick={addPlayer}
-            // onClick={() => {
-            //   // setBuyInPlayers(addPlayer(buyInPlayers));
-
-            // }}
           >
             Add more player
           </Button>
@@ -121,7 +100,6 @@ const InitialState = () => {
         <div>
           <Button
             className={styles.nextBtn}
-            // onClick={() => navigate(getPath(ERouteName.BuyInWait))}
             onClick={() => navigate('/buyin/playing')}
           >
             Start play
@@ -132,4 +110,4 @@ const InitialState = () => {
   );
 };
 
-export default InitialState;
+export default BuyInPrepare;

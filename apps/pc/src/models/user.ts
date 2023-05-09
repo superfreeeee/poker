@@ -1,4 +1,4 @@
-import { atom, useAtom, useAtomValue} from 'jotai';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import { ELocalStorageKey, getItem, setItem } from '../common/localStorage';
 
 export interface IUser {

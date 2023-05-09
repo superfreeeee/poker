@@ -1,4 +1,4 @@
-import React, { useMemo, ChangeEvent, useState, FC } from 'react';
+import React, { ChangeEvent, useState, FC, useMemo } from 'react';
 import { Input, Button } from 'antd';
 import {
   DownCircleFilled,
@@ -7,52 +7,27 @@ import {
   SmileOutlined,
   TransactionOutlined,
 } from '@ant-design/icons';
-// import { useNavigate } from 'react-router-dom';
+import { nanoid } from 'nanoid';
 import PlayerHand from '../PlayerHand';
-import {
-  IPlayer,
-  BuyInPlayer,
-  changeHandPlayer,
-  changeNamePlayer,
-  addPlayer,
-  removePlayer,
-  useAmountPerHand,
-  useBuyInPlayers,
-  ISumData,
-} from '../../../../models/buyIn';
-// import { ERouteName } from '../../../../routes/constants';
-// import { getPath } from '../../../../routes/utils';
-import styles from '../InitialState/index.module.scss';
+import { IPlayer, useCurrentBuyInData, calcSumData } from '../../../../models/buyIn';
+import styles from '../BuyInPrepare/index.module.scss';
 import ownStyles from './index.module.scss';
 
-const calSumData = (details: BuyInPlayer, amoutPerHand: number): ISumData => {
-  let handSum = 0;
-  details.forEach((element: IPlayer) => {
-    handSum += element.hands;
-  });
-  const sumData: ISumData = {
-    playerSum: details.length,
-    handSum: handSum,
-    amountSum: handSum * amoutPerHand,
-  };
-  return sumData;
-};
-
-interface IEditStateProps {
-  onConfirm?: () => void;
-  onCancel?: () => void;
+interface IEditableProps {
+  exitEdit: () => void;
 }
 
-const EditState: FC<IEditStateProps> = ({ onConfirm, onCancel }) => {
-  const [amountPerHand, setAmountPerHand] = useAmountPerHand();
-  const [buyInPlayers, setBuyInPlayers] = useBuyInPlayers();
-  const [editAmountPerHand, setEditAmountPerHand] = useState(amountPerHand);
+const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
+  const {
+    currentBuyInData: { amountPerhand, players: buyInPlayers },
+    changeCurrentBuyInData,
+  } = useCurrentBuyInData();
+  const [editAmountPerhand, setEditAmoutPerhand] = useState(amountPerhand);
   const [editBuyInPlayers, setEditBuyInPlayers] = useState(buyInPlayers);
-
-  const sumData = useMemo(() => {
-    return calSumData(editBuyInPlayers, editAmountPerHand);
-  }, [editAmountPerHand, editBuyInPlayers]);
-  // const navigate = useNavigate();
+  const sumData = useMemo(
+    () => calcSumData({ amountPerhand: editAmountPerhand, players: editBuyInPlayers }),
+    [editAmountPerhand, editBuyInPlayers],
+  );
 
   return (
     <div className={styles.container}>
@@ -74,11 +49,10 @@ const EditState: FC<IEditStateProps> = ({ onConfirm, onCancel }) => {
               <Input
                 placeholder="Input here"
                 maxLength={10}
-                defaultValue={editAmountPerHand}
+                defaultValue={editAmountPerhand}
                 bordered={false}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  const num = Number(e.target.value);
-                  setEditAmountPerHand(num);
+                  setEditAmoutPerhand(Number(e.target.value));
                 }}
               />
             </div>
@@ -99,13 +73,13 @@ const EditState: FC<IEditStateProps> = ({ onConfirm, onCancel }) => {
             <PlayerHand
               player={element}
               remove={(id: string) => {
-                setEditBuyInPlayers(removePlayer(editBuyInPlayers, id));
+                setEditBuyInPlayers(editBuyInPlayers.filter((player) => player.id != id));
               }}
-              changeName={(id: string, name: string) => {
-                setEditBuyInPlayers(changeNamePlayer(editBuyInPlayers, id, name));
-              }}
-              changeHand={(id: string, hand: number) => {
-                setEditBuyInPlayers(changeHandPlayer(editBuyInPlayers, id, hand));
+              change={(targetPlayer: IPlayer) => {
+                setEditBuyInPlayers([
+                  ...editBuyInPlayers.filter((player) => player.id != targetPlayer.id),
+                  targetPlayer,
+                ]);
               }}
             ></PlayerHand>
           </div>
@@ -117,7 +91,15 @@ const EditState: FC<IEditStateProps> = ({ onConfirm, onCancel }) => {
             className={ownStyles.singleBtn}
             icon={<DownCircleFilled className={ownStyles.btnSvg} />}
             onClick={() => {
-              setEditBuyInPlayers(addPlayer(editBuyInPlayers));
+              setEditBuyInPlayers([
+                ...editBuyInPlayers,
+                {
+                  id: nanoid(),
+                  name: '',
+                  hands: 1,
+                  rest: 0,
+                },
+              ]);
             }}
           >
             Add more player
@@ -128,10 +110,11 @@ const EditState: FC<IEditStateProps> = ({ onConfirm, onCancel }) => {
             <Button
               className={styles.addBtn}
               onClick={() => {
-                setBuyInPlayers(editBuyInPlayers);
-                setAmountPerHand(editAmountPerHand);
-                // navigate(getPath(ERouteName.BuyInWait))
-                onConfirm?.();
+                changeCurrentBuyInData({
+                  amountPerhand: editAmountPerhand,
+                  players: editBuyInPlayers,
+                });
+                exitEdit();
               }}
             >
               Confirm Change
@@ -140,9 +123,8 @@ const EditState: FC<IEditStateProps> = ({ onConfirm, onCancel }) => {
           <div>
             <Button
               className={styles.nextBtn}
-              // onClick={() => navigate(getPath(ERouteName.BuyInWait))}
               onClick={() => {
-                onCancel?.();
+                exitEdit();
               }}
             >
               Cancel Change
@@ -153,4 +135,4 @@ const EditState: FC<IEditStateProps> = ({ onConfirm, onCancel }) => {
     </div>
   );
 };
-export default EditState;
+export default Editable;

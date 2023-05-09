@@ -1,15 +1,14 @@
-import React,{FC} from 'react';
+import React, { FC } from 'react';
 import { Button } from 'antd';
 import { UserOutlined, RedEnvelopeOutlined } from '@ant-design/icons';
 import { IPlayer } from '../../../../models/buyIn';
 import styles from './index.module.scss';
 
-interface IPlayerHandProps{
-  player:IPlayer
+interface IPlayerHandProps {
+  player: IPlayer;
 }
 
-const PlayerHandView :FC<IPlayerHandProps>= (props) => {
-  const player = props.player;
+const PlayerHandView: FC<IPlayerHandProps> = ({ player }: IPlayerHandProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.leftContainer}>

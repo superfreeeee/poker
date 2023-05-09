@@ -13,12 +13,11 @@ import styles from './index.module.scss';
 interface IPlayerHandProps {
   player: IPlayer;
   remove: (id: string) => void;
-  changeName: (id: string, name: string) => void;
-  changeHand: (id: string, hand: number) => void;
+  change: (targetPlayer: IPlayer) => void;
 }
 
-const PlayerHand: FC<IPlayerHandProps> = (props) => {
-  const { id, name, hands } = props.player;
+const PlayerHand: FC<IPlayerHandProps> = ({player,remove,change}:IPlayerHandProps) => {
+  const { id, name, hands } = player;
 
   return (
     <>
@@ -35,7 +34,10 @@ const PlayerHand: FC<IPlayerHandProps> = (props) => {
               defaultValue={name}
               bordered={false}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                props.changeName(id, e.target.value);
+                change({
+                  ...player,
+                  name: e.target.value,
+                });
               }}
             />
           </div>
@@ -45,7 +47,7 @@ const PlayerHand: FC<IPlayerHandProps> = (props) => {
           icon={<DeleteOutlined />}
           className={styles.btnBG}
           onClick={() => {
-            props.remove(id);
+            remove(id);
           }}
         />
       </div>
@@ -60,22 +62,21 @@ const PlayerHand: FC<IPlayerHandProps> = (props) => {
             // if (isNumber(e.target.value)) {
             //   params.changeHand(id, e.target.value);
             // }
-            const num = Number(e.target.value);
-            props.changeHand(id, num);
+            change({ ...player, hands: Number(e.target.value) });
           }}
         />
         <div className={styles.buttonWrap}>
           <div
             className={styles.btnSplitLine}
             onClick={() => {
-              props.changeHand(id, hands - 1);
+              change({ ...player, hands: hands - 1 });
             }}
           >
             <MinusOutlined />
           </div>
           <div
             onClick={() => {
-              props.changeHand(id, hands + 1);
+              change({ ...player, hands: hands + 1 });
             }}
           >
             <PlusOutlined />
