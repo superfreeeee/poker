@@ -1,0 +1,54 @@
+.container {
+  padding: 0 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  height: 50px;
+}
+
+.main {
+  display: flex;
+
+  .preview {
+    min-width: 400px;
+  }
+
+  .divider {
+    align-self: stretch;
+    margin: 12px 20px;
+    border-left: 1px solid #dbdbdb;
+  }
+
+  .controller {
+    padding-bottom: 40px;
+  }
+
+  .area {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  // under controller
+  .area + .area {
+    margin-top: 20px;
+  }
+
+  .cardsSelector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .cards {
+      font-size: 20px;
+    }
+  }
+
+  .seatBtn {
+    height: unset;
+    line-height: unset;
+    text-align: center;
+  }
+}

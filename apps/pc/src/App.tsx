@@ -6,6 +6,7 @@ import { LazyBuyIn } from './pages/BuyIn/lazy';
 import BuyInPrepare from './pages/BuyIn/components/BuyInPrepare';
 import BuyInPlaying from './pages/BuyIn/components/BuyInPlaying';
 import BuyInSettle from './pages/BuyIn/components/BuyInSettle';
+import HandCreate from './pages/HandCreate';
 import Redirect from './components/Redirect';
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
           {/* <Route path="" element={<div />} /> */}
           <Route path="" element={<Redirect path="/buyin/prepare" />} />
         </Route>
+        <Route path="/hand/create" element={<HandCreate />} />
         <Route path="*" element={<Redirect path="/" />} />
       </Routes>
     </BrowserRouter>
