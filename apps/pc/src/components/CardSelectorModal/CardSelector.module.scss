@@ -1,0 +1,23 @@
+.info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  font-size: 24px;
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .count {
+    min-width: 50px;
+    font-size: 16px;
+    color: #777;
+  }
+
+  .cards {
+    border-bottom: 1px solid #ddd;
+  }
+}

@@ -1,19 +1,21 @@
 import { useCallback, useState } from 'react';
-import { ICard } from '../../common/card';
+import { Card } from '../../models/card';
 
 export const useSelectCards = (max = 5) => {
-  const [selectedCards, setSelectedCards] = useState<ICard[]>([]);
+  const [selectedCards, setSelectedCards] = useState<Card[]>([]);
 
   const select = useCallback(
-    (card: ICard) => {
+    (card: Card) => {
       setSelectedCards((selectedCards) => {
         const targetCard = selectedCards.find(
           (selectedCard) => selectedCard.suit === card.suit && selectedCard.num === card.num,
         );
         const newCards = targetCard
-          ? selectedCards.filter((card) => card !== targetCard)
-          : [card, ...selectedCards];
-        return newCards.slice(0, max);
+          ? // unselect card
+            selectedCards.filter((card) => card !== targetCard)
+          : // add at end
+            [...selectedCards, card];
+        return newCards.slice(Math.max(newCards.length - max, 0), newCards.length);
       });
     },
     [max],
