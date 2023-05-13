@@ -1,0 +1,29 @@
+.actionContainer {
+  width: 400px;
+  padding: 4px 60px;
+  font-size: 18px;
+
+  &.stage {
+    background-color: #eee;
+  }
+
+  & > .wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+
+    .cards {
+      display: flex;
+      justify-content: center;
+      flex: 1;
+    }
+  }
+
+  &.deal > .wrapper {
+    width: 100%;
+  }
+
+  .chips {
+    font-weight: 600;
+  }
+}

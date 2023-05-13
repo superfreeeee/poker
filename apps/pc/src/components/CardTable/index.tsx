@@ -1,30 +1,22 @@
 import React, { FC } from 'react';
 import { Col, Row } from 'antd';
 import classNames from 'classnames';
-import { ECardSuit, getSuitColor, ICardNum, ICard, encodeCard } from '../../common/card';
-import { createLogger } from '../../common/commonLogger';
+import { ALL_NUMS, ALL_SUITS, Card, encodeCard, getSuitColor } from '../../models/card';
 import styles from './index.module.scss';
 
-const tableLogger = createLogger('components/CardTable');
-
-const suits = [ECardSuit.Spade, ECardSuit.Heart, ECardSuit.Diamond, ECardSuit.Club];
-const nums: ICardNum[] = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'];
-
 interface ICardTableProps {
-  selectedCards?: ICard[];
-  onClick?: (card: ICard) => void;
+  selectedCards?: Card[];
+  onClick?: (card: Card) => void;
 }
 
 const CardTable: FC<ICardTableProps> = ({ selectedCards = [], onClick }) => {
   const selectedCardsSet = new Set(selectedCards.map(encodeCard));
 
-  tableLogger.log(selectedCardsSet);
-
   return (
     <div className={styles.container}>
-      {suits.map((suit) => (
-        <Row key={suit} justify="space-evenly" align="middle" gutter={4}>
-          {nums.map((num) => (
+      {ALL_SUITS.map((suit) => (
+        <Row key={suit} justify="space-evenly" align="middle" wrap={false} gutter={2}>
+          {ALL_NUMS.map((num) => (
             <Col key={num} flex={1}>
               <div
                 className={classNames(styles.square, {
@@ -32,7 +24,6 @@ const CardTable: FC<ICardTableProps> = ({ selectedCards = [], onClick }) => {
                 })}
                 style={{ color: getSuitColor(suit) }}
                 onClick={() => {
-                  tableLogger.log(`card: ${encodeCard({ suit, num })}`);
                   onClick?.({ suit, num });
                 }}
               >
