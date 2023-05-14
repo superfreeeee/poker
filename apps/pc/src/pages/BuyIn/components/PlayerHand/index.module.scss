@@ -1,47 +1,59 @@
+$color-match: #c2d7ef;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 10px;
+  padding: 16px 30px;
+  background-color: white;
+}
+
 .firstLine {
   display: flex;
   justify-content: space-between;
+
+  .btnContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
-.leftWrap {
-  display: flex;
-}
+.inputForm {
+  :global {
+    .ant-form-item-control-input {
+      border-bottom: 1px solid black;
+      width: 250px;
+      overflow: hidden;
+    }
 
-.inputUnderLine {
-  border-bottom: 1px solid #cdc8c8;
+    .ant-form-item-explain-error {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  input {
+    margin-left: 15px;
+  }
 }
 
 .secondLine {
-  margin-top: 2vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.inputDecorate {
-  border-radius: 10px;
-  border: 2px solid #cdc8c8;
-  width: 200px;
-  height: 50px;
-
-  input {
-    margin-left: 6px;
-  }
-}
-
-.buttonWrap {
-  border-radius: 20px;
-  border: 2px solid #cdc8c8;
-  width: 5vw;
-  height: 4vh;
+.numberBtnWrap {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-
-  .svg {
-    padding-top: 1vh;
-  }
-
+  border-radius: 20px;
+  border: 2px solid #cdc8c8;
+  width: 60px;
+  height: 30px;
+  
   .btnSplitLine {
     width: 1.8vw;
     border-right: 1px solid #cdc8c8;
@@ -49,5 +61,5 @@
 }
 
 .btnBG {
-  background-color: #cdc8c8;
+  background-color: $color-match;
 }

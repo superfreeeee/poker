@@ -1,109 +1,93 @@
+$color-match: #c2d7ef;
+
 .container {
-  // display
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  // position
-
-  // box
   max-width: 800px;
   padding-bottom: 32px;
   margin: 0 auto;
   border: 0;
   border-radius: 10px;
-
-  // text
-
-  // color
   background-color: whitesmoke;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: stretch;
+  align-items: start;
   width: 100%;
-  padding: 14px 20px;
-  background-color: #a1e6b0;
+  height: 140px;
+  padding: 16px 20px;
+  background-color: $color-match;
 
   .leftWrap {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-  }
+    justify-content: start;
+    align-items: flex-start;
+    gap: 10px;
 
-  .sumData {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 200px;
-    font-size: 14px;
-  }
-}
-
-.inputContainer {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-
-  .inputHand {
-    border-bottom: 1px solid;
-    width: 100px;
-    font-size: 10px;
+    :global {
+      .ant-form-item {
+        margin-bottom: 0;
+      }
+    }
   }
 }
 
-.iconMargin {
-  margin-right: 0.5vw;
-}
+.inputForm {
+  :global {
+    .ant-form-item-control-input {
+      border-bottom: 1px solid black;
+      width: 250px;
+      overflow: hidden;
+    }
+    
+    .ant-form-item-explain-error {
+      display: flex;
+      justify-content: center;
+    }
+  }
 
-.amountSum {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  font-size: large;
+  input {
+    margin-left: 15px;
+  }
 }
 
 .playerList {
-  margin-top: 3vh;
-  max-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
   overflow: auto;
   width: 80%;
-
-  .playerContainer {
-    border-radius: 10px;
-    background-color: white;
-    padding: 12px 16px;
-    margin-bottom: 2vh;
-    display: flex;
-    flex-direction: column;
-  }
 }
 
 .buttonList {
-  width: 50%;
   display: flex;
   justify-content: space-between;
+  width: 50%;
 }
 
 .addBtn {
-  height: 4vh;
+  height: 30px;
   border-radius: 10px;
 
   .btnSvg {
-    color: #a1e6b0;
+    color: $color-match;
   }
 }
 
 .nextBtn {
-  height: 4vh;
-  background-color: #a1e6b0;
+  height: 30px;
   border-radius: 10px;
+  background-color: $color-match;
 
   :where(.css-dev-only-do-not-override-yp8pcc).ant-btn-default:not(:disabled):active {
-    color: #a1e6b0 !important;
-    border-color: #a1e6b0 !important;
+    color: $color-match !important;
+    border-color: $color-match !important;
   }
 }

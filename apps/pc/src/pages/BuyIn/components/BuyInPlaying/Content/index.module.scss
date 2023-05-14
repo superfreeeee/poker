@@ -1,3 +1,5 @@
+$color-match: #c2d7ef;
+
 .buttonList {
   display: flex;
   flex-direction: column;
@@ -8,14 +10,13 @@
 }
 
 .twoBtnContainer{
-    display: flex;
-    justify-content:space-between;
-
+  display: flex;
+  justify-content:space-between;
 }
 
 .nextBtn {
   border-radius: 10px;
-  background-color: #a1e6b0;
+  background-color: $color-match;
   height: 4vh;
   width: 100%;
 }

@@ -14,29 +14,55 @@ export interface IPlayer {
   rest: number; // 剩余筹码
 }
 
+// const getDefaultUser = () =>{
+//   // hook?
+//   // const defaultPlayer:IPlayer = {
+//   //   id:currentUser?.id || nanoid(),
+//   //   name:currentUser?.name || "",
+//   //   hands:0,
+//   //   rest:0
+//   // }
+
+// }
+
 export const defaultBuyInData: IBuyInData = {
   amountPerhand: 0,
-  players: [],
+  players: [
+    {
+      name: 'xiix',
+      id: nanoid(),
+      hands: 1,
+      rest: 0,
+    },
+  ],
 };
 
 const currentBuyInDataAtom = atom(defaultBuyInData);
 
 export const useCurrentBuyInData = () => {
   const [currentBuyInData, setCurrentBuyInData] = useAtom(currentBuyInDataAtom);
+  return useBuyInData({ buyInData: currentBuyInData, setBuyInData: setCurrentBuyInData });
+};
 
-  const sumData = useMemo(() => {
-    return calcSumData(currentBuyInData);
-  }, [currentBuyInData]);
+interface IBuyInDataProps {
+  buyInData: IBuyInData;
+  setBuyInData: (buyInData: IBuyInData) => void;
+}
+
+export const useBuyInData = ({ buyInData, setBuyInData }: IBuyInDataProps) => {
+  const statisticsData = useMemo(() => {
+    return calcStatisticsData(buyInData);
+  }, [buyInData]);
 
   const sumBenefit = useMemo(() => {
-    return calcBenfit(currentBuyInData);
-  }, [currentBuyInData]);
+    return calcBenfit(buyInData);
+  }, [buyInData]);
 
   const addPlayer = () => {
-    setCurrentBuyInData({
-      ...currentBuyInData,
+    setBuyInData({
+      ...buyInData,
       players: [
-        ...currentBuyInData.players,
+        ...buyInData.players,
         {
           id: nanoid(),
           name: '',
@@ -48,45 +74,47 @@ export const useCurrentBuyInData = () => {
   };
 
   const removePlayer = (targetId: string) => {
-    setCurrentBuyInData({
-      ...currentBuyInData,
-      players: currentBuyInData.players.filter((player) => player.id != targetId),
-    });
+    if (buyInData.players.length != 1) {
+      setBuyInData({
+        ...buyInData,
+        players: buyInData.players.filter((player) => player.id != targetId),
+      });
+    } else {
+      alert('玩家不能为空');
+    }
   };
 
   const changePlayer = (targetPlayer: IPlayer, index: number) => {
-    const originPlayers = currentBuyInData.players.slice();
+    const originPlayers = buyInData.players.slice();
     if (index < 0 || index >= originPlayers.length) {
       throw new Error(`Invalid index=${index} at changePlayer`);
     }
-
     originPlayers.splice(index, 1, targetPlayer);
-
-    setCurrentBuyInData({
-      ...currentBuyInData,
+    setBuyInData({
+      ...buyInData,
       players: originPlayers,
     });
   };
 
-  const changeCurrentBuyInData = (data: IBuyInData) => {
-    setCurrentBuyInData(data);
+  const changeBuyInData = (data: IBuyInData) => {
+    setBuyInData(data);
   };
 
   return {
-    currentBuyInData,
-    sumData,
+    buyInData,
+    statisticsData,
     sumBenefit,
     addPlayer,
     removePlayer,
     changePlayer,
-    changeCurrentBuyInData,
+    changeBuyInData,
   };
 };
 
-export interface ISumData {
-  playerSum: number;
-  handSum: number;
-  amountSum: number;
+export interface IStatisticsData {
+  totalPlayer: number;
+  totalHands: number;
+  totalAmount: number;
 }
 
 /**
@@ -94,14 +122,14 @@ export interface ISumData {
  * @param param0
  * @returns
  */
-export const calcSumData = ({ amountPerhand, players }: IBuyInData): ISumData => {
-  const handSum = players.reduce((sum, player) => sum + player.hands, 0);
-  const sumData: ISumData = {
-    playerSum: players.length,
-    handSum: handSum,
-    amountSum: handSum * amountPerhand,
+export const calcStatisticsData = ({ amountPerhand, players }: IBuyInData): IStatisticsData => {
+  const totalHands = players.reduce((sum, player) => sum + player.hands, 0);
+  const statisticsData: IStatisticsData = {
+    totalPlayer: players.length,
+    totalHands: totalHands,
+    totalAmount: totalHands * amountPerhand,
   };
-  return sumData;
+  return statisticsData;
 };
 
 /**

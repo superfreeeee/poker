@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Content from '../Content';
-import Editable from '../Editable';
+import Content from './Content';
+import Editable from './Editable';
 
 const BuyInPlaying = () => {
   const [isEdit, setEdit] = useState(false);
