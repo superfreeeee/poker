@@ -1,10 +1,11 @@
+import React, { FC, useEffect, useState } from 'react';
 import { Button } from 'antd';
-import React, { FC, forwardRef, RefObject, useImperativeHandle, useRef, useState } from 'react';
 import { renderCardText } from '../../../../components/Card';
 import { CardSelectorModal } from '../../../../components/CardSelectorModal';
 import { Card } from '../../../../models/card';
-import { HandBlindRecord, HandStage } from '../../../../models/hand';
+import { HandBlindRecord, HandStage, PostFlopHandStage } from '../../../../models/hand';
 import { PlayerSeat } from '../../../../models/player';
+import { getNextStage } from '../../hooks/useHandStage';
 import CompactInput from '../CompactInput';
 import styles from './index.module.scss';
 
@@ -16,11 +17,11 @@ type INextStageParams =
   | {
       stage: HandStage.Blinds;
       blinds: HandBlindRecord[];
-      potSize: number;
     }
   | {
       stage: HandStage.PreFlop | HandStage.Showdown;
       potSize: number;
+      cards?: Card[];
     }
   | {
       stage: HandStage.Flop | HandStage.Turn | HandStage.River;
@@ -28,10 +29,9 @@ type INextStageParams =
       cards: Card[];
     };
 
-export type IStageSettingRef = IPotSizeSettingRef;
-
 export interface IStageSettingProps {
-  stage: HandStage;
+  currentStage: HandStage;
+  estimatePotSize: number;
   stageClear: boolean;
   onNextStage: (params: INextStageParams) => void;
 }
@@ -41,64 +41,59 @@ export interface IStageSettingProps {
  * @param param0
  * @returns
  */
-const StageSetting = forwardRef<IStageSettingRef, IStageSettingProps>(
-  ({ stage, stageClear, onNextStage }, ref) => {
-    const potSizeRef = useRef<IPotSizeSettingRef>(null);
+const StageSetting = ({
+  currentStage,
+  estimatePotSize,
+  stageClear,
+  onNextStage,
+}: IStageSettingProps) => {
+  if (currentStage === HandStage.Init) {
+    return <InitSetting onConfirm={(players) => onNextStage({ stage: currentStage, players })} />;
+  }
 
-    useImperativeHandle(ref, () => {
-      return {
-        estimatePotSize: (potSize) => potSizeRef.current?.estimatePotSize(potSize),
-      };
-    });
+  if (currentStage === HandStage.Blinds) {
+    return <BlindsSetting onConfirm={(blinds) => onNextStage({ stage: currentStage, blinds })} />;
+  }
 
-    if (stage === HandStage.Init) {
-      return <InitSetting onConfirm={(players) => onNextStage({ stage, players })} />;
-    }
+  if (currentStage === HandStage.River) {
+    return (
+      <PotSizeSetting
+        estimatePotSize={estimatePotSize}
+        stageClear={stageClear}
+        onConfirm={(potSize) => onNextStage({ stage: HandStage.Showdown, potSize })}
+      />
+    );
+  }
 
-    if (stage === HandStage.Blinds) {
-      return (
-        <BlindsSetting
-          onConfirm={(blinds) =>
-            onNextStage({
-              stage,
-              blinds,
-              potSize: blinds.reduce((sum, { chips }) => sum + chips, 0),
-            })
-          }
-        />
-      );
-    }
+  if (
+    currentStage === HandStage.PreFlop ||
+    currentStage === HandStage.Flop ||
+    currentStage === HandStage.Turn
+  ) {
+    return (
+      <PostFlopSetting
+        key={currentStage}
+        currentStage={currentStage}
+        estimatePotSize={estimatePotSize}
+        stageClear={stageClear}
+        onConfirm={(nexStage, cards, potSize) => onNextStage({ stage: nexStage, cards, potSize })}
+      />
+    );
+  }
 
-    if (stage === HandStage.PreFlop || stage === HandStage.Showdown) {
-      return (
-        <PotSizeSetting
-          ref={potSizeRef}
-          stageClear={stageClear}
-          onConfirm={(potSize) => onNextStage({ stage, potSize })}
-        />
-      );
-    }
-    if (stage === HandStage.Flop || stage === HandStage.Turn || stage === HandStage.River) {
-      return (
-        <PostFlopSetting
-          stage={stage}
-          stageClear={stageClear}
-          onConfirm={(cards, potSize) => onNextStage({ stage, cards, potSize })}
-          potSizeRef={potSizeRef}
-        />
-      );
-    }
+  return <h4>No Setting for {currentStage} stage</h4>;
+};
 
-    return <h4>No Setting for {stage} stage</h4>;
-  },
-);
+interface IInitSettingProps {
+  onConfirm: (players: number) => void;
+}
 
 /**
  * HandStage.Init setting
  * @param param0
  * @returns
  */
-const InitSetting: FC<{ onConfirm: (players: number) => void }> = ({ onConfirm }) => {
+const InitSetting: FC<IInitSettingProps> = ({ onConfirm }) => {
   const [players, setPlayers] = useState(0);
 
   return (
@@ -118,20 +113,21 @@ const initBlinds: HandBlindRecord[] = [
   { seat: PlayerSeat.BB, type: 'BB', chips: 1 },
 ];
 
+interface IBlindsSettingProps {
+  onConfirm: (blinds: HandBlindRecord[]) => void;
+}
+
 /**
  * HandStage.Blinds setting
  * @param param0
  * @returns
  */
-const BlindsSetting: FC<{ onConfirm: (blinds: HandBlindRecord[]) => void }> = ({ onConfirm }) => {
+const BlindsSetting: FC<IBlindsSettingProps> = ({ onConfirm }) => {
   return <Button onClick={() => onConfirm(initBlinds)}>Next</Button>;
 };
 
-interface IPotSizeSettingRef {
-  estimatePotSize: (potSize: number) => void;
-}
-
 interface IPotSizeSettingProps {
+  estimatePotSize: number;
   stageClear: boolean;
   disabledConfirm?: boolean;
   onConfirm: (potSize: number) => void;
@@ -142,45 +138,49 @@ interface IPotSizeSettingProps {
  * @param param0
  * @returns
  */
-const PotSizeSetting = forwardRef<IPotSizeSettingRef, IPotSizeSettingProps>(
-  ({ stageClear, disabledConfirm = false, onConfirm }, ref) => {
-    const [potSize, setPotSize] = useState(0);
+const PotSizeSetting: FC<IPotSizeSettingProps> = ({
+  estimatePotSize,
+  stageClear,
+  disabledConfirm = false,
+  onConfirm,
+}) => {
+  const [potSize, setPotSize] = useState(estimatePotSize);
 
-    useImperativeHandle(ref, () => {
-      return {
-        estimatePotSize: (potSize) => setPotSize(potSize),
-      };
-    });
+  useEffect(() => {
+    setPotSize(estimatePotSize);
+  }, [estimatePotSize]);
 
-    return (
-      <CompactInput
-        placeholder="Pot size"
-        disabledConfirm={disabledConfirm || !stageClear || potSize <= 0}
-        value={potSize}
-        onValueChange={(input) => setPotSize(+input)}
-        onOk={() => onConfirm(potSize)}
-        okText="Next Stage"
-      />
-    );
-  },
-);
+  return (
+    <CompactInput
+      placeholder="Pot size"
+      disabledConfirm={disabledConfirm || !stageClear || potSize <= 0}
+      value={potSize}
+      onValueChange={(input) => setPotSize(+input)}
+      onOk={() => onConfirm(potSize)}
+      okText="Next Stage"
+    />
+  );
+};
 
 /**
- * PostFlop := HandStage.Flop | HandStage.Turn | HandStage.River setting
+ * PostFlop := HandStage.PreFlop | HandStage.Flop | HandStage.Turn | HandStage.River setting
  * @param param0
  * @returns
  */
 const PostFlopSetting: FC<{
-  stage: HandStage.Flop | HandStage.Turn | HandStage.River;
+  currentStage: HandStage.PreFlop | HandStage.Flop | HandStage.Turn | HandStage.River;
+  estimatePotSize: number;
   stageClear: boolean;
-  onConfirm: (dealCards: Card[], potSize: number) => void;
-  potSizeRef: RefObject<IPotSizeSettingRef>;
-}> = ({ stage, stageClear, onConfirm, potSizeRef }) => {
+  onConfirm: (nextStage: PostFlopHandStage, dealCards: Card[], potSize: number) => void;
+}> = ({ currentStage, estimatePotSize, stageClear, onConfirm }) => {
+  const nextStage = getNextStage(currentStage) as PostFlopHandStage;
+  const count = nextStage === HandStage.Flop ? 3 : 1;
+
   const [dealCards, setDealCards] = useState<Card[]>([]);
 
   const selectDealCards = () => {
     CardSelectorModal.open({
-      count: stage === HandStage.Flop ? 3 : 1,
+      count,
       selectedCards: dealCards,
       onSelect: setDealCards,
     });
@@ -190,15 +190,17 @@ const PostFlopSetting: FC<{
     <>
       <div className={styles.cardsSelector}>
         <Button type="primary" onClick={selectDealCards}>
-          Select {stage}
+          Select {nextStage}
         </Button>
         {renderCardText(dealCards, styles.cards)}
       </div>
       <PotSizeSetting
-        ref={potSizeRef}
+        estimatePotSize={estimatePotSize}
         stageClear={stageClear}
-        disabledConfirm={dealCards.length !== (stage === HandStage.Flop ? 3 : 1)}
-        onConfirm={(potSize) => onConfirm(dealCards, potSize)}
+        disabledConfirm={dealCards.length !== count}
+        onConfirm={(potSize) => {
+          onConfirm(nextStage, dealCards, potSize);
+        }}
       />
     </>
   );

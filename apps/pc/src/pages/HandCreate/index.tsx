@@ -1,47 +1,38 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Radio, RadioChangeEvent } from 'antd';
 import {
   ALL_PLAYER_ACTIONS,
-  ALL_SETTING_STAGES,
   HandStage,
   HandAction,
   PlayerAction,
-  SettingHandStage,
   SettingPlayerAction,
+  PostFlopHandStage,
 } from '../../models/hand';
 import { PlayerSeat } from '../../models/player';
 import HandActionUI from './components/HandAction';
 import CompactInput from './components/CompactInput';
-import StageSetting, { IStageSettingProps, IStageSettingRef } from './components/StageSetting';
+import StageSetting, { IStageSettingProps } from './components/StageSetting';
 import { usePlayerStates } from './hooks/usePlayerStates';
 import styles from './index.module.scss';
 import { useHandActions } from './hooks/useHandActions';
 import { useCurrentBetSize } from './hooks/useCurrentBetSize';
+import { getNextStage, useHandStage } from './hooks/useHandStage';
 
 const HandCreate = () => {
   const { actions, dispatchAction } = useHandActions();
-
-  // Next Stage state
-  const [stage, setStage] = useState<SettingHandStage>(HandStage.Init);
-
+  const { stage, nextStage } = useHandStage();
+  const { currentBetSize, updateCurrentBetSize, resetCurrentBetSize } = useCurrentBetSize();
   const [lastPotSize, setLastPotSize] = useState(0);
 
-  // User Action state
-  const [seat, setSeat] = useState<PlayerSeat>(PlayerSeat.UTG);
-  const [action, setAction] = useState<SettingPlayerAction>(PlayerAction.Check);
-  const [betSize, setBetSize] = useState(0);
-
-  const { currentBetSize, updateCurrentBetSize, resetCurrentBetSize } = useCurrentBetSize();
-
-  const stageSettingRef = useRef<IStageSettingRef>(null);
   const { playerStates, estimatePotSize, initStates, setBlinds, userAction, resetChips } =
     usePlayerStates({
       lastPotSize,
     });
 
-  useEffect(() => {
-    stageSettingRef.current?.estimatePotSize(estimatePotSize);
-  }, [estimatePotSize, stage]);
+  // User Action state
+  const [seat, setSeat] = useState<PlayerSeat>(PlayerSeat.UTG);
+  const [action, setAction] = useState<SettingPlayerAction>(PlayerAction.Check);
+  const [betSize, setBetSize] = useState(0);
 
   const foldPlayers = playerStates.filter((state) => state.fold).length;
   const noSeatLeft = playerStates.length - foldPlayers <= 1;
@@ -82,10 +73,9 @@ const HandCreate = () => {
       dispatchAction(...actions);
       setBetSize(0);
       resetCurrentBetSize();
-      // Go next stage
-      setStage(ALL_SETTING_STAGES[ALL_SETTING_STAGES.indexOf(stage) + 1]);
+      nextStage();
     },
-    [dispatchAction, stage],
+    [dispatchAction, nextStage, resetCurrentBetSize],
   );
 
   const dispatchUserAction = () => {
@@ -105,11 +95,11 @@ const HandCreate = () => {
     switch (params.stage) {
       case HandStage.Init:
         initStates(params.players);
-        dispatchStageAction({ type: 'stageInit', players: params.players });
+        dispatchStageAction({ type: 'stageBlinds', players: params.players });
         break;
 
       case HandStage.Blinds: {
-        const { blinds, potSize } = params;
+        const { blinds } = params;
         setBlinds(blinds);
         dispatchStageAction(
           ...blinds.map(({ seat, type, chips }) => {
@@ -121,9 +111,10 @@ const HandCreate = () => {
             };
           }),
           {
-            type: 'stageBlinds',
-            blinds,
-            potSize,
+            type: 'stageInfo',
+            stage: HandStage.PreFlop,
+            potSize: blinds.reduce((res, { chips }) => res + chips, 0),
+            cards: [],
           },
         );
         updateCurrentBetSize(blinds.reduce((res, { chips }) => Math.max(res, chips), 0));
@@ -131,23 +122,15 @@ const HandCreate = () => {
       }
 
       case HandStage.PreFlop:
-      case HandStage.Showdown:
-        dispatchStageAction({
-          type: 'stageInfo',
-          stage: params.stage,
-          potSize: params.potSize,
-          cards: [],
-        });
-        break;
-
       case HandStage.Flop:
       case HandStage.Turn:
       case HandStage.River:
+      case HandStage.Showdown:
         dispatchStageAction({
           type: 'stageInfo',
-          stage: params.stage,
+          stage: getNextStage(params.stage) as PostFlopHandStage,
           potSize: params.potSize,
-          cards: params.cards,
+          cards: params.cards ?? [],
         });
         resetChips();
         setLastPotSize(params.potSize);
@@ -178,70 +161,78 @@ const HandCreate = () => {
           <div className={styles.area}>
             <h3>Current Stage: {stage}</h3>
             <StageSetting
-              ref={stageSettingRef}
-              stage={stage}
+              currentStage={stage}
+              estimatePotSize={estimatePotSize}
               stageClear={stageClear}
               onNextStage={onNextStage}
             />
           </div>
 
           {/* User action */}
-          {stage !== HandStage.Init && stage !== HandStage.Blinds && (
-            <div className={styles.area}>
-              <h3>User Action</h3>
-              <Radio.Group
-                buttonStyle="solid"
-                optionType="button"
-                value={seat}
-                onChange={(e) => {
-                  setSeat(e.target.value as PlayerSeat);
-                }}
-              >
-                {playerStates.map(({ seat, fold, chips }) => (
-                  <Radio.Button key={seat} className={styles.seatBtn} value={seat} disabled={fold}>
-                    <div>{seat}</div>
-                    <div>
-                      {fold && 'fold '}
-                      {(!fold || chips > 0) && chips}
-                    </div>
-                  </Radio.Button>
-                ))}
-              </Radio.Group>
-              <Radio.Group
-                buttonStyle="solid"
-                optionType="button"
-                options={ALL_PLAYER_ACTIONS.map((action) => {
-                  const currentState = playerStates.find((state) => state.seat === seat);
-                  return {
-                    label: action,
-                    value: action,
-                    disabled:
-                      stageClear ||
-                      (action === PlayerAction.Check &&
-                        currentState &&
-                        currentState.chips < currentBetSize) ||
-                      (action === PlayerAction.Bet && currentBetSize > 0),
-                  };
-                })}
-                value={action}
-                onChange={onActionChange}
-              />
-              <div>currentBetSize: {currentBetSize}</div>
-              <CompactInput
-                placeholder="Input bet size"
-                disabled={noSeatLeft || stageClear}
-                disabledInput={
-                  ![PlayerAction.Bet, PlayerAction.Raise, PlayerAction.Allin].includes(action)
-                }
-                disabledConfirm={playerStates.some(
-                  (state) => state.seat === seat && state.actioned && state.chips >= currentBetSize,
-                )}
-                value={betSize}
-                onValueChange={(input) => setBetSize(+input)}
-                onOk={dispatchUserAction}
-              />
-            </div>
-          )}
+          {stage !== HandStage.Init &&
+            stage !== HandStage.Blinds &&
+            stage !== HandStage.Showdown && (
+              <div className={styles.area}>
+                <h3>User Action</h3>
+                <Radio.Group
+                  buttonStyle="solid"
+                  optionType="button"
+                  value={seat}
+                  onChange={(e) => {
+                    setSeat(e.target.value as PlayerSeat);
+                  }}
+                >
+                  {playerStates.map(({ seat, fold, chips }) => (
+                    <Radio.Button
+                      key={seat}
+                      className={styles.seatBtn}
+                      value={seat}
+                      disabled={fold}
+                    >
+                      <div>{seat}</div>
+                      <div>
+                        {fold && 'fold '}
+                        {(!fold || chips > 0) && chips}
+                      </div>
+                    </Radio.Button>
+                  ))}
+                </Radio.Group>
+                <Radio.Group
+                  buttonStyle="solid"
+                  optionType="button"
+                  options={ALL_PLAYER_ACTIONS.map((action) => {
+                    const currentState = playerStates.find((state) => state.seat === seat);
+                    return {
+                      label: action,
+                      value: action,
+                      disabled:
+                        stageClear ||
+                        (action === PlayerAction.Check &&
+                          currentState &&
+                          currentState.chips < currentBetSize) ||
+                        (action === PlayerAction.Bet && currentBetSize > 0),
+                    };
+                  })}
+                  value={action}
+                  onChange={onActionChange}
+                />
+                <div>currentBetSize: {currentBetSize}</div>
+                <CompactInput
+                  placeholder="Input bet size"
+                  disabled={noSeatLeft || stageClear}
+                  disabledInput={
+                    ![PlayerAction.Bet, PlayerAction.Raise, PlayerAction.Allin].includes(action)
+                  }
+                  disabledConfirm={playerStates.some(
+                    (state) =>
+                      state.seat === seat && state.actioned && state.chips >= currentBetSize,
+                  )}
+                  value={betSize}
+                  onValueChange={(input) => setBetSize(+input)}
+                  onOk={dispatchUserAction}
+                />
+              </div>
+            )}
         </div>
       </div>
     </div>

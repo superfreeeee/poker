@@ -9,9 +9,13 @@ export enum HandStage {
   Turn = 'Turn',
   River = 'River',
   Showdown = 'Showdown', // show cards
-
-  PostFlop = 'Post-Flop', // info stage
 }
+
+export type PostFlopHandStage =
+  | HandStage.Flop
+  | HandStage.Turn
+  | HandStage.River
+  | HandStage.Showdown;
 
 export const ALL_SETTING_STAGES = [
   HandStage.Init,
@@ -57,13 +61,8 @@ export interface HandBlindRecord {
 
 export type HandAction =
   | {
-      type: 'stageInit';
-      players: number;
-    }
-  | {
       type: 'stageBlinds';
-      potSize: number;
-      blinds: HandBlindRecord[];
+      players: number;
     }
   | {
       type: 'stageInfo';
