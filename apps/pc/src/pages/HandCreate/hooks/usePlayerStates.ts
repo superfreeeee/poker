@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { PlayerAction } from '../../models/hand';
-import { PlayerSeat } from '../../models/player';
+import { keyBy } from 'lodash-es';
+import { HandBlindRecord, PlayerAction } from '../../../models/hand';
+import { getPlayerSeats, PlayerSeat } from '../../../models/player';
 
 export type PlayerState = {
   seat: PlayerSeat;
@@ -10,23 +11,37 @@ export type PlayerState = {
 };
 
 interface IUsePlayerStatesProps {
-  seats: PlayerSeat[];
+  lastPotSize: number;
 }
 
-export const usePlayerStates = ({ seats }: IUsePlayerStatesProps) => {
+export const usePlayerStates = ({ lastPotSize }: IUsePlayerStatesProps) => {
   const [playerStates, setPlayerStates] = useState<PlayerState[]>([]);
+  const estimatePotSize = playerStates.reduce((sum, state) => sum + state.chips, lastPotSize);
 
   useEffect(() => {
-    const newSeatStates = seats.map((seat) => {
-      if (seat === PlayerSeat.SB || seat === PlayerSeat.BB) {
-        return { seat, fold: false, actioned: false, chips: 2 };
-      }
+    console.log('playerStates', playerStates);
+  }, [playerStates]);
+
+  const initStates = (players: number) => {
+    const newSeatStates = getPlayerSeats(players).map((seat) => {
       return { seat, fold: false, actioned: false, chips: 0 };
     });
     setPlayerStates(newSeatStates);
-  }, [seats]);
+  };
 
-  const userAction = (action: PlayerAction, seat: PlayerSeat, chips: number): PlayerState[] => {
+  const setBlinds = (blinds: HandBlindRecord[]) => {
+    const blindsObj = keyBy(blinds, 'seat');
+    const statesWithBlinds = playerStates.map((state) => {
+      const record = blindsObj[state.seat];
+      if (record) {
+        return { ...state, chips: record.chips };
+      }
+      return state;
+    });
+    setPlayerStates(statesWithBlinds);
+  };
+
+  const userAction = (action: PlayerAction, seat: PlayerSeat, chips: number) => {
     const nextStates = playerStates.map((state) => {
       if (state.seat !== seat) return state;
 
@@ -46,7 +61,6 @@ export const usePlayerStates = ({ seats }: IUsePlayerStatesProps) => {
     });
 
     setPlayerStates(nextStates);
-    return nextStates;
   };
 
   const resetChips = useCallback(() => {
@@ -59,6 +73,9 @@ export const usePlayerStates = ({ seats }: IUsePlayerStatesProps) => {
 
   return {
     playerStates,
+    estimatePotSize,
+    initStates,
+    setBlinds,
     userAction,
     resetChips,
   };

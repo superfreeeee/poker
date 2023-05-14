@@ -45,7 +45,8 @@
     "import/no-unresolved": 2,
     "import/no-self-import": 2,
     "import/no-cycle": 2,
-    "import/order": 2
+    "import/order": 2,
+    "react/display-name": 0
   },
   "ignorePatterns": ["node_modules/**", "dist", "webpack.config.js", "commitlint.config.js"]
 }

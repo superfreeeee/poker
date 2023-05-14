@@ -16,9 +16,11 @@ export enum HandStage {
 export const ALL_SETTING_STAGES = [
   HandStage.Init,
   HandStage.Blinds,
+  HandStage.PreFlop,
   HandStage.Flop,
   HandStage.Turn,
   HandStage.River,
+  HandStage.Showdown,
 ] as const;
 
 export type SettingHandStage = (typeof ALL_SETTING_STAGES)[number];
@@ -47,6 +49,12 @@ export type SettingPlayerAction = (typeof ALL_PLAYER_ACTIONS)[number];
 
 type BlindType = 'SB' | 'BB' | `Straddle-${number}`;
 
+export interface HandBlindRecord {
+  seat: PlayerSeat;
+  type: BlindType;
+  chips: number;
+}
+
 export type HandAction =
   | {
       type: 'stageInit';
@@ -55,6 +63,7 @@ export type HandAction =
   | {
       type: 'stageBlinds';
       potSize: number;
+      blinds: HandBlindRecord[];
     }
   | {
       type: 'stageInfo';
