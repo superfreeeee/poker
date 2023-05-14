@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { HandAction } from '../../../models/hand';
 
 export const useHandActions = () => {
@@ -8,9 +8,7 @@ export const useHandActions = () => {
     setActions([...actions, ...addActions]);
   };
 
-  useEffect(() => {
-    console.log('actions', actions);
-  }, [actions]);
+  // console.log('actions', actions);
 
   return { actions, dispatchAction };
 };
