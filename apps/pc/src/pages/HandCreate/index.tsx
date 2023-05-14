@@ -1,22 +1,21 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Radio, RadioChangeEvent } from 'antd';
+import { Radio } from 'antd';
 import {
-  ALL_PLAYER_ACTIONS,
   HandStage,
   HandAction,
   PlayerAction,
   SettingPlayerAction,
-  PostFlopHandStage,
+  getPlayerActionOptions,
 } from '../../models/hand';
 import { PlayerSeat } from '../../models/player';
 import HandActionUI from './components/HandAction';
 import CompactInput from './components/CompactInput';
 import StageSetting, { IStageSettingProps } from './components/StageSetting';
 import { usePlayerStates } from './hooks/usePlayerStates';
-import styles from './index.module.scss';
 import { useHandActions } from './hooks/useHandActions';
 import { useCurrentBetSize } from './hooks/useCurrentBetSize';
-import { getNextStage, useHandStage } from './hooks/useHandStage';
+import { useHandStage } from './hooks/useHandStage';
+import styles from './index.module.scss';
 
 const HandCreate = () => {
   const { actions, dispatchAction } = useHandActions();
@@ -31,7 +30,7 @@ const HandCreate = () => {
 
   // User Action state
   const [seat, setSeat] = useState<PlayerSeat>(PlayerSeat.UTG);
-  const [action, setAction] = useState<SettingPlayerAction>(PlayerAction.Check);
+  const [action, setAction] = useState<SettingPlayerAction>(PlayerAction.Fold);
   const [betSize, setBetSize] = useState(0);
 
   const foldPlayers = playerStates.filter((state) => state.fold).length;
@@ -45,19 +44,18 @@ const HandCreate = () => {
     [currentBetSize, playerStates],
   );
 
-  const onActionChange = (e: RadioChangeEvent) => {
-    const action = e.target.value as SettingPlayerAction;
+  const setActionWithBetSize = (action: SettingPlayerAction, betSize?: number) => {
     setAction(action);
 
     if (action === PlayerAction.Call) {
-      setBetSize(currentBetSize);
+      setBetSize(betSize ?? currentBetSize);
     } else if (action === PlayerAction.Check || action === PlayerAction.Fold) {
       setBetSize(0);
     }
   };
 
-  const estimateNextSeat = () => {
-    let nextIndex = playerStates.findIndex((state) => state.seat === seat);
+  const estimateNextSeat = (fromIndex = playerStates.findIndex((state) => state.seat === seat)) => {
+    let nextIndex = fromIndex;
     while (!noSeatLeft) {
       nextIndex = (nextIndex + 1) % playerStates.length;
       const nextState = playerStates[nextIndex];
@@ -87,6 +85,12 @@ const HandCreate = () => {
       action,
       chips: [PlayerAction.Fold, PlayerAction.Check].includes(action) ? undefined : betSize,
     });
+
+    // Set to Call when previous player bet
+    if (action === PlayerAction.Bet) {
+      setActionWithBetSize(PlayerAction.Call, betSize);
+    }
+
     // Go next seat
     estimateNextSeat();
   };
@@ -121,22 +125,35 @@ const HandCreate = () => {
         break;
       }
 
-      case HandStage.PreFlop:
       case HandStage.Flop:
       case HandStage.Turn:
       case HandStage.River:
       case HandStage.Showdown:
+        setActionWithBetSize(PlayerAction.Check);
+
+      // eslint-disable-next-line no-fallthrough
+      case HandStage.PreFlop:
         dispatchStageAction({
           type: 'stageInfo',
-          stage: getNextStage(params.stage) as PostFlopHandStage,
+          stage: params.stage,
           potSize: params.potSize,
           cards: params.cards ?? [],
         });
         resetChips();
         setLastPotSize(params.potSize);
+        // Reset to First player & Check
+        estimateNextSeat(0);
         break;
     }
   };
+
+  const playerActions = useMemo(() => {
+    return getPlayerActionOptions({
+      currentBetSize,
+      currentState: playerStates.find((state) => state.seat === seat),
+      stageClear,
+    });
+  }, [currentBetSize, playerStates, seat, stageClear]);
 
   return (
     <div className={styles.container}>
@@ -200,21 +217,9 @@ const HandCreate = () => {
                 <Radio.Group
                   buttonStyle="solid"
                   optionType="button"
-                  options={ALL_PLAYER_ACTIONS.map((action) => {
-                    const currentState = playerStates.find((state) => state.seat === seat);
-                    return {
-                      label: action,
-                      value: action,
-                      disabled:
-                        stageClear ||
-                        (action === PlayerAction.Check &&
-                          currentState &&
-                          currentState.chips < currentBetSize) ||
-                        (action === PlayerAction.Bet && currentBetSize > 0),
-                    };
-                  })}
+                  options={playerActions}
                   value={action}
-                  onChange={onActionChange}
+                  onChange={(e) => setActionWithBetSize(e.target.value as SettingPlayerAction)}
                 />
                 <div>currentBetSize: {currentBetSize}</div>
                 <CompactInput

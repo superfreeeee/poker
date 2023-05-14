@@ -1,5 +1,6 @@
+import { CheckboxOptionType } from 'antd';
 import { Card } from './card';
-import { PlayerSeat } from './player';
+import { PlayerSeat, PlayerState } from './player';
 
 export enum HandStage {
   Init = 'Init', // players unknown
@@ -40,7 +41,7 @@ export enum PlayerAction {
   Showdown = 'showdown',
 }
 
-export const ALL_PLAYER_ACTIONS = [
+const ALL_PLAYER_ACTIONS = [
   PlayerAction.Check,
   PlayerAction.Fold,
   PlayerAction.Call,
@@ -50,6 +51,33 @@ export const ALL_PLAYER_ACTIONS = [
 ] as const;
 
 export type SettingPlayerAction = (typeof ALL_PLAYER_ACTIONS)[number];
+
+interface IGetPlayerActionsProps {
+  currentBetSize: number;
+  currentState?: PlayerState;
+  stageClear: boolean;
+}
+
+export const getPlayerActionOptions = ({
+  currentBetSize,
+  currentState,
+  stageClear,
+}: IGetPlayerActionsProps): CheckboxOptionType[] => {
+  const actions = ALL_PLAYER_ACTIONS.filter(
+    (action) => !(currentBetSize > 0 ? action === PlayerAction.Bet : action === PlayerAction.Raise),
+  ) as SettingPlayerAction[];
+
+  return actions.map((action) => {
+    return {
+      label: action,
+      value: action,
+      disabled:
+        stageClear ||
+        (action === PlayerAction.Check && currentState && currentState.chips < currentBetSize) ||
+        (currentBetSize === 0 && action === PlayerAction.Call),
+    };
+  });
+};
 
 type BlindType = 'SB' | 'BB' | `Straddle-${number}`;
 

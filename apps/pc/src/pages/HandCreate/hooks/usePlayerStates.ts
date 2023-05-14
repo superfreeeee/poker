@@ -1,14 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { keyBy } from 'lodash-es';
 import { HandBlindRecord, PlayerAction } from '../../../models/hand';
-import { getPlayerSeats, PlayerSeat } from '../../../models/player';
-
-export type PlayerState = {
-  seat: PlayerSeat;
-  fold: boolean;
-  actioned: boolean;
-  chips: number;
-};
+import { getPlayerSeats, PlayerSeat, PlayerState } from '../../../models/player';
 
 interface IUsePlayerStatesProps {
   lastPotSize: number;
@@ -18,9 +11,7 @@ export const usePlayerStates = ({ lastPotSize }: IUsePlayerStatesProps) => {
   const [playerStates, setPlayerStates] = useState<PlayerState[]>([]);
   const estimatePotSize = playerStates.reduce((sum, state) => sum + state.chips, lastPotSize);
 
-  useEffect(() => {
-    console.log('playerStates', playerStates);
-  }, [playerStates]);
+  // console.log('playerStates', playerStates);
 
   const initStates = (players: number) => {
     const newSeatStates = getPlayerSeats(players).map((seat) => {
