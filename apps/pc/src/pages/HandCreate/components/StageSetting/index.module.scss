@@ -1,3 +1,13 @@
+.blindRecord {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .title {
+    width: 40px;
+  }
+}
+
 .cardsSelector {
   display: flex;
   align-items: center;

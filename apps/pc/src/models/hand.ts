@@ -79,11 +79,8 @@ export const getPlayerActionOptions = ({
   });
 };
 
-type BlindType = 'SB' | 'BB' | `Straddle-${number}`;
-
 export interface HandBlindRecord {
   seat: PlayerSeat;
-  type: BlindType;
   chips: number;
 }
 
@@ -101,7 +98,6 @@ export type HandAction =
   | {
       type: 'playerPayBlinds';
       seat: PlayerSeat;
-      blindType: BlindType;
       chips: number;
     }
   | {

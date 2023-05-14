@@ -1,10 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Button } from 'antd';
+import { Button, Input } from 'antd';
+import { MinusCircleOutlined } from '@ant-design/icons';
 import { renderCardText } from '../../../../components/Card';
 import { CardSelectorModal } from '../../../../components/CardSelectorModal';
 import { Card } from '../../../../models/card';
 import { HandBlindRecord, HandStage, PostFlopHandStage } from '../../../../models/hand';
-import { PlayerSeat } from '../../../../models/player';
+import { PlayerSeat, PlayerState } from '../../../../models/player';
 import { getNextStage } from '../../hooks/useHandStage';
 import CompactInput from '../CompactInput';
 import styles from './index.module.scss';
@@ -31,6 +32,7 @@ type INextStageParams =
 
 export interface IStageSettingProps {
   currentStage: HandStage;
+  playerStates: PlayerState[];
   estimatePotSize: number;
   stageClear: boolean;
   onNextStage: (params: INextStageParams) => void;
@@ -43,6 +45,7 @@ export interface IStageSettingProps {
  */
 const StageSetting = ({
   currentStage,
+  playerStates,
   estimatePotSize,
   stageClear,
   onNextStage,
@@ -52,7 +55,12 @@ const StageSetting = ({
   }
 
   if (currentStage === HandStage.Blinds) {
-    return <BlindsSetting onConfirm={(blinds) => onNextStage({ stage: currentStage, blinds })} />;
+    return (
+      <BlindsSetting
+        playerStates={playerStates}
+        onConfirm={(blinds) => onNextStage({ stage: currentStage, blinds })}
+      />
+    );
   }
 
   if (currentStage === HandStage.River) {
@@ -109,11 +117,12 @@ const InitSetting: FC<IInitSettingProps> = ({ onConfirm }) => {
 };
 
 const initBlinds: HandBlindRecord[] = [
-  { seat: PlayerSeat.SB, type: 'SB', chips: 0.5 },
-  { seat: PlayerSeat.BB, type: 'BB', chips: 1 },
+  { seat: PlayerSeat.SB, chips: 0.5 },
+  { seat: PlayerSeat.BB, chips: 1 },
 ];
 
 interface IBlindsSettingProps {
+  playerStates: PlayerState[];
   onConfirm: (blinds: HandBlindRecord[]) => void;
 }
 
@@ -122,8 +131,64 @@ interface IBlindsSettingProps {
  * @param param0
  * @returns
  */
-const BlindsSetting: FC<IBlindsSettingProps> = ({ onConfirm }) => {
-  return <Button onClick={() => onConfirm(initBlinds)}>Next</Button>;
+const BlindsSetting: FC<IBlindsSettingProps> = ({ playerStates, onConfirm }) => {
+  const [blinds, setBlinds] = useState<HandBlindRecord[]>(initBlinds);
+
+  return (
+    <>
+      {blinds.map(({ seat, chips }, index) => {
+        return (
+          <div key={seat} className={styles.blindRecord}>
+            <div className={styles.title}>{seat}</div>
+            <Input
+              placeholder="Input Blind Size"
+              type="number"
+              value={chips}
+              onChange={(e) => {
+                const newBlinds = blinds.slice();
+                newBlinds.splice(index, 1, {
+                  ...blinds[index],
+                  chips: +e.target.value,
+                });
+                setBlinds(newBlinds);
+              }}
+            />
+            {
+              <Button
+                style={{ width: 50 }}
+                type="text"
+                danger
+                disabled={seat === PlayerSeat.SB || seat === PlayerSeat.BB}
+                icon={<MinusCircleOutlined />}
+                onClick={() => {
+                  const newBlinds = blinds.slice();
+                  newBlinds.splice(index, 1);
+                  setBlinds(newBlinds);
+                }}
+              />
+            }
+          </div>
+        );
+      })}
+      <Button
+        disabled={blinds.length >= playerStates.length}
+        onClick={() => {
+          setBlinds([
+            ...blinds,
+            {
+              seat: playerStates[blinds.length].seat,
+              chips: blinds[blinds.length - 1].chips * 2,
+            },
+          ]);
+        }}
+      >
+        +
+      </Button>
+      <Button type="primary" onClick={() => onConfirm(blinds)}>
+        Next
+      </Button>
+    </>
+  );
 };
 
 interface IPotSizeSettingProps {

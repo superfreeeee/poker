@@ -35,7 +35,7 @@ const HandAction: FC<{ action: IHandAction }> = ({ action }) => {
       return (
         <div className={styles.wrapper}>
           <div style={{ width: 100 }}>{action.seat}</div>
-          <div style={{ flex: 1 }}>(Pay Blind: {action.blindType})</div>
+          <div style={{ flex: 1 }}>(Pay Blind)</div>
           <div className={styles.chips}>{action.chips}</div>
         </div>
       );

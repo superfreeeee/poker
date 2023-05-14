@@ -106,11 +106,10 @@ const HandCreate = () => {
         const { blinds } = params;
         setBlinds(blinds);
         dispatchStageAction(
-          ...blinds.map(({ seat, type, chips }) => {
+          ...blinds.map(({ seat, chips }) => {
             return {
               type: 'playerPayBlinds' as const,
               seat,
-              blindType: type,
               chips,
             };
           }),
@@ -122,6 +121,7 @@ const HandCreate = () => {
           },
         );
         updateCurrentBetSize(blinds.reduce((res, { chips }) => Math.max(res, chips), 0));
+        setSeat(playerStates[blinds.length % playerStates.length].seat);
         break;
       }
 
@@ -142,7 +142,7 @@ const HandCreate = () => {
         resetChips();
         setLastPotSize(params.potSize);
         // Reset to First player & Check
-        estimateNextSeat(0);
+        estimateNextSeat(-1);
         break;
     }
   };
@@ -179,6 +179,7 @@ const HandCreate = () => {
             <h3>Current Stage: {stage}</h3>
             <StageSetting
               currentStage={stage}
+              playerStates={playerStates}
               estimatePotSize={estimatePotSize}
               stageClear={stageClear}
               onNextStage={onNextStage}
