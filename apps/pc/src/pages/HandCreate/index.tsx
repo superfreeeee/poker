@@ -1,6 +1,5 @@
-/* eslint-disable no-fallthrough */
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { Button, Radio, RadioChangeEvent } from 'antd';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Radio, RadioChangeEvent } from 'antd';
 import {
   ALL_PLAYER_ACTIONS,
   ALL_SETTING_STAGES,
@@ -10,21 +9,20 @@ import {
   SettingHandStage,
   SettingPlayerAction,
 } from '../../models/hand';
-import { getPlayerSeats, PlayerSeat } from '../../models/player';
+import { PlayerSeat } from '../../models/player';
 import HandActionUI from './components/HandAction';
 import CompactInput from './components/CompactInput';
-import SetPlayers from './components/SetPlayers';
-import SetPostFlop, { ISetPostFlopRef } from './components/SetPostFlop';
-import { PlayerState, usePlayerStates } from './usePlayerStates';
+import StageSetting, { IStageSettingProps, IStageSettingRef } from './components/StageSetting';
+import { usePlayerStates } from './hooks/usePlayerStates';
 import styles from './index.module.scss';
+import { useHandActions } from './hooks/useHandActions';
+import { useCurrentBetSize } from './hooks/useCurrentBetSize';
 
 const HandCreate = () => {
-  const [actions, setActions] = useState<HandAction[]>([]);
+  const { actions, dispatchAction } = useHandActions();
 
   // Next Stage state
   const [stage, setStage] = useState<SettingHandStage>(HandStage.Init);
-  const [players, setPlayers] = useState(0);
-  const seats = useMemo(() => getPlayerSeats(players), [players]);
 
   const [lastPotSize, setLastPotSize] = useState(0);
 
@@ -33,12 +31,20 @@ const HandCreate = () => {
   const [action, setAction] = useState<SettingPlayerAction>(PlayerAction.Check);
   const [betSize, setBetSize] = useState(0);
 
-  const [currentBetSize, setCurrentBetSize] = useState(2); // Biggest bet size at current stage
+  const { currentBetSize, updateCurrentBetSize, resetCurrentBetSize } = useCurrentBetSize();
 
-  const { playerStates, userAction, resetChips } = usePlayerStates({ seats });
+  const stageSettingRef = useRef<IStageSettingRef>(null);
+  const { playerStates, estimatePotSize, initStates, setBlinds, userAction, resetChips } =
+    usePlayerStates({
+      lastPotSize,
+    });
+
+  useEffect(() => {
+    stageSettingRef.current?.estimatePotSize(estimatePotSize);
+  }, [estimatePotSize, stage]);
 
   const foldPlayers = playerStates.filter((state) => state.fold).length;
-  const noSeatLeft = seats.length - foldPlayers <= 1;
+  const noSeatLeft = playerStates.length - foldPlayers <= 1;
 
   const stageClear = useMemo(
     () =>
@@ -47,8 +53,6 @@ const HandCreate = () => {
       ),
     [currentBetSize, playerStates],
   );
-
-  console.log('playerStates', playerStates);
 
   const onActionChange = (e: RadioChangeEvent) => {
     const action = e.target.value as SettingPlayerAction;
@@ -61,19 +65,10 @@ const HandCreate = () => {
     }
   };
 
-  const setPostFlopRef = useRef<ISetPostFlopRef>(null);
-  const estimatePotSize = useCallback(
-    (states: PlayerState[] = playerStates) => {
-      const nextPotSize = states.reduce((sum, state) => sum + state.chips, lastPotSize);
-      setPostFlopRef.current?.estimatePotSize(nextPotSize);
-    },
-    [lastPotSize, playerStates],
-  );
-
   const estimateNextSeat = () => {
     let nextIndex = playerStates.findIndex((state) => state.seat === seat);
     while (!noSeatLeft) {
-      nextIndex = (nextIndex + 1) % seats.length;
+      nextIndex = (nextIndex + 1) % playerStates.length;
       const nextState = playerStates[nextIndex];
       if (nextState && !nextState.fold) {
         setSeat(nextState.seat);
@@ -82,26 +77,20 @@ const HandCreate = () => {
     }
   };
 
-  const dispatchAction = (action: HandAction) => {
-    setActions([...actions, action]);
-  };
-
   const dispatchStageAction = useCallback(
-    (action: HandAction) => {
-      setActions((actions) => [...actions, action]);
+    (...actions: HandAction[]) => {
+      dispatchAction(...actions);
       setBetSize(0);
-      setCurrentBetSize(0);
-      estimatePotSize();
+      resetCurrentBetSize();
       // Go next stage
       setStage(ALL_SETTING_STAGES[ALL_SETTING_STAGES.indexOf(stage) + 1]);
     },
-    [estimatePotSize, stage],
+    [dispatchAction, stage],
   );
 
   const dispatchUserAction = () => {
-    const nextStates = userAction(action, seat, betSize);
-    estimatePotSize(nextStates);
-    betSize > currentBetSize && setCurrentBetSize(betSize);
+    userAction(action, seat, betSize);
+    updateCurrentBetSize(betSize);
     dispatchAction({
       type: 'playerAction',
       seat,
@@ -112,45 +101,59 @@ const HandCreate = () => {
     estimateNextSeat();
   };
 
-  const stageSetting = useMemo(() => {
-    if (stage === HandStage.Init) {
-      return (
-        <SetPlayers
-          onConfirm={(players) => {
-            setPlayers(players);
-            dispatchStageAction({ type: 'stageInit', players });
-          }}
-        />
-      );
-    }
+  const onNextStage: IStageSettingProps['onNextStage'] = (params) => {
+    switch (params.stage) {
+      case HandStage.Init:
+        initStates(params.players);
+        dispatchStageAction({ type: 'stageInit', players: params.players });
+        break;
 
-    if (stage === HandStage.Blinds) {
-      return (
-        <Button
-          onClick={() => {
-            dispatchStageAction({ type: 'stageBlinds', potSize: 0 });
-          }}
-        >
-          Next
-        </Button>
-      );
-    }
+      case HandStage.Blinds: {
+        const { blinds, potSize } = params;
+        setBlinds(blinds);
+        dispatchStageAction(
+          ...blinds.map(({ seat, type, chips }) => {
+            return {
+              type: 'playerPayBlinds' as const,
+              seat,
+              blindType: type,
+              chips,
+            };
+          }),
+          {
+            type: 'stageBlinds',
+            blinds,
+            potSize,
+          },
+        );
+        updateCurrentBetSize(blinds.reduce((res, { chips }) => Math.max(res, chips), 0));
+        break;
+      }
 
-    return (
-      !!stage && (
-        <SetPostFlop
-          ref={setPostFlopRef}
-          stage={stage}
-          stageClear={stageClear}
-          onConfirm={(cards, potSize) => {
-            dispatchStageAction({ type: 'stageInfo', stage, cards, potSize });
-            resetChips();
-            setLastPotSize(potSize);
-          }}
-        />
-      )
-    );
-  }, [dispatchStageAction, resetChips, stage, stageClear]);
+      case HandStage.PreFlop:
+      case HandStage.Showdown:
+        dispatchStageAction({
+          type: 'stageInfo',
+          stage: params.stage,
+          potSize: params.potSize,
+          cards: [],
+        });
+        break;
+
+      case HandStage.Flop:
+      case HandStage.Turn:
+      case HandStage.River:
+        dispatchStageAction({
+          type: 'stageInfo',
+          stage: params.stage,
+          potSize: params.potSize,
+          cards: params.cards,
+        });
+        resetChips();
+        setLastPotSize(params.potSize);
+        break;
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -173,22 +176,13 @@ const HandCreate = () => {
 
           {/* Stage change => deal cards */}
           <div className={styles.area}>
-            <h3>Next Stage</h3>
-            <Radio.Group
-              buttonStyle="solid"
-              optionType="button"
-              options={ALL_SETTING_STAGES.map((stageOption) => ({
-                label: stageOption,
-                value: stageOption,
-                disabled: stage !== stageOption,
-              }))}
-              value={stage}
-              onChange={(e) => {
-                const stage = e.target.value as SettingHandStage;
-                setStage(stage);
-              }}
+            <h3>Current Stage: {stage}</h3>
+            <StageSetting
+              ref={stageSettingRef}
+              stage={stage}
+              stageClear={stageClear}
+              onNextStage={onNextStage}
             />
-            {stageSetting}
           </div>
 
           {/* User action */}
