@@ -1,5 +1,6 @@
+import { CheckboxOptionType } from 'antd';
 import { Card } from './card';
-import { PlayerSeat } from './player';
+import { PlayerSeat, PlayerState } from './player';
 
 export enum HandStage {
   Init = 'Init', // players unknown
@@ -9,16 +10,22 @@ export enum HandStage {
   Turn = 'Turn',
   River = 'River',
   Showdown = 'Showdown', // show cards
-
-  PostFlop = 'Post-Flop', // info stage
 }
+
+export type PostFlopHandStage =
+  | HandStage.Flop
+  | HandStage.Turn
+  | HandStage.River
+  | HandStage.Showdown;
 
 export const ALL_SETTING_STAGES = [
   HandStage.Init,
   HandStage.Blinds,
+  HandStage.PreFlop,
   HandStage.Flop,
   HandStage.Turn,
   HandStage.River,
+  HandStage.Showdown,
 ] as const;
 
 export type SettingHandStage = (typeof ALL_SETTING_STAGES)[number];
@@ -34,7 +41,7 @@ export enum PlayerAction {
   Showdown = 'showdown',
 }
 
-export const ALL_PLAYER_ACTIONS = [
+const ALL_PLAYER_ACTIONS = [
   PlayerAction.Check,
   PlayerAction.Fold,
   PlayerAction.Call,
@@ -45,16 +52,45 @@ export const ALL_PLAYER_ACTIONS = [
 
 export type SettingPlayerAction = (typeof ALL_PLAYER_ACTIONS)[number];
 
+interface IGetPlayerActionsProps {
+  currentBetSize: number;
+  currentState?: PlayerState;
+  stageClear: boolean;
+}
+
+export const getPlayerActionOptions = ({
+  currentBetSize,
+  currentState,
+  stageClear,
+}: IGetPlayerActionsProps): CheckboxOptionType[] => {
+  const actions = ALL_PLAYER_ACTIONS.filter(
+    (action) => !(currentBetSize > 0 ? action === PlayerAction.Bet : action === PlayerAction.Raise),
+  ) as SettingPlayerAction[];
+
+  return actions.map((action) => {
+    return {
+      label: action,
+      value: action,
+      disabled:
+        stageClear ||
+        (action === PlayerAction.Check && currentState && currentState.chips < currentBetSize) ||
+        (currentBetSize === 0 && action === PlayerAction.Call),
+    };
+  });
+};
+
 type BlindType = 'SB' | 'BB' | `Straddle-${number}`;
+
+export interface HandBlindRecord {
+  seat: PlayerSeat;
+  type: BlindType;
+  chips: number;
+}
 
 export type HandAction =
   | {
-      type: 'stageInit';
-      players: number;
-    }
-  | {
       type: 'stageBlinds';
-      potSize: number;
+      players: number;
     }
   | {
       type: 'stageInfo';

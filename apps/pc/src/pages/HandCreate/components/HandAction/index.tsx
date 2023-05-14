@@ -12,20 +12,11 @@ import styles from './index.module.scss';
 const HandAction: FC<{ action: IHandAction }> = ({ action }) => {
   const content = useMemo(() => {
     const { type } = action;
-    if (type === 'stageInit') {
-      return (
-        <div className={styles.wrapper}>
-          <div>{HandStage.Init}</div>
-          <div>players: {action.players}</div>
-        </div>
-      );
-    }
-
     if (type === 'stageBlinds') {
       return (
         <div className={styles.wrapper}>
-          <div>{HandStage.Blinds}</div>
-          <div>potSize: {action.potSize}</div>
+          <div style={{ flex: 1 }}>{HandStage.Blinds}</div>
+          <div>players: {action.players}</div>
         </div>
       );
     }

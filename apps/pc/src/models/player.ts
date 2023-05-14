@@ -94,3 +94,10 @@ export const getPlayerSeats = (
       return ALL_PLAYER_SEATS;
   }
 };
+
+export type PlayerState = {
+  seat: PlayerSeat;
+  fold: boolean;
+  actioned: boolean;
+  chips: number;
+};
