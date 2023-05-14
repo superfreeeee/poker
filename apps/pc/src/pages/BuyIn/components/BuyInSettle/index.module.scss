@@ -1,11 +1,14 @@
-.buttonList{
-    width: 50%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.buttonList {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-    .resUnderLine{
-        border-bottom: 1px solid black;
-        min-width: 10vw;
-    }
+  .resUnderLine {
+    border-bottom: 1px solid black;
+    width: 180px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }

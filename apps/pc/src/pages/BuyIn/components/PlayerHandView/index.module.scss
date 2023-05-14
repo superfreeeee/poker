@@ -1,26 +1,31 @@
 .container {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  border-radius: 10px;
+  padding: 16px 30px;
+  background-color: white;
+}
+
+.textContiner {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 200px;
+}
+
+.text {
+  display: flex;
+  justify-content: start;
   align-items: center;
-
-  .leftContainer{
-    display: flex;
-    gap:0.5vw;
-    
-  }
-  
-  .rightContainer{
-    display: flex;
-    gap:0.5vw;
-  }
+  gap: 10px;
+  border-bottom: 1px solid black;
+  padding-left: 10px;
+  text-align: center;
 }
 
-.text{
-    border-bottom: 1px solid #cdc8c8;
-    min-width: 3vw;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+.btnMargin {
+  margin-right: 10px;
 }
-

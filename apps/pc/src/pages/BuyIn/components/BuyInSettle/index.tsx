@@ -1,70 +1,53 @@
 import React from 'react';
 import { Button } from 'antd';
-import {
-  DollarOutlined,
-  SelectOutlined,
-  SmileOutlined,
-  TransactionOutlined,
-} from '@ant-design/icons';
-// import PlayerHandView from '../PlayerHandView';
-import styles from '../BuyInPrepare/index.module.scss';
+import { TransactionOutlined } from '@ant-design/icons';
+import StatisticsDataView from '../StatisticsDataView';
 import { useCurrentBuyInData } from '../../../../models/buyIn';
 import PlayResult from '../PlayResult';
-import ownStyles from './index.module.scss';
+import initialStyles from '../BuyInPrepare/index.module.scss';
+import styles from './index.module.scss';
 
 const BuyInSetttle = () => {
   const {
-    currentBuyInData: { amountPerhand, players: buyInPlayers },
-    sumData,
-    sumBenefit,
+    buyInData: { amountPerhand, players: buyInPlayers },
+    statisticsData: { totalPlayer, totalHands, totalAmount },
+    totalBenefit,
     changePlayer,
   } = useCurrentBuyInData();
 
   return (
-    <div className={styles.container}>
-      <div className={styles.title}>
-        <div className={styles.leftWrap}>
+    <div className={initialStyles.container}>
+      <div className={initialStyles.header}>
+        <div className={initialStyles.leftWrap}>
           <div style={{ fontSize: 20 }}>结算状态</div>
-          <div className={styles.amountSum}>
-            <div>
-              <DollarOutlined /> 总买入金额
-            </div>
-            <div>{sumData.amountSum} </div>
+          <div>
+            <TransactionOutlined className={initialStyles.iconMargin} /> 一手金额 {amountPerhand}
           </div>
         </div>
 
-        <div className={styles.sumData}>
-          <div className={styles.inputContainer}>
-            <TransactionOutlined className={styles.iconMargin} /> 一手金额 {amountPerhand}
-          </div>
-          <div>
-            <SmileOutlined className={styles.iconMargin} />
-            总玩家数 {sumData.playerSum}
-          </div>
-          <div>
-            <SelectOutlined className={styles.iconMargin} />
-            总买入手数 {sumData.handSum}
-          </div>
-        </div>
+        <StatisticsDataView
+          totalPlayer={totalPlayer}
+          totalHands={totalHands}
+          totalAmount={totalAmount}
+        />
       </div>
-      <div className={styles.playerList}>
-        {buyInPlayers.map((player, index) => (
-          <div key={player.id} className={styles.playerContainer}>
-            <PlayResult
-              player={player}
-              amoutPerHand={amountPerhand}
-              changeRest={(player) => changePlayer(player, index)}
-            ></PlayResult>
-          </div>
+      <div className={initialStyles.playerList}>
+        {buyInPlayers.map((player, i) => (
+          <PlayResult
+          key={player.id}
+          player={player}
+          amoutPerHand={amountPerhand}
+          onChange={(player) => changePlayer(player, i)}
+        ></PlayResult>
         ))}
       </div>
-      <div className={ownStyles.buttonList}>
-        <div className={ownStyles.resUnderLine}>最终盈余总计 {sumBenefit}</div>
+      <div className={styles.buttonList}>
+        <div className={styles.resUnderLine}>最终盈余总计 {totalBenefit}</div>
         <div>
-          {sumBenefit == 0 ? (
-            <Button className={styles.nextBtn}>Show final result</Button>
+          {totalBenefit == 0 ? (
+            <Button className={initialStyles.nextBtn}>Show final result</Button>
           ) : (
-            <Button className={styles.nextBtn} disabled>
+            <Button className={initialStyles.nextBtn} disabled>
               Show final result
             </Button>
           )}

@@ -1,25 +1,20 @@
 import React from 'react';
-import { Input, Button } from 'antd';
-import {
-  DownCircleFilled,
-  SelectOutlined,
-  SmileOutlined,
-  TransactionOutlined,
-} from '@ant-design/icons';
+import { Input, Button, Form } from 'antd';
+import { DownCircleFilled, TransactionOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import PlayerHand from '../PlayerHand';
-import BuyInTitle from '../BuyInTitle';
+import StatisticsDataView from '../StatisticsDataView';
 import { useCurrentBuyInData } from '../../../../models/buyIn';
 import styles from './index.module.scss';
 
 const BuyInPrepare = () => {
   const {
-    currentBuyInData: { amountPerhand, players: buyInPlayers },
-    sumData,
+    buyInData: { amountPerhand, players: buyInPlayers },
+    statisticsData: { totalPlayer, totalHands, totalAmount },
     addPlayer,
     removePlayer,
     changePlayer,
-    changeCurrentBuyInData,
+    changeBuyInData,
   } = useCurrentBuyInData();
 
   const navigate = useNavigate();
@@ -27,49 +22,61 @@ const BuyInPrepare = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <BuyInTitle title="初始状态" totalAmount={sumData.amountSum} />
-        <div className={styles.sumData}>
-          <div className={styles.inputContainer}>
-            <TransactionOutlined className={styles.iconMargin} /> 一手金额
-            <div className={styles.inputHand}>
-              <Input
-                placeholder="Input here"
-                maxLength={10}
-                value={amountPerhand}
-                bordered={false}
-                onChange={(e) => {
-                  const amount = +e.target.value;
-                  if (isNaN(amount)) {
-                    return;
+        <div className={styles.leftWrap}>
+          <div style={{ fontSize: 20 }}>初始状态</div>
+          <div className={styles.inputForm}>
+            <div>一手金额</div>
+            <Form>
+              <Form.Item
+                name="amountPerhand"
+                rules={[
+                  {
+                    required: true,
+                    pattern: new RegExp(/^[1-9]\d*$/, 'g'),
+                    message: '请输入正整数',
+                  },
+                  {
+                    max:10,
+                    message:'超出最大买入数量'
                   }
-
-                  changeCurrentBuyInData({
-                    players: buyInPlayers,
-                    amountPerhand: amount,
-                  });
-                }}
-              />
-            </div>
-          </div>
-          <div>
-            <SmileOutlined className={styles.iconMargin} />
-            总玩家数 {sumData.playerSum}
-          </div>
-          <div>
-            <SelectOutlined className={styles.iconMargin} />
-            总买入手数 {sumData.handSum}
+                ]}
+              >
+                <Input
+                  placeholder="Input here"
+                  maxLength={11}
+                  value={amountPerhand}
+                  bordered={false}
+                  prefix={<TransactionOutlined />}
+                  onChange={(e) => {
+                    const amount = +e.target.value;
+                    if (isNaN(amount)) {
+                      return;
+                    }
+                    if (amount < 0) return;
+                    changeBuyInData({
+                      players: buyInPlayers,
+                      amountPerhand: amount,
+                    });
+                  }}
+                />
+              </Form.Item>
+            </Form>
           </div>
         </div>
+        <StatisticsDataView
+          totalPlayer={totalPlayer}
+          totalHands={totalHands}
+          totalAmount={totalAmount}
+        />
       </div>
       <div className={styles.playerList}>
         {buyInPlayers.map((player, i) => (
-          <div key={player.id} className={styles.playerContainer}>
-            <PlayerHand
-              player={player}
-              onRemove={removePlayer}
-              onChange={(player) => changePlayer(player, i)}
-            ></PlayerHand>
-          </div>
+          <PlayerHand
+            key={player.id}
+            player={player}
+            onRemove={removePlayer}
+            onChange={(player) => changePlayer(player, i)}
+          ></PlayerHand>
         ))}
       </div>
       <div className={styles.buttonList}>
@@ -83,7 +90,12 @@ const BuyInPrepare = () => {
           </Button>
         </div>
         <div>
-          <Button className={styles.nextBtn} onClick={() => navigate('/buyin/playing')}>
+          <Button
+            className={styles.nextBtn}
+            onClick={() => {
+              navigate('/buyin/playing');
+            }}
+          >
             Start play
           </Button>
         </div>
