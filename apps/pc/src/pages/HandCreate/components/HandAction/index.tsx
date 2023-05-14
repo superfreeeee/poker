@@ -16,7 +16,7 @@ const HandAction: FC<{ action: IHandAction }> = ({ action }) => {
       return (
         <div className={styles.wrapper}>
           <div style={{ flex: 1 }}>{HandStage.Blinds}</div>
-          <div>players: {action.players}</div>
+          <div className={styles.players}>players: {action.players}</div>
         </div>
       );
     }
@@ -26,7 +26,7 @@ const HandAction: FC<{ action: IHandAction }> = ({ action }) => {
         <div className={styles.wrapper}>
           <div>{action.stage}</div>
           {renderCardText(action.cards, styles.cards)}
-          <div>potSize: {action.potSize}</div>
+          <div className={styles.potSize}>potSize: {action.potSize}</div>
         </div>
       );
     }

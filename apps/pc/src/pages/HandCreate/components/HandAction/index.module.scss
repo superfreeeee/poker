@@ -1,5 +1,5 @@
 .actionContainer {
-  width: 400px;
+  width: 100%;
   padding: 4px 60px;
   font-size: 18px;
 
@@ -23,7 +23,15 @@
     width: 100%;
   }
 
-  .chips {
+  .players,
+  .chips,
+  .potSize {
     font-weight: 600;
+  }
+}
+
+@media screen and (width <= 500px) {
+  .actionContainer {
+    padding: 4px 20px;
   }
 }

@@ -52,3 +52,22 @@
     text-align: center;
   }
 }
+
+@media screen and (width <= 500px) {
+  .main {
+    flex-direction: column;
+
+    .divider {
+      margin: 14px 0;
+      border-left: none;
+      border-top: 1px solid #dbdbdb;
+    }
+
+    .preview {
+      min-width: unset;
+      width: 100%;
+      max-height: 500px;
+      overflow: auto;
+    }
+  }
+}
