@@ -7,6 +7,13 @@
   .main {
     padding: 0 100px;
   }
+
+  .records {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+  }
 }
 
 .record {
