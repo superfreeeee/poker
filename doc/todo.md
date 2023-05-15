@@ -1,4 +1,4 @@
-# Bugs / Feat
+# TODO = Bugs + Feat
 
 ## HandCreate page
 
