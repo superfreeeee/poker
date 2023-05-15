@@ -8,11 +8,11 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "strictNullChecks": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "skipLibCheck": true
   },
   "include": ["apps/**/*", "packages/**/*"],
   "exclude": [
-    "**/node_modules/**",
     "**/coverage",
     "**/webpack.config.js",
     "apps/**/dist",

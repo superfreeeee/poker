@@ -39,6 +39,9 @@
     "*.{js,jsx,ts,tsx}": [
       "eslint"
     ],
+    "*.{ts,tsx}": [
+      "tsc --noEmit"
+    ],
     "*.{css,scss,less}": [
       "stylelint"
     ]
