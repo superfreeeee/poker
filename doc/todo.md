@@ -17,10 +17,17 @@
 - [ ] 回退一步
 - [ ] 出现过的牌不能再选
 - [ ] 选完之后的 Generate => 改成 Save + 自动跳转到 HandDetail
-- [ ] 适配手机端 UI
+- [x] 适配手机端 UI
+  - [ ] Mobile 的 CardSelector 使用抽屉
+  - [ ] addAction 后自动滚动到最下记录
+- [ ] potSize 不用输入框了
 
 ## HandRecordList
 
-- [ ] 加 create 入口
-- [ ] 列表 UI 加 gap
-- [ ] 适配手机端 UI
+- [x] 加 create 入口
+- [x] 列表 UI 加 gap
+- [x] 适配手机端 UI
+
+## HandDetail
+
+- [ ] 基础信息展示
