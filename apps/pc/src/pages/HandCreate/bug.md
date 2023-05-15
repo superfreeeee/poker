@@ -9,7 +9,7 @@
 - [x] Pro-flop 阶段 + 上盲
 - [x] Allin 输入框 enabled
 - [x] Call 平应禁用 User Action 直到 stage 切换
-- [ ] Blinds：Input 盲注结构
+- [x] Blinds：Input 盲注结构
 - [ ] Showdown：摊牌选择
 - [ ] 上一步操作
 - [ ] 选中某一项纪录进行修改

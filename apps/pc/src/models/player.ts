@@ -100,4 +100,5 @@ export type PlayerState = {
   fold: boolean;
   actioned: boolean;
   chips: number;
+  showdown: boolean;
 };

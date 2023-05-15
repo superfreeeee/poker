@@ -89,6 +89,10 @@ const StageSetting = ({
     );
   }
 
+  if (currentStage === HandStage.Showdown) {
+    return null;
+  }
+
   return <h4>No Setting for {currentStage} stage</h4>;
 };
 
