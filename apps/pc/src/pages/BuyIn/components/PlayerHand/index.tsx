@@ -21,15 +21,6 @@ const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlaye
   const { id, name, hands } = player;
   const [playerNameForm] = useForm();
 
-  const onFinish = (val: any) => {
-    console.log('onFinish', val);
-  };
-
-  // 表单校验失败执行
-  const onFinishFailed = (val: any) => {
-    console.log('onFinishFailed', val);
-  };
-
   const validateHandsMax = (_rule: any, value: number) => {
     if (value > 50) {
       return Promise.reject('买入必须在0-50范围内');
@@ -42,12 +33,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlaye
       <div className={styles.firstLine}>
         <div className={styles.inputForm}>
           <div>USERNAME</div>
-          <Form
-            name="valid"
-            form={playerNameForm}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-          >
+          <Form name="valid" form={playerNameForm}>
             <Form.Item
               name="username"
               validateTrigger="onBlur"
