@@ -20,7 +20,7 @@
 - [x] 适配手机端 UI
   - [ ] Mobile 的 CardSelector 使用抽屉
   - [ ] addAction 后自动滚动到最下记录
-- [ ] potSize 不用输入框了
+- [x] potSize 不用输入框了 => do nothing at onChange
 
 ## HandRecordList
 

@@ -219,12 +219,24 @@ const PotSizeSetting: FC<IPotSizeSettingProps> = ({
     setPotSize(estimatePotSize);
   }, [estimatePotSize]);
 
+  // return (
+  //   <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+  //     <span style={{ fontSize: 16 }}>PotSize = {potSize}</span>
+  //     <Button type="primary" onClick={() => onConfirm(potSize)}>
+  //       Next Stage
+  //       <ArrowRightOutlined />
+  //     </Button>
+  //   </div>
+  // );
+
   return (
     <CompactInput
       placeholder="Pot size"
       disabledConfirm={disabledConfirm || !stageClear || potSize <= 0}
       value={potSize}
-      onValueChange={(input) => setPotSize(+input)}
+      // onValueChange={(input) => setPotSize(+input)}
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      onValueChange={() => {}}
       onOk={() => onConfirm(potSize)}
       okText="Next Stage"
     />
