@@ -10,3 +10,10 @@ clean-deps:
 
 clean-build:
 	echo 'TODO clean-build'
+
+upload-pc:
+	scp -r apps/pc/dist/ root@remote:/root/poker-dist/
+	scp -r apps/pc/deploy/* root@remote:/root/poker-dist/
+
+remote-restart:
+	ssh root@remote "cd /root/poker-dist/; ./restart.sh"

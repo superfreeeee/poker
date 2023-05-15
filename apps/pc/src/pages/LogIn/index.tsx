@@ -28,7 +28,7 @@ const LogIn = () => {
 
   return (
     <div className={styles.container}>
-      <h1>Input your name</h1>
+      <h1>Using @youxian/poker!</h1>
       <Space>
         <Space.Compact size="large" style={{ width: 350 }}>
           <Input
