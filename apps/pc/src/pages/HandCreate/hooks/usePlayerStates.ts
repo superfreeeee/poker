@@ -14,10 +14,11 @@ export const usePlayerStates = ({ lastPotSize }: IUsePlayerStatesProps) => {
   // console.log('playerStates', playerStates);
 
   const initStates = (players: number) => {
-    const newSeatStates = getPlayerSeats(players).map((seat) => {
-      return { seat, fold: false, actioned: false, chips: 0 };
-    });
-    setPlayerStates(newSeatStates);
+    setPlayerStates(
+      getPlayerSeats(players).map((seat) => {
+        return { seat, fold: false, actioned: false, chips: 0, showdown: false };
+      }),
+    );
   };
 
   const setBlinds = (blinds: HandBlindRecord[]) => {
@@ -39,12 +40,13 @@ export const usePlayerStates = ({ lastPotSize }: IUsePlayerStatesProps) => {
       switch (action) {
         case PlayerAction.Fold:
           return { ...state, fold: true, actioned: true };
+
         case PlayerAction.Bet:
         case PlayerAction.Raise:
         case PlayerAction.Allin:
-        case PlayerAction.Call: {
+        case PlayerAction.Call:
           return { ...state, chips, actioned: true };
-        }
+
         case PlayerAction.Check:
         default:
           return { ...state, actioned: true };
@@ -52,6 +54,12 @@ export const usePlayerStates = ({ lastPotSize }: IUsePlayerStatesProps) => {
     });
 
     setPlayerStates(nextStates);
+  };
+
+  const showdown = (seat: PlayerSeat) => {
+    setPlayerStates(
+      playerStates.map((state) => (state.seat !== seat ? state : { ...state, showdown: true })),
+    );
   };
 
   const resetChips = useCallback(() => {
@@ -68,6 +76,7 @@ export const usePlayerStates = ({ lastPotSize }: IUsePlayerStatesProps) => {
     initStates,
     setBlinds,
     userAction,
+    showdown,
     resetChips,
   };
 };

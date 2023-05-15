@@ -1,0 +1,74 @@
+{
+  "version": "v1",
+  "players": [],
+  "seatMap": {},
+  "blinds": [
+    { "seat": "SB", "chips": 0.5 },
+    { "seat": "BB", "chips": 1 }
+  ],
+  "actions": [
+    { "type": "stageBlinds", "players": 6 },
+    { "type": "playerPayBlinds", "seat": "SB", "chips": 0.5 },
+    { "type": "playerPayBlinds", "seat": "BB", "chips": 1 },
+    { "type": "stageInfo", "stage": "Pre-Flop", "potSize": 1.5, "cards": [] },
+    { "type": "playerAction", "seat": "UTG", "action": "fold" },
+    { "type": "playerAction", "seat": "MP", "action": "fold" },
+    { "type": "playerAction", "seat": "CO", "action": "raise", "chips": 2.5 },
+    { "type": "playerAction", "seat": "BTN", "action": "fold" },
+    { "type": "playerAction", "seat": "SB", "action": "fold" },
+    { "type": "playerAction", "seat": "BB", "action": "call", "chips": 2.5 },
+    {
+      "type": "stageInfo",
+      "stage": "Flop",
+      "potSize": 5.5,
+      "cards": [
+        { "suit": "♣", "num": "2" },
+        { "suit": "♣", "num": "Q" },
+        { "suit": "♣", "num": "5" }
+      ]
+    },
+    { "type": "playerAction", "seat": "BB", "action": "check" },
+    { "type": "playerAction", "seat": "CO", "action": "check" },
+    {
+      "type": "stageInfo",
+      "stage": "Turn",
+      "potSize": 5.5,
+      "cards": [{ "suit": "♥", "num": "8" }]
+    },
+    { "type": "playerAction", "seat": "BB", "action": "bet", "chips": 7 },
+    { "type": "playerAction", "seat": "CO", "action": "call", "chips": 7 },
+    {
+      "type": "stageInfo",
+      "stage": "River",
+      "potSize": 19.5,
+      "cards": [{ "suit": "♦", "num": "J" }]
+    },
+    { "type": "playerAction", "seat": "BB", "action": "check" },
+    { "type": "playerAction", "seat": "CO", "action": "check" },
+    { "type": "stageInfo", "stage": "Showdown", "potSize": 19.5, "cards": [] },
+    {
+      "type": "playerShowdown",
+      "seat": "BB",
+      "cards": [
+        { "suit": "♦", "num": "K" },
+        { "suit": "♦", "num": "T" }
+      ]
+    },
+    {
+      "type": "playerShowdown",
+      "seat": "CO",
+      "cards": [
+        { "suit": "♠", "num": "J" },
+        { "suit": "♣", "num": "J" }
+      ]
+    }
+  ],
+  "boardCards": [
+    { "suit": "♣", "num": "2" },
+    { "suit": "♣", "num": "Q" },
+    { "suit": "♣", "num": "5" },
+    { "suit": "♥", "num": "8" },
+    { "suit": "♦", "num": "J" }
+  ],
+  "winnerId": ""
+}

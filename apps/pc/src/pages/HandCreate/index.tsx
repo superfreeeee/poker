@@ -1,13 +1,18 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Radio } from 'antd';
+import { Button, Radio } from 'antd';
+import { CopyOutlined } from '@ant-design/icons';
 import {
   HandStage,
   HandAction,
   PlayerAction,
   SettingPlayerAction,
   getPlayerActionOptions,
+  HandRecord,
+  HandBlindRecord,
+  serializeHandRecordV1,
 } from '../../models/hand';
 import { PlayerSeat } from '../../models/player';
+import { CardSelectorModal } from '../../components/CardSelectorModal';
 import HandActionUI from './components/HandAction';
 import CompactInput from './components/CompactInput';
 import StageSetting, { IStageSettingProps } from './components/StageSetting';
@@ -23,7 +28,7 @@ const HandCreate = () => {
   const { currentBetSize, updateCurrentBetSize, resetCurrentBetSize } = useCurrentBetSize();
   const [lastPotSize, setLastPotSize] = useState(0);
 
-  const { playerStates, estimatePotSize, initStates, setBlinds, userAction, resetChips } =
+  const { playerStates, estimatePotSize, initStates, setBlinds, userAction, showdown, resetChips } =
     usePlayerStates({
       lastPotSize,
     });
@@ -106,11 +111,10 @@ const HandCreate = () => {
         const { blinds } = params;
         setBlinds(blinds);
         dispatchStageAction(
-          ...blinds.map(({ seat, type, chips }) => {
+          ...blinds.map(({ seat, chips }) => {
             return {
               type: 'playerPayBlinds' as const,
               seat,
-              blindType: type,
               chips,
             };
           }),
@@ -122,13 +126,14 @@ const HandCreate = () => {
           },
         );
         updateCurrentBetSize(blinds.reduce((res, { chips }) => Math.max(res, chips), 0));
+        setSeat(playerStates[blinds.length % playerStates.length].seat);
         break;
       }
 
+      case HandStage.Showdown:
       case HandStage.Flop:
       case HandStage.Turn:
       case HandStage.River:
-      case HandStage.Showdown:
         setActionWithBetSize(PlayerAction.Check);
 
       // eslint-disable-next-line no-fallthrough
@@ -142,7 +147,7 @@ const HandCreate = () => {
         resetChips();
         setLastPotSize(params.potSize);
         // Reset to First player & Check
-        estimateNextSeat(0);
+        estimateNextSeat(-1);
         break;
     }
   };
@@ -154,6 +159,36 @@ const HandCreate = () => {
       stageClear,
     });
   }, [currentBetSize, playerStates, seat, stageClear]);
+
+  const showdownOptions = playerStates.filter((state) => !state.fold && !state.showdown);
+
+  const [record, setRecord] = useState<HandRecord | null>(null);
+
+  const generateRecord = () => {
+    setRecord({
+      version: 'v1',
+      players: [],
+      seatMap: {},
+      blinds: actions
+        .map((action): HandBlindRecord | null => {
+          if (action.type === 'playerPayBlinds') {
+            return { seat: action.seat, chips: action.chips };
+          }
+          return null;
+        })
+        .reduce((blinds, record) => (record ? [...blinds, record] : blinds), []),
+      actions,
+      boardCards: actions
+        .map((action) => {
+          if (action.type === 'stageInfo') {
+            return action.cards;
+          }
+          return [];
+        })
+        .reduce((res, cards) => [...res, ...cards], []),
+      winnerId: '',
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -179,6 +214,7 @@ const HandCreate = () => {
             <h3>Current Stage: {stage}</h3>
             <StageSetting
               currentStage={stage}
+              playerStates={playerStates}
               estimatePotSize={estimatePotSize}
               stageClear={stageClear}
               onNextStage={onNextStage}
@@ -238,6 +274,59 @@ const HandCreate = () => {
                 />
               </div>
             )}
+          {stage === HandStage.Showdown && (
+            <div className={styles.area}>
+              {showdownOptions.map(({ seat }) => {
+                return (
+                  <div key={seat} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    {seat}
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        CardSelectorModal.open({
+                          count: 2,
+                          onSelect: (cards) => {
+                            dispatchAction({
+                              type: 'playerShowdown',
+                              seat,
+                              cards,
+                            });
+                            showdown(seat);
+                          },
+                        });
+                      }}
+                    >
+                      Select Hand
+                    </Button>
+                  </div>
+                );
+              })}
+              {showdownOptions.length === 0 && (
+                <Button type="primary" onClick={generateRecord}>
+                  Generate Record
+                </Button>
+              )}
+              <div>
+                Record:{' '}
+                <Button
+                  icon={<CopyOutlined />}
+                  disabled={!record}
+                  onClick={() => {
+                    if (record) {
+                      const recordStr = serializeHandRecordV1(record);
+                      navigator.clipboard
+                        .writeText(recordStr)
+                        // error handler
+                        .catch((err) => {
+                          console.error('copy error', err);
+                        });
+                    }
+                  }}
+                />
+              </div>
+              {!!record && <div>{JSON.stringify(record)}</div>}
+            </div>
+          )}
         </div>
       </div>
     </div>
