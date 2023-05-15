@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
+import { ArrowRightOutlined } from '@ant-design/icons';
 import { useLoginCheck } from '../../hooks/useLoginCheck';
 import { useCurrentUser } from '../../models/user';
 import styles from './index.module.scss';
+
+interface IPageLinkProps {
+  title: string;
+  path: string;
+}
+
+const PageLink: FC<IPageLinkProps> = ({ title, path }) => {
+  const navigate = useNavigate();
+
+  return (
+    <Button size="large" onClick={() => navigate(path)}>
+      {title}
+      <ArrowRightOutlined />
+    </Button>
+  );
+};
 
 const Home = () => {
   useLoginCheck();
@@ -25,20 +42,13 @@ const Home = () => {
         </Button>
       </div>
       <div className={styles.content}>
-        <h3>currentUser:</h3>
+        <h3>currentUser</h3>
         <div>id: {currentUser?.id}</div>
         <div>name: {currentUser?.name}</div>
-        <div style={{ marginTop: 12 }}>
-          <h3>Tabs</h3>
-          <Button size="large" onClick={() => navigate('/buyin/prepare')}>
-            Buy in
-          </Button>
-          <Button size="large" onClick={() => navigate('/hand/create')}>
-            Create Hand
-          </Button>
-          <Button size="large" onClick={() => navigate('/hands')}>
-            HandRecordList
-          </Button>
+        <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+          <h3>Pages:</h3>
+          <PageLink title="BuyIn" path="/buyin/prepare" />
+          <PageLink title="HandRecordList" path="/hands" />
         </div>
       </div>
     </div>
