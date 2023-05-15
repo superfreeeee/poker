@@ -230,7 +230,12 @@ const HandCreate = () => {
             stage !== HandStage.Blinds &&
             stage !== HandStage.Showdown && (
               <div className={styles.area}>
-                <h3>User Action</h3>
+                <div className={styles.title}>
+                  <h3>User Action: </h3>
+                  <div style={{ fontWeight: 400, fontSize: 16 }}>
+                    currentBetSize: {currentBetSize}
+                  </div>
+                </div>
                 <Radio.Group
                   buttonStyle="solid"
                   optionType="button"
@@ -261,7 +266,6 @@ const HandCreate = () => {
                   value={action}
                   onChange={(e) => setActionWithBetSize(e.target.value as SettingPlayerAction)}
                 />
-                <div>currentBetSize: {currentBetSize}</div>
                 <CompactInput
                   placeholder="Input bet size"
                   disabled={noSeatLeft || stageClear}
