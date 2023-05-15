@@ -1,13 +1,11 @@
 .container {
   padding: 0 16px;
-
-  .header {
-    margin: 0;
-  }
 }
 
 .main {
   display: flex;
+  padding: 0 100px;
+  transition: padding 750ms;
 
   .preview {
     min-width: 375px;
@@ -56,9 +54,10 @@
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 800px) {
   .main {
     flex-direction: column;
+    padding: 0 10px;
 
     .divider {
       margin: 14px 0;
