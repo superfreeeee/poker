@@ -9,6 +9,8 @@
     "start:pc": "pnpm --filter @youxian/poker-pc start",
     "build:pc": "pnpm --filter @youxian/poker-pc build",
     "build:pc:dev": "pnpm --filter @youxian/poker-pc build:dev",
+    "upload:pc": "make upload-pc",
+    "deploy:pc": "pnpm build:pc && pnpm upload:pc && make remote-restart",
     "test": "pnpm --filter @youxian/poker-pc test",
     "lint": "eslint .",
     "lint:quiet": "eslint . --quiet",
