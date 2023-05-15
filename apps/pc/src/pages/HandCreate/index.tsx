@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import { nanoid } from 'nanoid';
 import { Button, Radio } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import {
@@ -168,6 +169,7 @@ const HandCreate = () => {
   const generateRecord = () => {
     setRecord({
       version: 'v1',
+      id: nanoid(),
       players: [],
       seatMap: {},
       blinds: actions
@@ -188,6 +190,7 @@ const HandCreate = () => {
         })
         .reduce((res, cards) => [...res, ...cards], []),
       winnerId: '',
+      createTime: Date.now(),
     });
   };
 

@@ -99,28 +99,43 @@ const deserializeActionV1 = (actionArr: SerializedHandAction): HandAction => {
 export const serializeHandRecordV1 = (record: HandRecord): string => {
   const recordArr = [
     record.version,
+    record.id,
     record.players.map((player) => [player.id, player.name]),
     record.seatMap,
     record.blinds.map((blind) => [blind.seat, blind.chips]),
     record.actions.map(serializeActionV1),
     record.boardCards.map((card) => encodeCard(card)),
     record.winnerId,
+    record.createTime,
   ] as SerializedHandRecord;
   return JSON.stringify(recordArr);
 };
 
 export const deserializeHandReocrdV1 = (recordV1: string): HandRecord => {
-  const [version, players, seatMap, blinds, actions, boardCards, winnerId] = JSON.parse(
-    recordV1,
-  ) as SerializedHandRecord;
+  const [version, id, players, seatMap, blinds, actions, boardCards, winnerId, createTime] =
+    JSON.parse(recordV1) as SerializedHandRecord;
   const recordDetail: HandRecord = {
     version,
+    id,
     players: players.map(([id, name]): Player => ({ id, name })),
     seatMap,
     blinds: blinds.map(([seat, chips]): HandBlindRecord => ({ seat, chips })),
     actions: actions.map(deserializeActionV1),
     boardCards: boardCards.map(decodeCard),
     winnerId,
+    createTime,
   };
   return recordDetail;
+};
+
+export const safeDeserializeHandReocrdV1 = (
+  recordV1: string,
+  onError?: () => void,
+): HandRecord | null => {
+  try {
+    return deserializeHandReocrdV1(recordV1);
+  } catch {
+    onError?.();
+    return null;
+  }
 };

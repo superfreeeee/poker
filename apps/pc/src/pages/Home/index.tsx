@@ -36,6 +36,9 @@ const Home = () => {
           <Button size="large" onClick={() => navigate('/hand/create')}>
             Create Hand
           </Button>
+          <Button size="large" onClick={() => navigate('/hands')}>
+            HandRecordList
+          </Button>
         </div>
       </div>
     </div>

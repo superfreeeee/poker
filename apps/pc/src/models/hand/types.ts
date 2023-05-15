@@ -86,12 +86,14 @@ export type HandAction =
 
 export type HandRecord = {
   version: 'v1';
+  id: string;
   players: Player[];
   seatMap: { [seat in PlayerSeat]?: string };
   blinds: HandBlindRecord[];
   actions: HandAction[];
   boardCards: Card[];
-  winnerId?: string;
+  winnerId: string;
+  createTime: number;
 };
 
 export type SerializedHandAction =
@@ -114,10 +116,12 @@ export type SerializedHandAction =
 export type SerializedHandRecord =
   | [
       version: 'v1',
+      id: string,
       players: [id: string, name: string][],
       seatMap: { [seat in PlayerSeat]?: string },
       blinds: [seat: PlayerSeat, chips: number][],
       actions: SerializedHandAction[],
       boardCards: EncodedCard[],
-      winnerId?: string,
+      winnerId: string,
+      createTime: number,
     ];
