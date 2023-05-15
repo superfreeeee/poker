@@ -26,7 +26,10 @@ const App = () => {
           {/* <Route path="" element={<div />} /> */}
           <Route path="" element={<Redirect path="/buyin/prepare" />} />
         </Route>
+        {/* // TODO tmp page => move to sub page of GameDetail */}
         <Route path="/hand/create" element={<HandCreate />} />
+        {/* // TODO tmp page => switch to GameList */}
+        <Route path="/hands" element={<HandCreate />} />
         <Route path="*" element={<Redirect path="/" />} />
       </Routes>
     </BrowserRouter>
