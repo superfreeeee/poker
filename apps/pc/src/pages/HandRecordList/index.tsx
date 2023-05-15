@@ -1,9 +1,26 @@
-import React from 'react'
+import { Button } from 'antd';
+import React, { useEffect } from 'react';
+import { useLocalHandRecords } from '../../models/hand';
+// import record1 from '../HandCreate/record1';
 
 const HandRecordList = () => {
-  return (
-    <div>index</div>
-  )
-}
+  const { localRecords } = useLocalHandRecords();
 
-export default HandRecordList
+  useEffect(() => {
+    console.log('localRecords', localRecords);
+  }, [localRecords]);
+
+  return (
+    <div>
+      <Button
+        onClick={() => {
+          // setRecords([...records, record1]);
+        }}
+      >
+        Add
+      </Button>
+    </div>
+  );
+};
+
+export default HandRecordList;

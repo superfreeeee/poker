@@ -10,6 +10,7 @@ import {
   HandRecord,
   HandBlindRecord,
   serializeHandRecordV1,
+  useLocalHandRecords,
 } from '../../models/hand';
 import { PlayerSeat } from '../../models/player';
 import { CardSelectorModal } from '../../components/CardSelectorModal';
@@ -190,6 +191,8 @@ const HandCreate = () => {
     });
   };
 
+  const { addRecord } = useLocalHandRecords();
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -323,6 +326,16 @@ const HandCreate = () => {
                     }
                   }}
                 />
+                <Button
+                  disabled={!record}
+                  onClick={() => {
+                    if (record) {
+                      addRecord(record);
+                    }
+                  }}
+                >
+                  Save Record
+                </Button>
               </div>
               {!!record && <div>{JSON.stringify(record)}</div>}
             </div>

@@ -1,11 +1,13 @@
-import { decodeCard, encodeCard, EncodedCard } from '../card';
-import { Player, PlayerSeat, PlayerState } from '../player';
+import { decodeCard, encodeCard } from '../card';
+import { Player, PlayerState } from '../player';
 import {
   ALL_PLAYER_ACTIONS,
   HandAction,
   HandBlindRecord,
   HandRecord,
   PlayerAction,
+  SerializedHandAction,
+  SerializedHandRecord,
   SettingPlayerAction,
 } from './types';
 
@@ -42,7 +44,7 @@ export const getPlayerActionOptions = ({
   });
 };
 
-const serializeActionV1 = (action: HandAction) => {
+const serializeActionV1 = (action: HandAction): SerializedHandAction => {
   switch (action.type) {
     case 'stageBlinds':
       return [action.type, action.players] as const;
@@ -58,8 +60,6 @@ const serializeActionV1 = (action: HandAction) => {
       throw new SyntaxError(`Unknown action type: ${(action as Record<string, unknown>).type}`);
   }
 };
-
-type SerializedHandAction = ReturnType<typeof serializeActionV1>;
 
 const deserializeActionV1 = (actionArr: SerializedHandAction): HandAction => {
   switch (actionArr[0]) {
@@ -95,17 +95,6 @@ const deserializeActionV1 = (actionArr: SerializedHandAction): HandAction => {
       throw new SyntaxError(`Unknown serialized action type: ${actionArr[0]}`);
   }
 };
-
-type SerializedHandRecord =
-  | [
-      version: 'v1',
-      players: [id: string, name: string][],
-      seatMap: { [seat in PlayerSeat]?: string },
-      blinds: [seat: PlayerSeat, chips: number][],
-      actions: SerializedHandAction[],
-      boardCards: EncodedCard[],
-      winnerId?: string,
-    ];
 
 export const serializeHandRecordV1 = (record: HandRecord): string => {
   const recordArr = [

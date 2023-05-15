@@ -7,6 +7,7 @@ import BuyInPrepare from './pages/BuyIn/components/BuyInPrepare';
 import BuyInPlaying from './pages/BuyIn/components/BuyInPlaying';
 import BuyInSettle from './pages/BuyIn/components/BuyInSettle';
 import HandCreate from './pages/HandCreate';
+import HandRecordList from './pages/HandRecordList';
 import Redirect from './components/Redirect';
 
 const App = () => {
@@ -29,7 +30,7 @@ const App = () => {
         {/* // TODO tmp page => move to sub page of GameDetail */}
         <Route path="/hand/create" element={<HandCreate />} />
         {/* // TODO tmp page => switch to GameList */}
-        <Route path="/hands" element={<HandCreate />} />
+        <Route path="/hands" element={<HandRecordList />} />
         <Route path="*" element={<Redirect path="/" />} />
       </Routes>
     </BrowserRouter>
