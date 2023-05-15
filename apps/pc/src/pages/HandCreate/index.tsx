@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { Button, Radio } from 'antd';
-import { CopyOutlined } from '@ant-design/icons';
 import {
   HandStage,
   HandAction,
@@ -10,7 +10,6 @@ import {
   getPlayerActionOptions,
   HandRecord,
   HandBlindRecord,
-  serializeHandRecordV1,
   useLocalHandRecords,
 } from '../../models/hand';
 import { PlayerSeat } from '../../models/player';
@@ -165,10 +164,11 @@ const HandCreate = () => {
 
   const showdownOptions = playerStates.filter((state) => !state.fold && !state.showdown);
 
-  const [record, setRecord] = useState<HandRecord | null>(null);
+  const { addRecord } = useLocalHandRecords();
 
-  const generateRecord = () => {
-    setRecord({
+  const navigate = useNavigate();
+  const saveRecord = () => {
+    const record: HandRecord = {
       version: 'v1',
       id: nanoid(),
       players: [],
@@ -182,20 +182,16 @@ const HandCreate = () => {
         })
         .reduce((blinds, record) => (record ? [...blinds, record] : blinds), []),
       actions,
-      boardCards: actions
-        .map((action) => {
-          if (action.type === 'stageInfo') {
-            return action.cards;
-          }
-          return [];
-        })
-        .reduce((res, cards) => [...res, ...cards], []),
+      boardCards: actions.reduce((res, action) => {
+        return action.type === 'stageInfo' ? [...res, ...action.cards] : res;
+      }, []),
       winnerId: '',
       createTime: Date.now(),
-    });
-  };
+    };
 
-  const { addRecord } = useLocalHandRecords();
+    addRecord(record);
+    navigate(`/hand/${record.id}`);
+  };
 
   return (
     <div className={styles.container}>
@@ -309,40 +305,12 @@ const HandCreate = () => {
                   </div>
                 );
               })}
+              {/* no showdownOptions => Hand Complete */}
               {showdownOptions.length === 0 && (
-                <Button type="primary" onClick={generateRecord}>
-                  Generate Record
+                <Button type="primary" onClick={saveRecord}>
+                  Save
                 </Button>
               )}
-              <div>
-                Record:{' '}
-                <Button
-                  icon={<CopyOutlined />}
-                  disabled={!record}
-                  onClick={() => {
-                    if (record) {
-                      const recordStr = serializeHandRecordV1(record);
-                      navigator.clipboard
-                        .writeText(recordStr)
-                        // error handler
-                        .catch((err) => {
-                          console.error('copy error', err);
-                        });
-                    }
-                  }}
-                />
-                <Button
-                  disabled={!record}
-                  onClick={() => {
-                    if (record) {
-                      addRecord(record);
-                    }
-                  }}
-                >
-                  Save Record
-                </Button>
-              </div>
-              {!!record && <div>{JSON.stringify(record)}</div>}
             </div>
           )}
         </div>
