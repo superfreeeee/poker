@@ -16,6 +16,12 @@
   }
 }
 
+@media screen and (max-width: 500px) {
+  .container .main {
+    padding: 0 10px;
+  }
+}
+
 .record {
   max-width: 500px;
   padding: 8px 16px;

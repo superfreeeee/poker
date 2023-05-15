@@ -51,7 +51,7 @@
   }
 }
 
-@media screen and (width <= 500px) {
+@media screen and (max-width: 500px) {
   .main {
     flex-direction: column;
 
@@ -64,7 +64,6 @@
     .preview {
       min-width: unset;
       width: 100%;
-      max-height: 500px;
       overflow: auto;
     }
   }
