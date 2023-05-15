@@ -6,11 +6,13 @@ const logger = createLogger('common/localStorage');
 export enum ELocalStorageKey {
   Me = 'current_user',
   UserList = 'user_list',
+  HandRecordList = 'hand_record_list',
 }
 
 type ILocalStorage = {
   [ELocalStorageKey.Me]: IUser;
   [ELocalStorageKey.UserList]: IUser[];
+  [ELocalStorageKey.HandRecordList]: string[];
 };
 
 /**

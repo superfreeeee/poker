@@ -3,16 +3,14 @@
 }
 
 .header {
-  display: flex;
-  align-items: center;
-  height: 50px;
+  margin: 0;
 }
 
 .main {
   display: flex;
 
   .preview {
-    min-width: 400px;
+    min-width: 375px;
   }
 
   .divider {

@@ -105,6 +105,6 @@ const decodeSuit = (suitAbbr: CardSuitAbbr): CardSuit => {
 };
 
 export const decodeCard = (card: EncodedCard): Card => {
-  const [suit, num] = card.split('') as [CardSuitAbbr, CardNum];
+  const [num, suit] = card.split('') as [CardNum, CardSuitAbbr];
   return { suit: decodeSuit(suit), num };
 };

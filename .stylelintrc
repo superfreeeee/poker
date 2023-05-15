@@ -11,6 +11,8 @@
       }
     ],
     "scss/dollar-variable-pattern": null,
-    "declaration-empty-line-before": null
+    "declaration-empty-line-before": null,
+    "color-function-notation": null,
+    "alpha-value-notation": null
   }
 }

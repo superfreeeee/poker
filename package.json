@@ -12,8 +12,10 @@
     "upload:pc": "make upload-pc",
     "deploy:pc": "pnpm build:pc && pnpm upload:pc && make remote-restart",
     "test": "pnpm --filter @youxian/poker-pc test",
-    "lint": "eslint .",
+    "lint": "pnpm lint:type && pnpm lint:es",
+    "lint:es": "eslint .",
     "lint:quiet": "eslint . --quiet",
+    "lint:type": "tsc --noEmit",
     "reinstall": "make reinstall",
     "clean:deps": "make clean-deps",
     "clean:build": "make clean-build"

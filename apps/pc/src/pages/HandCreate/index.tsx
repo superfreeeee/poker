@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import { nanoid } from 'nanoid';
 import { Button, Radio } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import {
@@ -10,8 +11,10 @@ import {
   HandRecord,
   HandBlindRecord,
   serializeHandRecordV1,
+  useLocalHandRecords,
 } from '../../models/hand';
 import { PlayerSeat } from '../../models/player';
+import Header from '../../components/Header';
 import { CardSelectorModal } from '../../components/CardSelectorModal';
 import HandActionUI from './components/HandAction';
 import CompactInput from './components/CompactInput';
@@ -167,6 +170,7 @@ const HandCreate = () => {
   const generateRecord = () => {
     setRecord({
       version: 'v1',
+      id: nanoid(),
       players: [],
       seatMap: {},
       blinds: actions
@@ -187,15 +191,15 @@ const HandCreate = () => {
         })
         .reduce((res, cards) => [...res, ...cards], []),
       winnerId: '',
+      createTime: Date.now(),
     });
   };
 
+  const { addRecord } = useLocalHandRecords();
+
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h1>Create Hand Record</h1>
-      </div>
-
+      <Header title="Create Hand Record" back="/hands" className={styles.header} />
       <div className={styles.main}>
         {/* Left part: Preview current actions */}
         <div className={styles.preview}>
@@ -323,6 +327,16 @@ const HandCreate = () => {
                     }
                   }}
                 />
+                <Button
+                  disabled={!record}
+                  onClick={() => {
+                    if (record) {
+                      addRecord(record);
+                    }
+                  }}
+                >
+                  Save Record
+                </Button>
               </div>
               {!!record && <div>{JSON.stringify(record)}</div>}
             </div>
