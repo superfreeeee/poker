@@ -1,4 +1,5 @@
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useAtomValue } from 'jotai';
+import { useMemo } from 'react';
 import { ELocalStorageKey, getItem, setItem } from '../../common/localStorage';
 import { HandRecord } from './types';
 import { safeDeserializeHandReocrdV1, serializeHandRecordV1 } from './utils';
@@ -29,4 +30,13 @@ export const useLocalHandRecords = () => {
   };
 
   return { localRecords, addRecord };
+};
+
+export const useLocalHandRecord = (recordId: string) => {
+  const localRecords = useAtomValue(localHandRecordsAtom);
+
+  return useMemo(
+    () => localRecords.find((record) => record.id === recordId),
+    [localRecords, recordId],
+  );
 };

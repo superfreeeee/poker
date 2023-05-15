@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { createLogger } from '../../common/commonLogger';
 import { renderCardText } from '../../components/Card';
 import Header from '../../components/Header';
 import { useLocalHandRecords } from '../../models/hand';
 import styles from './index.module.scss';
+
+const logger = createLogger('pages/HandRecordList');
 
 const HandRecordList = () => {
   const { localRecords } = useLocalHandRecords();
@@ -11,7 +14,7 @@ const HandRecordList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('localRecords', localRecords);
+    logger.log('localRecords', localRecords);
   }, [localRecords]);
 
   return (
