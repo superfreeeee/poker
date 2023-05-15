@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 // import PlayerHandView from '../PlayerHandView';
 import styles from '../BuyInPrepare/index.module.scss';
-import { IPlayer, useCurrentBuyInData } from '../../../../models/buyIn';
+import { useCurrentBuyInData } from '../../../../models/buyIn';
 import PlayResult from '../PlayResult';
 import ownStyles from './index.module.scss';
 
@@ -48,12 +48,12 @@ const BuyInSetttle = () => {
         </div>
       </div>
       <div className={styles.playerList}>
-        {buyInPlayers.map((player: IPlayer) => (
+        {buyInPlayers.map((player, index) => (
           <div key={player.id} className={styles.playerContainer}>
             <PlayResult
               player={player}
               amoutPerHand={amountPerhand}
-              changeRest={changePlayer}
+              changeRest={(player) => changePlayer(player, index)}
             ></PlayResult>
           </div>
         ))}

@@ -14,6 +14,7 @@ import {
   useLocalHandRecords,
 } from '../../models/hand';
 import { PlayerSeat } from '../../models/player';
+import Header from '../../components/Header';
 import { CardSelectorModal } from '../../components/CardSelectorModal';
 import HandActionUI from './components/HandAction';
 import CompactInput from './components/CompactInput';
@@ -198,10 +199,7 @@ const HandCreate = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h1>Create Hand Record</h1>
-      </div>
-
+      <Header title="Create Hand Record" back="/hands" className={styles.header} />
       <div className={styles.main}>
         {/* Left part: Preview current actions */}
         <div className={styles.preview}>

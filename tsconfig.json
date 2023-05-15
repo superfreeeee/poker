@@ -12,10 +12,5 @@
     "skipLibCheck": true
   },
   "include": ["apps/**/*", "packages/**/*"],
-  "exclude": [
-    "**/coverage",
-    "**/webpack.config.js",
-    "apps/**/dist",
-    "packages/**/lib"
-  ]
+  "exclude": ["**/coverage", "**/webpack.config.js", "apps/**/dist", "packages/**/lib"]
 }

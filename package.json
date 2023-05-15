@@ -12,6 +12,7 @@
     "test": "pnpm --filter @youxian/poker-pc test",
     "lint": "eslint .",
     "lint:quiet": "eslint . --quiet",
+    "lint:type": "tsc --noEmit",
     "reinstall": "make reinstall",
     "clean:deps": "make clean-deps",
     "clean:build": "make clean-build"
@@ -38,9 +39,6 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint"
-    ],
-    "*.{ts,tsx}": [
-      "tsc --noEmit"
     ],
     "*.{css,scss,less}": [
       "stylelint"
