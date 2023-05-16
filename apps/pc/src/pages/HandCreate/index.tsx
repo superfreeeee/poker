@@ -203,6 +203,21 @@ const HandCreate = () => {
     navigate(`/hand/${record.id}`);
   };
 
+  const selectShowdown = (seat: PlayerSeat) => {
+    CardSelectorModal.open({
+      count: 2,
+      disabledCards: selectedCards,
+      onSelect: (cards) => {
+        dispatchAction({
+          type: 'playerShowdown',
+          seat,
+          cards,
+        });
+        showdown(seat);
+      },
+    });
+  };
+
   return (
     <div className={styles.container}>
       <Header title="Create Hand Record" back="/hands" className={styles.header} />
@@ -295,22 +310,7 @@ const HandCreate = () => {
                 return (
                   <div key={seat} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     {seat}
-                    <Button
-                      type="primary"
-                      onClick={() => {
-                        CardSelectorModal.open({
-                          count: 2,
-                          onSelect: (cards) => {
-                            dispatchAction({
-                              type: 'playerShowdown',
-                              seat,
-                              cards,
-                            });
-                            showdown(seat);
-                          },
-                        });
-                      }}
-                    >
+                    <Button type="primary" onClick={() => selectShowdown(seat)}>
                       Select Hand
                     </Button>
                   </div>
