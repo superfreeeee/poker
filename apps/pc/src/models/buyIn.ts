@@ -27,14 +27,7 @@ export interface IPlayer {
 
 export const defaultBuyInData: IBuyInData = {
   amountPerhand: 0,
-  players: [
-    {
-      name: 'xiix',
-      id: nanoid(),
-      hands: 1,
-      rest: 0,
-    },
-  ],
+  players: [],
 };
 
 const currentBuyInDataAtom = atom(defaultBuyInData);
