@@ -92,7 +92,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlaye
               ]}
             >
               <Input
-                defaultValue={hands}
+                defaultValue={0}
                 value={hands}
                 prefix={<RedEnvelopeOutlined />}
                 bordered={false}
