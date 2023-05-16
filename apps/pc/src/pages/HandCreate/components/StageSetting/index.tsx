@@ -33,8 +33,9 @@ type INextStageParams =
 export interface IStageSettingProps {
   currentStage: HandStage;
   playerStates: PlayerState[];
-  estimatePotSize: number;
-  stageClear: boolean;
+  selectedCards: Card[]; // Cards already selected
+  estimatePotSize: number; // estimatePotSize base on playerStates
+  stageClear: boolean; // if currentStage cleared
   onNextStage: (params: INextStageParams) => void;
 }
 
@@ -46,6 +47,7 @@ export interface IStageSettingProps {
 const StageSetting = ({
   currentStage,
   playerStates,
+  selectedCards,
   estimatePotSize,
   stageClear,
   onNextStage,
@@ -82,6 +84,7 @@ const StageSetting = ({
       <PostFlopSetting
         key={currentStage}
         currentStage={currentStage}
+        selectedCards={selectedCards}
         estimatePotSize={estimatePotSize}
         stageClear={stageClear}
         onConfirm={(nexStage, cards, potSize) => onNextStage({ stage: nexStage, cards, potSize })}
@@ -250,10 +253,11 @@ const PotSizeSetting: FC<IPotSizeSettingProps> = ({
  */
 const PostFlopSetting: FC<{
   currentStage: HandStage.PreFlop | HandStage.Flop | HandStage.Turn | HandStage.River;
+  selectedCards: Card[];
   estimatePotSize: number;
   stageClear: boolean;
   onConfirm: (nextStage: PostFlopHandStage, dealCards: Card[], potSize: number) => void;
-}> = ({ currentStage, estimatePotSize, stageClear, onConfirm }) => {
+}> = ({ currentStage, selectedCards, estimatePotSize, stageClear, onConfirm }) => {
   const nextStage = getNextStage(currentStage) as PostFlopHandStage;
   const count = nextStage === HandStage.Flop ? 3 : 1;
 
@@ -264,6 +268,7 @@ const PostFlopSetting: FC<{
       count,
       onSelect: setDealCards,
       defaultSelectedCards: dealCards,
+      disabledCards: selectedCards,
     });
   };
 

@@ -12,6 +12,7 @@ import {
   HandBlindRecord,
   useLocalHandRecords,
 } from '../../models/hand';
+import { Card } from '../../models/card';
 import { PlayerSeat } from '../../models/player';
 import Header from '../../components/Header';
 import { CardSelectorModal } from '../../components/CardSelectorModal';
@@ -34,6 +35,15 @@ const HandCreate = () => {
     usePlayerStates({
       lastPotSize,
     });
+
+  const selectedCards = useMemo(() => {
+    return actions.reduce((cards: Card[], action) => {
+      if (action.type === 'stageInfo' || action.type === 'playerShowdown') {
+        return [...cards, ...action.cards];
+      }
+      return cards;
+    }, []);
+  }, [actions]);
 
   // User Action state
   const [seat, setSeat] = useState<PlayerSeat>(PlayerSeat.UTG);
@@ -215,6 +225,7 @@ const HandCreate = () => {
             <StageSetting
               currentStage={stage}
               playerStates={playerStates}
+              selectedCards={selectedCards}
               estimatePotSize={estimatePotSize}
               stageClear={stageClear}
               onNextStage={onNextStage}
