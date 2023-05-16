@@ -33,8 +33,9 @@ type INextStageParams =
 export interface IStageSettingProps {
   currentStage: HandStage;
   playerStates: PlayerState[];
-  estimatePotSize: number;
-  stageClear: boolean;
+  selectedCards: Card[]; // Cards already selected
+  estimatePotSize: number; // estimatePotSize base on playerStates
+  stageClear: boolean; // if currentStage cleared
   onNextStage: (params: INextStageParams) => void;
 }
 
@@ -46,6 +47,7 @@ export interface IStageSettingProps {
 const StageSetting = ({
   currentStage,
   playerStates,
+  selectedCards,
   estimatePotSize,
   stageClear,
   onNextStage,
@@ -82,6 +84,7 @@ const StageSetting = ({
       <PostFlopSetting
         key={currentStage}
         currentStage={currentStage}
+        selectedCards={selectedCards}
         estimatePotSize={estimatePotSize}
         stageClear={stageClear}
         onConfirm={(nexStage, cards, potSize) => onNextStage({ stage: nexStage, cards, potSize })}
@@ -219,12 +222,24 @@ const PotSizeSetting: FC<IPotSizeSettingProps> = ({
     setPotSize(estimatePotSize);
   }, [estimatePotSize]);
 
+  // return (
+  //   <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+  //     <span style={{ fontSize: 16 }}>PotSize = {potSize}</span>
+  //     <Button type="primary" onClick={() => onConfirm(potSize)}>
+  //       Next Stage
+  //       <ArrowRightOutlined />
+  //     </Button>
+  //   </div>
+  // );
+
   return (
     <CompactInput
       placeholder="Pot size"
       disabledConfirm={disabledConfirm || !stageClear || potSize <= 0}
       value={potSize}
-      onValueChange={(input) => setPotSize(+input)}
+      // onValueChange={(input) => setPotSize(+input)}
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      onValueChange={() => {}}
       onOk={() => onConfirm(potSize)}
       okText="Next Stage"
     />
@@ -238,10 +253,11 @@ const PotSizeSetting: FC<IPotSizeSettingProps> = ({
  */
 const PostFlopSetting: FC<{
   currentStage: HandStage.PreFlop | HandStage.Flop | HandStage.Turn | HandStage.River;
+  selectedCards: Card[];
   estimatePotSize: number;
   stageClear: boolean;
   onConfirm: (nextStage: PostFlopHandStage, dealCards: Card[], potSize: number) => void;
-}> = ({ currentStage, estimatePotSize, stageClear, onConfirm }) => {
+}> = ({ currentStage, selectedCards, estimatePotSize, stageClear, onConfirm }) => {
   const nextStage = getNextStage(currentStage) as PostFlopHandStage;
   const count = nextStage === HandStage.Flop ? 3 : 1;
 
@@ -250,8 +266,9 @@ const PostFlopSetting: FC<{
   const selectDealCards = () => {
     CardSelectorModal.open({
       count,
-      selectedCards: dealCards,
       onSelect: setDealCards,
+      defaultSelectedCards: dealCards,
+      disabledCards: selectedCards,
     });
   };
 

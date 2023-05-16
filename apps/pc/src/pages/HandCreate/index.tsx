@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { Button, Radio } from 'antd';
-import { CopyOutlined } from '@ant-design/icons';
 import {
   HandStage,
   HandAction,
@@ -10,9 +10,9 @@ import {
   getPlayerActionOptions,
   HandRecord,
   HandBlindRecord,
-  serializeHandRecordV1,
   useLocalHandRecords,
 } from '../../models/hand';
+import { Card } from '../../models/card';
 import { PlayerSeat } from '../../models/player';
 import Header from '../../components/Header';
 import { CardSelectorModal } from '../../components/CardSelectorModal';
@@ -35,6 +35,15 @@ const HandCreate = () => {
     usePlayerStates({
       lastPotSize,
     });
+
+  const selectedCards = useMemo(() => {
+    return actions.reduce((cards: Card[], action) => {
+      if (action.type === 'stageInfo' || action.type === 'playerShowdown') {
+        return [...cards, ...action.cards];
+      }
+      return cards;
+    }, []);
+  }, [actions]);
 
   // User Action state
   const [seat, setSeat] = useState<PlayerSeat>(PlayerSeat.UTG);
@@ -165,10 +174,11 @@ const HandCreate = () => {
 
   const showdownOptions = playerStates.filter((state) => !state.fold && !state.showdown);
 
-  const [record, setRecord] = useState<HandRecord | null>(null);
+  const { addRecord } = useLocalHandRecords();
 
-  const generateRecord = () => {
-    setRecord({
+  const navigate = useNavigate();
+  const saveRecord = () => {
+    const record: HandRecord = {
       version: 'v1',
       id: nanoid(),
       players: [],
@@ -182,20 +192,31 @@ const HandCreate = () => {
         })
         .reduce((blinds, record) => (record ? [...blinds, record] : blinds), []),
       actions,
-      boardCards: actions
-        .map((action) => {
-          if (action.type === 'stageInfo') {
-            return action.cards;
-          }
-          return [];
-        })
-        .reduce((res, cards) => [...res, ...cards], []),
+      boardCards: actions.reduce((res, action) => {
+        return action.type === 'stageInfo' ? [...res, ...action.cards] : res;
+      }, []),
       winnerId: '',
       createTime: Date.now(),
-    });
+    };
+
+    addRecord(record);
+    navigate(`/hand/${record.id}`);
   };
 
-  const { addRecord } = useLocalHandRecords();
+  const selectShowdown = (seat: PlayerSeat) => {
+    CardSelectorModal.open({
+      count: 2,
+      disabledCards: selectedCards,
+      onSelect: (cards) => {
+        dispatchAction({
+          type: 'playerShowdown',
+          seat,
+          cards,
+        });
+        showdown(seat);
+      },
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -219,6 +240,7 @@ const HandCreate = () => {
             <StageSetting
               currentStage={stage}
               playerStates={playerStates}
+              selectedCards={selectedCards}
               estimatePotSize={estimatePotSize}
               stageClear={stageClear}
               onNextStage={onNextStage}
@@ -288,61 +310,18 @@ const HandCreate = () => {
                 return (
                   <div key={seat} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     {seat}
-                    <Button
-                      type="primary"
-                      onClick={() => {
-                        CardSelectorModal.open({
-                          count: 2,
-                          onSelect: (cards) => {
-                            dispatchAction({
-                              type: 'playerShowdown',
-                              seat,
-                              cards,
-                            });
-                            showdown(seat);
-                          },
-                        });
-                      }}
-                    >
+                    <Button type="primary" onClick={() => selectShowdown(seat)}>
                       Select Hand
                     </Button>
                   </div>
                 );
               })}
+              {/* no showdownOptions => Hand Complete */}
               {showdownOptions.length === 0 && (
-                <Button type="primary" onClick={generateRecord}>
-                  Generate Record
+                <Button type="primary" onClick={saveRecord}>
+                  Save
                 </Button>
               )}
-              <div>
-                Record:{' '}
-                <Button
-                  icon={<CopyOutlined />}
-                  disabled={!record}
-                  onClick={() => {
-                    if (record) {
-                      const recordStr = serializeHandRecordV1(record);
-                      navigator.clipboard
-                        .writeText(recordStr)
-                        // error handler
-                        .catch((err) => {
-                          console.error('copy error', err);
-                        });
-                    }
-                  }}
-                />
-                <Button
-                  disabled={!record}
-                  onClick={() => {
-                    if (record) {
-                      addRecord(record);
-                    }
-                  }}
-                >
-                  Save Record
-                </Button>
-              </div>
-              {!!record && <div>{JSON.stringify(record)}</div>}
             </div>
           )}
         </div>
