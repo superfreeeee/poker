@@ -15,14 +15,23 @@ export interface ICardSelectorCallback {
 export interface ICardSelectorProps extends ICardSelectorCallback {
   count?: number;
   max?: number;
-  selectedCards?: Card[];
+  defaultSelectedCards?: Card[];
+  disabledCards?: Card[];
 }
 
-const CardSelector: FC<ICardSelectorProps> = ({ count, max = 3, onSelect, onCancel, onClose }) => {
+const CardSelector: FC<ICardSelectorProps> = ({
+  count,
+  max = 3,
+  onSelect,
+  onCancel,
+  onClose,
+  defaultSelectedCards,
+  disabledCards,
+}) => {
   const fixedCards = !!count;
   const size = count ?? max;
 
-  const { selectedCards, select } = useSelectCards(size);
+  const { selectedCards, select } = useSelectCards(size, defaultSelectedCards);
 
   return (
     <Modal
@@ -48,7 +57,7 @@ const CardSelector: FC<ICardSelectorProps> = ({ count, max = 3, onSelect, onCanc
           </div>
           {renderCardText(selectedCards, styles.cards)}
         </div>
-        <CardTable selectedCards={selectedCards} onClick={select} />
+        <CardTable selectedCards={selectedCards} disabledCards={disabledCards} onClick={select} />
       </div>
     </Modal>
   );

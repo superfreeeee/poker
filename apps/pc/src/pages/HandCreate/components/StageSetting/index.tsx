@@ -262,8 +262,8 @@ const PostFlopSetting: FC<{
   const selectDealCards = () => {
     CardSelectorModal.open({
       count,
-      selectedCards: dealCards,
       onSelect: setDealCards,
+      defaultSelectedCards: dealCards,
     });
   };
 

@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react';
 import { Card } from '../../models/card';
 
-export const useSelectCards = (max = 5) => {
-  const [selectedCards, setSelectedCards] = useState<Card[]>([]);
+export const useSelectCards = (max = 5, defaultCards: Card[] = []) => {
+  const [selectedCards, setSelectedCards] = useState<Card[]>(defaultCards);
 
   const select = useCallback(
     (card: Card) => {

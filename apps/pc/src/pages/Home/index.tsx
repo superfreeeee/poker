@@ -2,8 +2,10 @@ import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
+import { IS_DEV } from '../../common/env';
 import { useLoginCheck } from '../../hooks/useLoginCheck';
 import { useCurrentUser } from '../../models/user';
+import HomeTest from './Test';
 import styles from './index.module.scss';
 
 interface IPageLinkProps {
@@ -50,6 +52,7 @@ const Home = () => {
           <PageLink title="BuyIn" path="/buyin/prepare" />
           <PageLink title="HandRecordList" path="/hands" />
         </div>
+        {IS_DEV && <HomeTest />}
       </div>
     </div>
   );
