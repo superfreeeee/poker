@@ -11,6 +11,11 @@
     min-width: 375px;
   }
 
+  .actionList {
+    min-width: unset;
+    width: 100%;
+  }
+
   .divider {
     align-self: stretch;
     margin: 12px 20px;
