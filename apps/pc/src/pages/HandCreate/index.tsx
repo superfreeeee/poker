@@ -14,9 +14,10 @@ import {
 } from '../../models/hand';
 import { Card } from '../../models/card';
 import { PlayerSeat } from '../../models/player';
+import { useWindowSize } from '../../hooks/useWindowSize';
 import Header from '../../components/Header';
 import { CardSelectorModal } from '../../components/CardSelectorModal';
-import HandActionUI from './components/HandAction';
+import HandActions from '../../components/HandActions';
 import CompactInput from './components/CompactInput';
 import StageSetting, { IStageSettingProps } from './components/StageSetting';
 import { usePlayerStates } from './hooks/usePlayerStates';
@@ -26,6 +27,8 @@ import { useHandStage } from './hooks/useHandStage';
 import styles from './index.module.scss';
 
 const HandCreate = () => {
+  const { width } = useWindowSize();
+
   const { actions, dispatchAction } = useHandActions();
   const { stage, nextStage } = useHandStage();
   const { currentBetSize, updateCurrentBetSize, resetCurrentBetSize } = useCurrentBetSize();
@@ -224,9 +227,7 @@ const HandCreate = () => {
       <div className={styles.main}>
         {/* Left part: Preview current actions */}
         <div className={styles.preview}>
-          {actions.map((action, i) => (
-            <HandActionUI key={i} action={action} />
-          ))}
+          <HandActions actions={actions} narrow={width <= 800} className={styles.actionList} />
         </div>
 
         <div className={styles.divider} />
