@@ -1,11 +1,8 @@
 import React, { FC } from 'react';
-import { Button } from 'antd';
+import { Button, Modal } from 'antd';
 import { TransactionOutlined, EditFilled, BackwardFilled } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import {
-  IPlayer,
-  useCurrentBuyInData,
-} from '../../../../../models/buyIn';
+import { IPlayer, useCurrentBuyInData } from '../../../../../models/buyIn';
 import PlayerHandView from '../../PlayerHandView';
 import StatisticsDataView from '../../StatisticsDataView';
 import initialStyles from '../../BuyInPrepare/index.module.scss';
@@ -24,11 +21,25 @@ const Content: FC<IContentProps> = ({ enterEdit }: IContentProps) => {
   const navigate = useNavigate();
 
   const reset = () => {
-    changeBuyInData({
-      amountPerhand: 0,
-      players: [],
+    Modal.confirm({
+      title: 'Reset buyIn data',
+      content: 'Are you sure to reset buy-in data?',
+      centered: true,
+      closable: true,
+      maskClosable: true,
+      okButtonProps: {
+        type: 'primary',
+        danger: true,
+      },
+      okText: 'Reset',
+      onOk: () => {
+        changeBuyInData({
+          amountPerhand: 0,
+          players: [],
+        });
+        navigate('/buyin/prepare');
+      },
     });
-    navigate('/buyin/prepare');
   };
 
   return (
