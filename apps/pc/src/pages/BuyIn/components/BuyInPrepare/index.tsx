@@ -32,7 +32,7 @@ const BuyInPrepare = () => {
 
   return (
     <>
-      <Header title="BuyIn Prepare" back="/" style={{ alignSelf: 'stretch' }} />
+      <Header title="BuyIn Prepare" back style={{ alignSelf: 'stretch' }} />
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.leftWrap}>
