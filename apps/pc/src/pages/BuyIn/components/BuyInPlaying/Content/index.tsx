@@ -1,46 +1,26 @@
 import React, { FC } from 'react';
-import { Button, Modal } from 'antd';
+import { Button } from 'antd';
 import { TransactionOutlined, EditFilled, BackwardFilled } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { IPlayer, useCurrentBuyInData } from '../../../../../models/buyIn';
 import PlayerHandView from '../../PlayerHandView';
 import StatisticsDataView from '../../StatisticsDataView';
 import initialStyles from '../../BuyInPrepare/index.module.scss';
+import { ResetSetting } from '../types';
 import styles from './index.module.scss';
 
 interface IContentProps {
   enterEdit: () => void;
+  resetSetting: ResetSetting;
 }
 
-const Content: FC<IContentProps> = ({ enterEdit }: IContentProps) => {
+const Content: FC<IContentProps> = ({ enterEdit, resetSetting }: IContentProps) => {
   const {
     buyInData: { amountPerhand, players: buyInPlayers },
     statisticsData: { totalPlayer, totalHands, totalAmount },
     changeBuyInData,
   } = useCurrentBuyInData();
   const navigate = useNavigate();
-
-  const reset = () => {
-    Modal.confirm({
-      title: 'Reset buyIn data',
-      content: 'Are you sure to reset buy-in data?',
-      centered: true,
-      closable: true,
-      maskClosable: true,
-      okButtonProps: {
-        type: 'primary',
-        danger: true,
-      },
-      okText: 'Reset',
-      onOk: () => {
-        changeBuyInData({
-          amountPerhand: 0,
-          players: [],
-        });
-        navigate('/buyin/prepare');
-      },
-    });
-  };
 
   return (
     <div className={initialStyles.container}>
@@ -71,7 +51,15 @@ const Content: FC<IContentProps> = ({ enterEdit }: IContentProps) => {
               icon={<BackwardFilled className={initialStyles.btnSvg} />}
               // onClick={() => navigate(getPath(ERouteName.BuyInEdit))}
               onClick={() => {
-                reset();
+                resetSetting({
+                  onOk: () => {
+                    changeBuyInData({
+                      amountPerhand: 0,
+                      players: [],
+                    });
+                    navigate('/buyin/prepare');
+                  },
+                });
               }}
             >
               Reset Setting
@@ -81,9 +69,7 @@ const Content: FC<IContentProps> = ({ enterEdit }: IContentProps) => {
             <Button
               className={initialStyles.addBtn}
               icon={<EditFilled className={initialStyles.btnSvg} />}
-              onClick={() => {
-                enterEdit();
-              }}
+              onClick={() => enterEdit()}
             >
               Edit Setting
             </Button>
