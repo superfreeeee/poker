@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import { atom, useAtom } from 'jotai';
 import { nanoid } from 'nanoid';
 import { useMemo } from 'react';
@@ -14,6 +15,17 @@ export interface IPlayer {
   rest: number; // 剩余筹码
 }
 
+// const getDefaultUser = () =>{
+//   // hook?
+//   // const defaultPlayer:IPlayer = {
+//   //   id:currentUser?.id || nanoid(),
+//   //   name:currentUser?.name || "",
+//   //   hands:0,
+//   //   rest:0
+//   // }
+
+// }
+
 export const defaultBuyInData: IBuyInData = {
   amountPerhand: 0,
   players: [],
@@ -23,19 +35,29 @@ const currentBuyInDataAtom = atom(defaultBuyInData);
 
 export const useCurrentBuyInData = () => {
   const [currentBuyInData, setCurrentBuyInData] = useAtom(currentBuyInDataAtom);
+  return useBuyInData({ buyInData: currentBuyInData, setBuyInData: setCurrentBuyInData });
+};
 
-  const sumData = useBuyInSumData(currentBuyInData);
+interface IBuyInDataProps {
+  buyInData: IBuyInData;
+  setBuyInData: (buyInData: IBuyInData) => void;
+}
 
-  const sumBenefit = useMemo(() => {
-    return calcBenfit(currentBuyInData);
-  }, [currentBuyInData]);
+export const useBuyInData = ({ buyInData, setBuyInData }: IBuyInDataProps) => {
+  const statisticsData = useMemo(() => {
+    return calcStatisticsData(buyInData);
+  }, [buyInData]);
 
-  const actions = useBuyInDataActions([currentBuyInData, setCurrentBuyInData]);
+  const totalBenefit = useMemo(() => {
+    return calcBenfit(buyInData);
+  }, [buyInData]);
+
+  const actions = useBuyInDataActions([buyInData, setBuyInData]);
 
   return {
-    currentBuyInData,
-    sumData,
-    sumBenefit,
+    buyInData,
+    statisticsData,
+    totalBenefit,
     ...actions,
   };
 };
@@ -64,10 +86,14 @@ export const useBuyInDataActions = ([buyInData, setBuyInData]: IBuyInDataEntry) 
   };
 
   const removePlayer = (targetId: string) => {
-    setBuyInData({
-      ...buyInData,
-      players: buyInData.players.filter((player) => player.id != targetId),
-    });
+    if (buyInData.players.length != 1) {
+      setBuyInData({
+        ...buyInData,
+        players: buyInData.players.filter((player) => player.id != targetId),
+      });
+    } else {
+      message.error("玩家不能为空")
+    }
   };
 
   const changePlayer = (targetPlayer: IPlayer, index: number) => {
@@ -75,16 +101,14 @@ export const useBuyInDataActions = ([buyInData, setBuyInData]: IBuyInDataEntry) 
     if (index < 0 || index >= originPlayers.length) {
       throw new Error(`Invalid index=${index} at changePlayer`);
     }
-
     originPlayers.splice(index, 1, targetPlayer);
-
     setBuyInData({
       ...buyInData,
       players: originPlayers,
     });
   };
 
-  const changeCurrentBuyInData = (data: IBuyInData) => {
+  const changeBuyInData = (data: IBuyInData) => {
     setBuyInData(data);
   };
 
@@ -92,23 +116,14 @@ export const useBuyInDataActions = ([buyInData, setBuyInData]: IBuyInDataEntry) 
     addPlayer,
     removePlayer,
     changePlayer,
-    changeCurrentBuyInData,
+    changeBuyInData,
   };
 };
 
-/**
- * 基于 buyInData 返回统计数据
- * @param data
- * @returns
- */
-export const useBuyInSumData = (data: IBuyInData) => {
-  return useMemo(() => calcSumData(data), [data]);
-};
-
-export interface ISumData {
-  playerSum: number;
-  handSum: number;
-  amountSum: number;
+export interface IStatisticsData {
+  totalPlayer: number;
+  totalHands: number;
+  totalAmount: number;
 }
 
 /**
@@ -116,14 +131,14 @@ export interface ISumData {
  * @param param0
  * @returns
  */
-export const calcSumData = ({ amountPerhand, players }: IBuyInData): ISumData => {
-  const handSum = players.reduce((sum, player) => sum + player.hands, 0);
-  const sumData: ISumData = {
-    playerSum: players.length,
-    handSum: handSum,
-    amountSum: handSum * amountPerhand,
+export const calcStatisticsData = ({ amountPerhand, players }: IBuyInData): IStatisticsData => {
+  const totalHands = players.reduce((sum, player) => sum + player.hands, 0);
+  const statisticsData: IStatisticsData = {
+    totalPlayer: players.length,
+    totalHands: totalHands,
+    totalAmount: totalHands * amountPerhand,
   };
-  return sumData;
+  return statisticsData;
 };
 
 /**

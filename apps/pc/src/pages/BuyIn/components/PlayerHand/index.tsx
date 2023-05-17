@@ -1,5 +1,5 @@
 import React, { FC, ChangeEvent } from 'react';
-import { Button, Input } from 'antd';
+import { Button, Input, message } from 'antd';
 import {
   DeleteOutlined,
   UserOutlined,
@@ -20,70 +20,87 @@ const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlaye
   const { id, name, hands } = player;
 
   return (
-    <>
+    <div className={styles.container}>
       <div className={styles.firstLine}>
-        <div className={styles.leftWrap}>
-          <Button shape="circle" icon={<UserOutlined />} className={styles.btnBG} />
-          <div className={styles.inputUnderLine}>
-            <Input
-              placeholder="Input your name"
-              allowClear
-              showCount
-              maxLength={30}
-              style={{ width: 180 }}
-              defaultValue={name}
-              bordered={false}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                onChange({
-                  ...player,
-                  name: e.target.value,
-                });
-              }}
-            />
-          </div>
+        <div className={styles.inputForm}>
+          <div>USERNAME</div>
+          <Input
+            prefix={<UserOutlined />}
+            placeholder="Input your name"
+            allowClear
+            showCount
+            maxLength={30}
+            bordered={false}
+            value={name}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              onChange({
+                ...player,
+                name: e.target.value,
+              });
+            }}
+          />
         </div>
-        <Button
-          shape="circle"
-          icon={<DeleteOutlined />}
-          className={styles.btnBG}
-          onClick={() => {
-            onRemove(id);
-          }}
-        />
+        <div className={styles.btnContainer}>
+          <Button
+            shape="circle"
+            icon={<DeleteOutlined />}
+            className={styles.btnBG}
+            onClick={() => {
+              onRemove(id);
+            }}
+          />
+        </div>
       </div>
       <div className={styles.secondLine}>
-        <Input
-          className={styles.inputDecorate}
-          defaultValue={hands}
-          value={hands}
-          type="number"
-          prefix={<RedEnvelopeOutlined />}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            // if (isNumber(e.target.value)) {
-            //   params.changeHand(id, e.target.value);
-            // }
-            onChange({ ...player, hands: Number(e.target.value) });
-          }}
-        />
-        <div className={styles.buttonWrap}>
+        <div className={styles.inputForm}>
+          <div>HANDS</div>
+          <Input
+            defaultValue={0}
+            value={hands}
+            prefix={<RedEnvelopeOutlined />}
+            bordered={false}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              let number = +e.target.value;
+              if (isNaN(number)) {
+                message.error('买入数量必须为正整数');
+                return;
+              }
+              if (number > 50) {
+                number = 50;
+                message.info('买入数量不能超过50');
+              }
+              onChange({ ...player, hands: number });
+            }}
+          />
+        </div>
+
+        <div className={styles.numberBtnWrap}>
           <div
             className={styles.btnSplitLine}
             onClick={() => {
-              onChange({ ...player, hands: hands - 1 });
+              if (hands == 1) {
+                message.info('买入数量不能为0');
+              } else {
+                onChange({ ...player, hands: hands - 1 });
+              }
             }}
           >
             <MinusOutlined />
           </div>
           <div
             onClick={() => {
-              onChange({ ...player, hands: hands + 1 });
+              if (hands == 50) {
+                message.info('买入数量不能超过50');
+              } else {
+                onChange({ ...player, hands: hands + 1 });
+              }
             }}
           >
             <PlusOutlined />
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 export default PlayerHand;
