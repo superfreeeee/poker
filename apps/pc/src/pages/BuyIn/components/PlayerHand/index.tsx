@@ -8,6 +8,7 @@ import {
   MinusOutlined,
 } from '@ant-design/icons';
 import { IPlayer } from '../../../../models/buyIn';
+import useDebounce from '../../../../hooks/useDebounce';
 import styles from './index.module.scss';
 
 interface IPlayerHandProps {
@@ -17,11 +18,31 @@ interface IPlayerHandProps {
 }
 
 const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlayerHandProps) => {
-  const { id, name, hands } = player;
+  const { id, hands } = player;
+
+  const handleNameChange = useDebounce((e: ChangeEvent<HTMLInputElement>) => {
+    onChange({
+      ...player,
+      name: e.target.value,
+    });
+  }, 500);
+
+  const handleHandChange = useDebounce((e: ChangeEvent<HTMLInputElement>) => {
+    let number = +e.target.value;
+    if (isNaN(number)) {
+      message.error('买入数量必须为正整数');
+      return;
+    }
+    if (number > 50) {
+      number = 50;
+      message.info('买入数量不能超过50');
+    }
+    onChange({ ...player, hands: number });
+  }, 500);
 
   return (
     <div className={styles.container}>
-      <div className={styles.firstLine}>
+      <div className={styles.firstCol}>
         <div className={styles.inputForm}>
           <div>USERNAME</div>
           <Input
@@ -31,18 +52,24 @@ const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlaye
             showCount
             maxLength={30}
             bordered={false}
-            value={name}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              onChange({
-                ...player,
-                name: e.target.value,
-              });
-            }}
+            onChange={handleNameChange}
           />
         </div>
+        <div className={styles.inputForm}>
+          <div>HANDS</div>
+          <Input
+            defaultValue={0}
+            prefix={<RedEnvelopeOutlined />}
+            bordered={false}
+            onChange={handleHandChange}
+          />
+        </div>
+      </div>
+      <div className={styles.secondCol}>
         <div className={styles.btnContainer}>
           <Button
             shape="circle"
+            size="large"
             icon={<DeleteOutlined />}
             className={styles.btnBG}
             onClick={() => {
@@ -50,33 +77,10 @@ const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlaye
             }}
           />
         </div>
-      </div>
-      <div className={styles.secondLine}>
-        <div className={styles.inputForm}>
-          <div>HANDS</div>
-          <Input
-            defaultValue={0}
-            value={hands}
-            prefix={<RedEnvelopeOutlined />}
-            bordered={false}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              let number = +e.target.value;
-              if (isNaN(number)) {
-                message.error('买入数量必须为正整数');
-                return;
-              }
-              if (number > 50) {
-                number = 50;
-                message.info('买入数量不能超过50');
-              }
-              onChange({ ...player, hands: number });
-            }}
-          />
-        </div>
-
         <div className={styles.numberBtnWrap}>
-          <div
-            className={styles.btnSplitLine}
+          <Button
+            icon={<MinusOutlined />}
+            className={styles.btnBG}
             onClick={() => {
               if (hands == 1) {
                 message.info('买入数量不能为0');
@@ -84,10 +88,10 @@ const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlaye
                 onChange({ ...player, hands: hands - 1 });
               }
             }}
-          >
-            <MinusOutlined />
-          </div>
-          <div
+          ></Button>
+          <Button
+            icon={<PlusOutlined />}
+            className={styles.btnBG}
             onClick={() => {
               if (hands == 50) {
                 message.info('买入数量不能超过50');
@@ -95,9 +99,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlaye
                 onChange({ ...player, hands: hands + 1 });
               }
             }}
-          >
-            <PlusOutlined />
-          </div>
+          ></Button>
         </div>
       </div>
     </div>

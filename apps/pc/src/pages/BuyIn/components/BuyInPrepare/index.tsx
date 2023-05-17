@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 import { Input, Button, message } from 'antd';
 import { DownCircleFilled, TransactionOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import PlayerHand from '../PlayerHand';
 import StatisticsDataView from '../StatisticsDataView';
+import { useCurrentUser } from '../../../../models/user';
 import { useCurrentBuyInData } from '../../../../models/buyIn';
+import useDebounce from '../../../../hooks/useDebounce';
 import styles from './index.module.scss';
 
 const BuyInPrepare = () => {
+  const currentUser = useCurrentUser();
   const {
     buyInData: { amountPerhand, players: buyInPlayers },
     statisticsData: { totalPlayer, totalHands, totalAmount },
@@ -16,6 +19,34 @@ const BuyInPrepare = () => {
     changePlayer,
     changeBuyInData,
   } = useCurrentBuyInData();
+
+  useEffect(() => {
+    if (currentUser !== undefined) {
+      changeBuyInData({
+        amountPerhand: amountPerhand,
+        players: [
+          {
+            id: currentUser.id,
+            name: currentUser.name,
+            hands: 1,
+            rest: 0,
+          },
+        ],
+      });
+    }
+  }, []);
+
+  const handleAmountPerHandChange = useDebounce((e: ChangeEvent<HTMLInputElement>) => {
+    const amount = +e.target.value;
+    if (isNaN(amount)) {
+      message.error('一手金额必须为正整数');
+      return;
+    }
+    changeBuyInData({
+      players: buyInPlayers,
+      amountPerhand: amount,
+    });
+  }, 500);
 
   const navigate = useNavigate();
 
@@ -42,17 +73,7 @@ const BuyInPrepare = () => {
               value={amountPerhand}
               bordered={false}
               prefix={<TransactionOutlined />}
-              onChange={(e) => {
-                const amount = +e.target.value;
-                if (isNaN(amount)) {
-                  message.error('一手金额必须为正整数');
-                  return;
-                }
-                changeBuyInData({
-                  players: buyInPlayers,
-                  amountPerhand: amount,
-                });
-              }}
+              onChange={handleAmountPerHandChange}
             />
           </div>
         </div>
