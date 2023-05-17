@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import { atom, useAtom } from 'jotai';
 import { nanoid } from 'nanoid';
 import { useMemo } from 'react';
@@ -91,7 +92,7 @@ export const useBuyInDataActions = ([buyInData, setBuyInData]: IBuyInDataEntry) 
         players: buyInData.players.filter((player) => player.id != targetId),
       });
     } else {
-      alert('玩家不能为空');
+      message.error("玩家不能为空")
     }
   };
 

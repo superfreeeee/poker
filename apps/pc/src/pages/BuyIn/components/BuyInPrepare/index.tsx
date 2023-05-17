@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Button, Form } from 'antd';
+import { Input, Button, message } from 'antd';
 import { DownCircleFilled, TransactionOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import PlayerHand from '../PlayerHand';
@@ -19,6 +19,16 @@ const BuyInPrepare = () => {
 
   const navigate = useNavigate();
 
+  const validateUserName = () => {
+    let hasNull = false;
+    buyInPlayers.forEach((player) => {
+      if (player.name === '') {
+        hasNull = true;
+      }
+    });
+    return !hasNull;
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -26,41 +36,24 @@ const BuyInPrepare = () => {
           <div style={{ fontSize: 20 }}>初始状态</div>
           <div className={styles.inputForm}>
             <div>一手金额</div>
-            <Form>
-              <Form.Item
-                name="amountPerhand"
-                rules={[
-                  {
-                    required: true,
-                    pattern: new RegExp(/^[1-9]\d*$/, 'g'),
-                    message: '请输入正整数',
-                  },
-                  {
-                    max:10,
-                    message:'超出最大买入数量'
-                  }
-                ]}
-              >
-                <Input
-                  placeholder="Input here"
-                  maxLength={11}
-                  value={amountPerhand}
-                  bordered={false}
-                  prefix={<TransactionOutlined />}
-                  onChange={(e) => {
-                    const amount = +e.target.value;
-                    if (isNaN(amount)) {
-                      return;
-                    }
-                    if (amount < 0) return;
-                    changeBuyInData({
-                      players: buyInPlayers,
-                      amountPerhand: amount,
-                    });
-                  }}
-                />
-              </Form.Item>
-            </Form>
+            <Input
+              placeholder="Input here"
+              maxLength={11}
+              value={amountPerhand}
+              bordered={false}
+              prefix={<TransactionOutlined />}
+              onChange={(e) => {
+                const amount = +e.target.value;
+                if (isNaN(amount)) {
+                  message.error('一手金额必须为正整数');
+                  return;
+                }
+                changeBuyInData({
+                  players: buyInPlayers,
+                  amountPerhand: amount,
+                });
+              }}
+            />
           </div>
         </div>
         <StatisticsDataView
@@ -93,7 +86,11 @@ const BuyInPrepare = () => {
           <Button
             className={styles.nextBtn}
             onClick={() => {
-              navigate('/buyin/playing');
+              if (validateUserName()) {
+                navigate('/buyin/playing');
+              } else {
+                message.error('玩家名不能为空');
+              }
             }}
           >
             Start play

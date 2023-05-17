@@ -1,5 +1,5 @@
-import React, {  useState, FC } from 'react';
-import { Input, Button, Form } from 'antd';
+import React, { useState, FC } from 'react';
+import { Input, Button, message } from 'antd';
 import { DownCircleFilled, TransactionOutlined } from '@ant-design/icons';
 import PlayerHand from '../../PlayerHand';
 import { IPlayer, useCurrentBuyInData, useBuyInData } from '../../../../../models/buyIn';
@@ -25,6 +25,16 @@ const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
     changeBuyInData: changeEditBuyInData,
   } = useBuyInData({ buyInData: editBuyInData, setBuyInData: setEditBuyInPlayers });
 
+  const validateUserName = () => {
+    let hasNull = false;
+    editBuyInPlayers.forEach((player) => {
+      if (player.name === '') {
+        hasNull = true;
+      }
+    });
+    return !hasNull;
+  };
+
   return (
     <div className={initialStyles.container}>
       <div className={initialStyles.header}>
@@ -32,41 +42,24 @@ const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
           <div style={{ fontSize: 20 }}>编辑状态</div>
           <div className={initialStyles.inputForm}>
             <div>一手金额</div>
-            <Form>
-              <Form.Item
-                name="amountPerhand"
-                rules={[
-                  {
-                    required: true,
-                    pattern: new RegExp(/^[1-9]\d*$/, 'g'),
-                    message: '请输入正整数',
-                  },
-                  {
-                    max: 10,
-                    message: '超出最大买入数量',
-                  },
-                ]}
-              >
-                <Input
-                  placeholder="Input here"
-                  maxLength={11}
-                  value={editAmoutPerhand}
-                  bordered={false}
-                  prefix={<TransactionOutlined />}
-                  onChange={(e) => {
-                    const amount = +e.target.value;
-                    if (isNaN(amount)) {
-                      return;
-                    }
-                    if (amount < 0) return;
-                    changeEditBuyInData({
-                      players: editBuyInPlayers,
-                      amountPerhand: amount,
-                    });
-                  }}
-                />
-              </Form.Item>
-            </Form>
+            <Input
+              placeholder="Input here"
+              maxLength={11}
+              value={editAmoutPerhand}
+              bordered={false}
+              prefix={<TransactionOutlined />}
+              onChange={(e) => {
+                const amount = +e.target.value;
+                if (isNaN(amount)) {
+                  message.error('一手金额必须为正整数');
+                  return;
+                }
+                changeEditBuyInData({
+                  players: editBuyInPlayers,
+                  amountPerhand: amount,
+                });
+              }}
+            />
           </div>
         </div>
 
@@ -107,8 +100,12 @@ const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
             <Button
               className={initialStyles.addBtn}
               onClick={() => {
-                changeCurrentBuyInData(editBuyInData);
-                exitEdit();
+                if (validateUserName()) {
+                  changeCurrentBuyInData(editBuyInData);
+                  exitEdit();
+                } else {
+                  message.error('玩家名不能为空');
+                }
               }}
             >
               Confirm Change

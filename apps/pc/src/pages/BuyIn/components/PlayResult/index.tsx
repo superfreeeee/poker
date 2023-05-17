@@ -1,6 +1,6 @@
 import React, { FC, ChangeEvent } from 'react';
 import { Form, Input } from 'antd';
-import { EyeOutlined, RedEnvelopeOutlined, UserOutlined } from '@ant-design/icons';
+import { EyeOutlined, LineChartOutlined, RedEnvelopeOutlined, UserOutlined } from '@ant-design/icons';
 import { IPlayer } from '../../../../models/buyIn';
 import styles from './index.module.scss';
 
@@ -65,9 +65,9 @@ const PlayResult: FC<IPlayerResultProps> = ({
           </Form>
         </div>
         <div className={styles.textContiner}>
-          <div>Benefit</div>
+          <div>Profit and Loss</div>
           <div className={styles.text}>
-            <UserOutlined className={styles.btnMargin} /> {benefit}
+            <LineChartOutlined className={styles.btnMargin} /> {benefit}
           </div>
         </div>
       </div>

@@ -50,6 +50,9 @@ importers:
       stylelint-config-standard-scss:
         specifier: ^9.0.0
         version: 9.0.0(postcss@8.4.23)(stylelint@15.6.0)
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
 
   apps/pc:
     dependencies:

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'antd';
 import { TransactionOutlined } from '@ant-design/icons';
+import PlayResultView from '../PlayResultView';
 import StatisticsDataView from '../StatisticsDataView';
 import { useCurrentBuyInData } from '../../../../models/buyIn';
 import PlayResult from '../PlayResult';
@@ -8,6 +9,7 @@ import initialStyles from '../BuyInPrepare/index.module.scss';
 import styles from './index.module.scss';
 
 const BuyInSetttle = () => {
+  const [isEdit, setEdit] = useState(true);
   const {
     buyInData: { amountPerhand, players: buyInPlayers },
     statisticsData: { totalPlayer, totalHands, totalAmount },
@@ -31,28 +33,42 @@ const BuyInSetttle = () => {
           totalAmount={totalAmount}
         />
       </div>
-      <div className={initialStyles.playerList}>
-        {buyInPlayers.map((player, i) => (
-          <PlayResult
-          key={player.id}
-          player={player}
-          amoutPerHand={amountPerhand}
-          onChange={(player) => changePlayer(player, i)}
-        ></PlayResult>
-        ))}
-      </div>
-      <div className={styles.buttonList}>
-        <div className={styles.resUnderLine}>最终盈余总计 {totalBenefit}</div>
-        <div>
-          {totalBenefit == 0 ? (
-            <Button className={initialStyles.nextBtn}>Show final result</Button>
-          ) : (
-            <Button className={initialStyles.nextBtn} disabled>
-              Show final result
-            </Button>
-          )}
-        </div>
-      </div>
+      {isEdit ? (
+        <>
+          <div className={initialStyles.playerList}>
+            {buyInPlayers.map((player, i) => (
+              <PlayResult
+                key={player.id}
+                player={player}
+                amoutPerHand={amountPerhand}
+                onChange={(player) => changePlayer(player, i)}
+              ></PlayResult>
+            ))}
+          </div>
+          <div className={styles.buttonList}>
+            <div className={styles.resUnderLine}>最终盈余总计 {totalBenefit}</div>
+            <div>
+              {totalBenefit == 0 ? (
+                <Button className={initialStyles.nextBtn} onClick={() => setEdit(false)}>
+                  Show final result
+                </Button>
+              ) : (
+                <Button className={initialStyles.nextBtn} disabled>
+                  Show final result
+                </Button>
+              )}
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className={initialStyles.playerList}>
+            {buyInPlayers.map((player) => (
+              <PlayResultView key={player.id} player={player} amoutPerhand={amountPerhand}></PlayResultView>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

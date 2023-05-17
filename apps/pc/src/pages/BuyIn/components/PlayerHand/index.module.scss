@@ -21,18 +21,9 @@ $color-match: #c2d7ef;
 }
 
 .inputForm {
-  :global {
-    .ant-form-item-control-input {
-      border-bottom: 1px solid black;
-      width: 250px;
-      overflow: hidden;
-    }
-
-    .ant-form-item-explain-error {
-      display: flex;
-      justify-content: center;
-    }
-  }
+  border-bottom: 1px solid black;
+  width: 250px;
+  overflow: hidden;
 
   input {
     margin-left: 15px;
@@ -53,7 +44,7 @@ $color-match: #c2d7ef;
   border: 2px solid #cdc8c8;
   width: 60px;
   height: 30px;
-  
+
   .btnSplitLine {
     width: 1.8vw;
     border-right: 1px solid #cdc8c8;
