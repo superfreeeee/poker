@@ -5,7 +5,7 @@ const ROLLING_DURATION = 200;
 const genNum = () => Math.floor(Math.random() * 100) + 1;
 
 export const useRng = (onRolling?: (num: number) => void) => {
-  const [num, setNum] = useState(() => genNum());
+  const [num, setNum] = useState(0);
   const isRolling = useRef(false);
 
   const onRollingCb = useRef(onRolling);
@@ -21,9 +21,13 @@ export const useRng = (onRolling?: (num: number) => void) => {
 
     const startTime = Date.now();
     const next = () => {
+      // Generate next number
       const nextNum = genNum();
+
+      // callback
       onRollingCb.current?.(nextNum);
 
+      // End Rolling
       if (Date.now() - startTime >= ROLLING_DURATION) {
         setNum(nextNum);
         isRolling.current = false;
