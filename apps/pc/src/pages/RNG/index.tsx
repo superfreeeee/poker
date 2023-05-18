@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Header from '../../components/Header';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import styles from './index.module.scss';
@@ -34,6 +35,10 @@ const calcColor = (num: number) => {
 const RNG = () => {
   useDocumentTitle('RNG by @youxian/poker');
 
+  // independent poker page
+  const [params] = useSearchParams();
+  const enableBack = !params.has('ind');
+
   const contentRef = useRef<HTMLDivElement>(null);
 
   const [nums, setNums] = useState<number[]>([]);
@@ -52,7 +57,7 @@ const RNG = () => {
 
   return (
     <div className={styles.container}>
-      <Header title="RNG" back />
+      <Header title="RNG" back={enableBack} />
       <div className={styles.main}>
         <div className={styles.btn} ref={contentRef} onClick={rolling}>
           <span style={{ fontSize: 35 }}>Click me!</span>

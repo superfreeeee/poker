@@ -5,7 +5,7 @@ import styles from './index.module.scss';
 
 interface IHeaderProps {
   title: string;
-  back?: string | true;
+  back?: string | boolean;
   beforeNavigate?: () => Promise<boolean> | boolean;
   style?: React.CSSProperties;
   className?: string;
