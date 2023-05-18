@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Header from '../../components/Header';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 import styles from './index.module.scss';
@@ -36,7 +36,8 @@ const RNG = () => {
 
   const contentRef = useRef<HTMLDivElement>(null);
 
-  const { rolling } = useRng((num) => {
+  const [nums, setNums] = useState<number[]>([]);
+  const { rolling } = useRng((num, isRolling) => {
     const content = contentRef.current;
     if (content) {
       content.textContent = `${num}`;
@@ -44,13 +45,22 @@ const RNG = () => {
       content.style.color = color;
       content.style.borderColor = color;
     }
+    if (!isRolling) {
+      setNums([num, ...nums]);
+    }
   });
 
   return (
     <div className={styles.container}>
       <Header title="RNG" back />
-      <div ref={contentRef} className={styles.btn} onClick={rolling}>
-        <span style={{ fontSize: 35 }}>Click me!</span>
+      <div className={styles.main}>
+        <div className={styles.btn} ref={contentRef} onClick={rolling}>
+          <span style={{ fontSize: 35 }}>Click me!</span>
+        </div>
+        <div className={styles.records}>
+          <span className={styles.title}>Recent: </span>
+          <span>{nums.join(', ')}</span>
+        </div>
       </div>
     </div>
   );
