@@ -2,11 +2,12 @@ import React, { ChangeEvent, useEffect } from 'react';
 import { Input, Button, message } from 'antd';
 import { DownCircleFilled, TransactionOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { useDebounceFn } from 'ahooks';
 import PlayerHand from '../PlayerHand';
 import StatisticsDataView from '../StatisticsDataView';
 import { useCurrentUser } from '../../../../models/user';
 import { useCurrentBuyInData } from '../../../../models/buyIn';
-import useDebounce from '../../../../hooks/useDebounce';
+
 import styles from './index.module.scss';
 
 const BuyInPrepare = () => {
@@ -36,17 +37,20 @@ const BuyInPrepare = () => {
     }
   }, []);
 
-  const handleAmountPerHandChange = useDebounce((e: ChangeEvent<HTMLInputElement>) => {
-    const amount = +e.target.value;
-    if (isNaN(amount)) {
-      message.error('一手金额必须为正整数');
-      return;
-    }
-    changeBuyInData({
-      players: buyInPlayers,
-      amountPerhand: amount,
-    });
-  }, 500);
+  const { run } = useDebounceFn(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const amount = +e.target.value;
+      if (isNaN(amount)) {
+        message.error('一手金额必须为正整数');
+        return;
+      }
+      changeBuyInData({
+        players: buyInPlayers,
+        amountPerhand: amount,
+      });
+    },
+    { wait: 500 },
+  );
 
   const navigate = useNavigate();
 
@@ -70,10 +74,10 @@ const BuyInPrepare = () => {
             <Input
               placeholder="Input here"
               maxLength={11}
-              value={amountPerhand}
+              defaultValue={amountPerhand}
               bordered={false}
               prefix={<TransactionOutlined />}
-              onChange={handleAmountPerHandChange}
+              onChange={run}
             />
           </div>
         </div>

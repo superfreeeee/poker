@@ -64,7 +64,11 @@ const BuyInSetttle = () => {
         <>
           <div className={initialStyles.playerList}>
             {buyInPlayers.map((player) => (
-              <PlayResultView key={player.id} player={player} amoutPerhand={amountPerhand}></PlayResultView>
+              <PlayResultView
+                key={player.id}
+                player={player}
+                amoutPerhand={amountPerhand}
+              ></PlayResultView>
             ))}
           </div>
         </>

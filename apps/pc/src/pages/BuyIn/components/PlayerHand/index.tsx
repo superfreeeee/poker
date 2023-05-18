@@ -7,8 +7,8 @@ import {
   PlusOutlined,
   MinusOutlined,
 } from '@ant-design/icons';
+import { useDebounceFn } from 'ahooks';
 import { IPlayer } from '../../../../models/buyIn';
-import useDebounce from '../../../../hooks/useDebounce';
 import styles from './index.module.scss';
 
 interface IPlayerHandProps {
@@ -18,27 +18,17 @@ interface IPlayerHandProps {
 }
 
 const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlayerHandProps) => {
-  const { id, hands } = player;
+  const { id, name, hands } = player;
 
-  const handleNameChange = useDebounce((e: ChangeEvent<HTMLInputElement>) => {
-    onChange({
-      ...player,
-      name: e.target.value,
-    });
-  }, 500);
-
-  const handleHandChange = useDebounce((e: ChangeEvent<HTMLInputElement>) => {
-    let number = +e.target.value;
-    if (isNaN(number)) {
-      message.error('买入数量必须为正整数');
-      return;
-    }
-    if (number > 50) {
-      number = 50;
-      message.info('买入数量不能超过50');
-    }
-    onChange({ ...player, hands: number });
-  }, 500);
+  const { run } = useDebounceFn(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      onChange({
+        ...player,
+        name: e.target.value,
+      });
+    },
+    { wait: 500 },
+  );
 
   return (
     <div className={styles.container}>
@@ -47,21 +37,33 @@ const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlaye
           <div>USERNAME</div>
           <Input
             prefix={<UserOutlined />}
+            defaultValue={name}
             placeholder="Input your name"
             allowClear
             showCount
             maxLength={30}
             bordered={false}
-            onChange={handleNameChange}
+            onChange={run}
           />
         </div>
         <div className={styles.inputForm}>
           <div>HANDS</div>
           <Input
-            defaultValue={0}
+            value={hands}
             prefix={<RedEnvelopeOutlined />}
             bordered={false}
-            onChange={handleHandChange}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              let number = +e.target.value;
+              if (isNaN(number)) {
+                message.error('买入数量必须为正整数');
+                return;
+              }
+              if (number > 50) {
+                number = 50;
+                message.info('买入数量不能超过50');
+              }
+              onChange({ ...player, hands: number });
+            }}
           />
         </div>
       </div>
