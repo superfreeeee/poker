@@ -6,16 +6,46 @@
   gap: 8px;
 }
 
-.btn {
-  margin: 0 100px;
+.main {
   width: 500px;
+  margin: 0 100px;
+  transition: width 750ms, margin 750ms;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 200px;
+  border: 2px solid #d9d9d9;
+  border-radius: 6px;
   font-size: 50px;
   font-weight: 500;
+  color: rgba(0, 0, 0, 0.88);
+  user-select: none;
+  transition: color 200ms, border-color 200ms;
+}
+
+.records {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 50px;
+  font-size: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: auto;
+
+  .title {
+    position: sticky;
+    left: 0;
+    padding-right: 8px;
+    background-color: #fff;
+  }
 }
 
 @media screen and (max-width: 800px) {
-  .btn {
+  .main {
     width: calc(100% - 8px);
     margin: 0 4px;
   }
