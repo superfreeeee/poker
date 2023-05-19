@@ -30,11 +30,18 @@
   position: relative;
   display: flex;
   align-items: center;
-  height: 50px;
+  gap: 8px;
+  height: 70px;
+  padding: 12px 0;
   font-size: 20px;
   font-weight: 500;
   white-space: nowrap;
-  overflow: auto;
+
+  .info {
+    flex: 1;
+    height: 100%;
+    overflow: auto;
+  }
 
   .title {
     position: sticky;
