@@ -1,8 +1,11 @@
 import React, { useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 import Header from '../../components/Header';
 import { useDocumentTitle } from '../../hooks/useDocumentTitle';
-import styles from './index.module.scss';
 import { useRng } from './useRng';
+import styles from './index.module.scss';
 
 type Color = [r: number, g: number, b: number];
 
@@ -34,6 +37,10 @@ const calcColor = (num: number) => {
 const RNG = () => {
   useDocumentTitle('RNG by @youxian/poker');
 
+  // independent poker page
+  const [params] = useSearchParams();
+  const enableBack = !params.has('ind');
+
   const contentRef = useRef<HTMLDivElement>(null);
 
   const [nums, setNums] = useState<number[]>([]);
@@ -52,14 +59,29 @@ const RNG = () => {
 
   return (
     <div className={styles.container}>
-      <Header title="RNG" back />
+      <Header title="RNG" back={enableBack} />
       <div className={styles.main}>
         <div className={styles.btn} ref={contentRef} onClick={rolling}>
           <span style={{ fontSize: 35 }}>Click me!</span>
         </div>
         <div className={styles.records}>
-          <span className={styles.title}>Recent: </span>
-          <span>{nums.join(', ')}</span>
+          <div className={styles.info}>
+            <span className={styles.title}>History: </span>
+            <span>{nums.join(', ')}</span>
+          </div>
+          {nums.length > 0 && (
+            <Button
+              icon={<DeleteOutlined />}
+              danger
+              size="large"
+              style={{ flexShrink: 0 }}
+              onClick={() => {
+                setNums([]);
+              }}
+            >
+              Clear
+            </Button>
+          )}
         </div>
       </div>
     </div>
