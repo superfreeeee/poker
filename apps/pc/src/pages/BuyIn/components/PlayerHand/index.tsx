@@ -13,11 +13,17 @@ import styles from './index.module.scss';
 
 interface IPlayerHandProps {
   player: IPlayer;
+  isValidOperated: boolean;
   onRemove: (id: string) => void;
   onChange: (targetPlayer: IPlayer) => void;
 }
 
-const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlayerHandProps) => {
+const PlayerHand: FC<IPlayerHandProps> = ({
+  player,
+  isValidOperated,
+  onRemove,
+  onChange,
+}: IPlayerHandProps) => {
   const { id, name, hands } = player;
 
   const { run } = useDebounceFn(
@@ -69,28 +75,56 @@ const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlaye
       </div>
       <div className={styles.secondCol}>
         <div className={styles.btnContainer}>
-          <Button
-            shape="circle"
-            size="large"
-            icon={<DeleteOutlined />}
-            className={styles.btnBG}
-            onClick={() => {
-              onRemove(id);
-            }}
-          />
+          {isValidOperated ? (
+            <Button
+              disabled
+              shape="circle"
+              size="large"
+              icon={<DeleteOutlined />}
+              className={styles.btnBG}
+              onClick={() => {
+                onRemove(id);
+              }}
+            />
+          ) : (
+            <Button
+              shape="circle"
+              size="large"
+              icon={<DeleteOutlined />}
+              className={styles.btnBG}
+              onClick={() => {
+                onRemove(id);
+              }}
+            />
+          )}
         </div>
         <div className={styles.numberBtnWrap}>
-          <Button
-            icon={<MinusOutlined />}
-            className={styles.btnBG}
-            onClick={() => {
-              if (hands == 1) {
-                message.info('买入数量不能为0');
-              } else {
-                onChange({ ...player, hands: hands - 1 });
-              }
-            }}
-          ></Button>
+          {isValidOperated ? (
+            <Button
+              disabled
+              icon={<MinusOutlined />}
+              className={styles.btnBG}
+              onClick={() => {
+                if (hands == 1) {
+                  message.info('买入数量不能为0');
+                } else {
+                  onChange({ ...player, hands: hands - 1 });
+                }
+              }}
+            ></Button>
+          ) : (
+            <Button
+              icon={<MinusOutlined />}
+              className={styles.btnBG}
+              onClick={() => {
+                if (hands == 1) {
+                  message.info('买入数量不能为0');
+                } else {
+                  onChange({ ...player, hands: hands - 1 });
+                }
+              }}
+            ></Button>
+          )}
           <Button
             icon={<PlusOutlined />}
             className={styles.btnBG}

@@ -1,7 +1,6 @@
-import React, { ChangeEvent, useEffect } from 'react';
+import React, { ChangeEvent, FC, useEffect } from 'react';
 import { Input, Button, message } from 'antd';
 import { DownCircleFilled, TransactionOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
 import { useDebounceFn } from 'ahooks';
 import PlayerHand from '../PlayerHand';
 import StatisticsDataView from '../StatisticsDataView';
@@ -10,7 +9,11 @@ import { useCurrentBuyInData } from '../../../../models/buyIn';
 
 import styles from './index.module.scss';
 
-const BuyInPrepare = () => {
+interface IBuyInPrepareProps {
+  enterNextState: () => void;
+}
+
+const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareProps) => {
   const currentUser = useCurrentUser();
   const {
     buyInData: { amountPerhand, players: buyInPlayers },
@@ -52,8 +55,6 @@ const BuyInPrepare = () => {
     { wait: 500 },
   );
 
-  const navigate = useNavigate();
-
   const validateUserName = () => {
     let hasNull = false;
     buyInPlayers.forEach((player) => {
@@ -92,6 +93,7 @@ const BuyInPrepare = () => {
           <PlayerHand
             key={player.id}
             player={player}
+            isValidOperated={false}
             onRemove={removePlayer}
             onChange={(player) => changePlayer(player, i)}
           ></PlayerHand>
@@ -112,7 +114,7 @@ const BuyInPrepare = () => {
             className={styles.nextBtn}
             onClick={() => {
               if (validateUserName()) {
-                navigate('/buyin/playing');
+                enterNextState();
               } else {
                 message.error('玩家名不能为空');
               }

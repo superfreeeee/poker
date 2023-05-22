@@ -1,3 +1,5 @@
+$color-match: #c2d7ef;
+
 .buttonList {
   display: flex;
   flex-direction: column;
@@ -17,6 +19,6 @@
   border-radius: 10px;
 
   .btnSvg {
-    color: #a1e6b0;
+    color: $color-match;
   }
 }

@@ -8,7 +8,7 @@ import initialStyles from '../../BuyInPrepare/index.module.scss';
 import styles from './index.module.scss';
 
 interface IEditableProps {
-  exitEdit: () => void;
+  exitEdit: (IBuyInData) => void;
 }
 
 const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
@@ -33,6 +33,10 @@ const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
       }
     });
     return !hasNull;
+  };
+
+  const judgeValidOperation = (id: string) => {
+    return currentBuyInData.players.some((player) => player.id == id);
   };
 
   return (
@@ -74,6 +78,7 @@ const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
           <PlayerHand
             key={player.id}
             player={player}
+            isValidOperated={judgeValidOperation(player.id)}
             onRemove={(id: string) => {
               removeEditPlayer(id);
             }}
@@ -102,7 +107,7 @@ const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
               onClick={() => {
                 if (validateUserName()) {
                   changeCurrentBuyInData(editBuyInData);
-                  exitEdit();
+                  exitEdit(editBuyInData);
                 } else {
                   message.error('玩家名不能为空');
                 }
@@ -115,7 +120,7 @@ const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
             <Button
               className={initialStyles.nextBtn}
               onClick={() => {
-                exitEdit();
+                exitEdit(null);
               }}
             >
               Cancel Change

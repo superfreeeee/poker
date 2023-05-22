@@ -49,7 +49,7 @@ const Home = () => {
         <div>name: {currentUser?.name}</div>
         <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
           <h3>Pages:</h3>
-          <PageLink title="BuyIn" path="/buyin/prepare" />
+          <PageLink title="BuyIn" path="/buyin/create" />
           <PageLink title="HandRecordList" path="/hands" />
         </div>
         {IS_DEV && <HomeTest />}
