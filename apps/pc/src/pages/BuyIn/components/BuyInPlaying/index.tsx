@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Button, Modal } from 'antd';
 import { TransactionOutlined, EditFilled, BackwardFilled } from '@ant-design/icons';
 import { IBuyInData, IPlayer, useCurrentBuyInData } from '../../../../models/buyIn';
@@ -82,10 +82,6 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
       });
     });
   };
-
-  useEffect(() => {
-    console.log(buyInHistory);
-  }, [buyInHistory]);
 
   return (
     <div>

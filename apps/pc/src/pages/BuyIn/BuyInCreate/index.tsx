@@ -4,24 +4,30 @@ import BuyInPrepare from '../components/BuyInPrepare';
 import BuyInPlaying from '../components/BuyInPlaying';
 import BuyInSettle from '../components/BuyInSettle';
 
+enum BuyInState {
+  Prepare = 'buyInPrepare',
+  Playing = 'buyInPlaying',
+  Settle = 'buyInSettle',
+}
+
 const BuyInCreate = () => {
-  const [buyInState, setBuyInState] = useState(0);
+  const [buyInState, setBuyInState] = useState(BuyInState.Prepare);
   const navigate = useNavigate();
   return (
     <div>
-      {buyInState == 0 ? (
+      {buyInState == BuyInState.Prepare ? (
         <BuyInPrepare
           enterNextState={() => {
-            setBuyInState(1);
+            setBuyInState(BuyInState.Playing);
           }}
         ></BuyInPrepare>
-      ) : buyInState == 1 ? (
+      ) : buyInState == BuyInState.Playing ? (
         <BuyInPlaying
           enterNextState={() => {
-            setBuyInState(2);
+            setBuyInState(BuyInState.Settle);
           }}
           enterPrevState={() => {
-            setBuyInState(0);
+            setBuyInState(BuyInState.Prepare);
           }}
         ></BuyInPlaying>
       ) : (
