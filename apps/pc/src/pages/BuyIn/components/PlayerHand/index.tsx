@@ -7,55 +7,54 @@ import {
   PlusOutlined,
   MinusOutlined,
 } from '@ant-design/icons';
+import { useDebounceFn } from 'ahooks';
 import { IPlayer } from '../../../../models/buyIn';
 import styles from './index.module.scss';
 
 interface IPlayerHandProps {
   player: IPlayer;
+  isValidOperated: boolean;
   onRemove: (id: string) => void;
   onChange: (targetPlayer: IPlayer) => void;
 }
 
-const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlayerHandProps) => {
+const PlayerHand: FC<IPlayerHandProps> = ({
+  player,
+  isValidOperated,
+  onRemove,
+  onChange,
+}: IPlayerHandProps) => {
   const { id, name, hands } = player;
+
+  const { run } = useDebounceFn(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      onChange({
+        ...player,
+        name: e.target.value,
+      });
+    },
+    { wait: 500 },
+  );
 
   return (
     <div className={styles.container}>
-      <div className={styles.firstLine}>
+      <div className={styles.firstCol}>
         <div className={styles.inputForm}>
           <div>USERNAME</div>
           <Input
             prefix={<UserOutlined />}
+            defaultValue={name}
             placeholder="Input your name"
             allowClear
             showCount
             maxLength={30}
             bordered={false}
-            value={name}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              onChange({
-                ...player,
-                name: e.target.value,
-              });
-            }}
+            onChange={run}
           />
         </div>
-        <div className={styles.btnContainer}>
-          <Button
-            shape="circle"
-            icon={<DeleteOutlined />}
-            className={styles.btnBG}
-            onClick={() => {
-              onRemove(id);
-            }}
-          />
-        </div>
-      </div>
-      <div className={styles.secondLine}>
         <div className={styles.inputForm}>
           <div>HANDS</div>
           <Input
-            defaultValue={0}
             value={hands}
             prefix={<RedEnvelopeOutlined />}
             bordered={false}
@@ -73,10 +72,25 @@ const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlaye
             }}
           />
         </div>
-
+      </div>
+      <div className={styles.secondCol}>
+        <div className={styles.btnContainer}>
+          <Button
+            disabled={isValidOperated}
+            shape="circle"
+            size="large"
+            icon={<DeleteOutlined />}
+            className={styles.btnBG}
+            onClick={() => {
+              onRemove(id);
+            }}
+          />
+        </div>
         <div className={styles.numberBtnWrap}>
-          <div
-            className={styles.btnSplitLine}
+          <Button
+            disabled={isValidOperated}
+            icon={<MinusOutlined />}
+            className={styles.btnBG}
             onClick={() => {
               if (hands == 1) {
                 message.info('买入数量不能为0');
@@ -84,10 +98,10 @@ const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlaye
                 onChange({ ...player, hands: hands - 1 });
               }
             }}
-          >
-            <MinusOutlined />
-          </div>
-          <div
+          ></Button>
+          <Button
+            icon={<PlusOutlined />}
+            className={styles.btnBG}
             onClick={() => {
               if (hands == 50) {
                 message.info('买入数量不能超过50');
@@ -95,9 +109,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({ player, onRemove, onChange }: IPlaye
                 onChange({ ...player, hands: hands + 1 });
               }
             }}
-          >
-            <PlusOutlined />
-          </div>
+          ></Button>
         </div>
       </div>
     </div>

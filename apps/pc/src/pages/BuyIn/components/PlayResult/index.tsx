@@ -1,6 +1,12 @@
 import React, { FC, ChangeEvent } from 'react';
-import { Form, Input } from 'antd';
-import { EyeOutlined, LineChartOutlined, RedEnvelopeOutlined, UserOutlined } from '@ant-design/icons';
+import { Input, message } from 'antd';
+import {
+  EyeOutlined,
+  LineChartOutlined,
+  RedEnvelopeOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
+import { useDebounceFn } from 'ahooks';
 import { IPlayer } from '../../../../models/buyIn';
 import styles from './index.module.scss';
 
@@ -17,6 +23,17 @@ const PlayResult: FC<IPlayerResultProps> = ({
 }: IPlayerResultProps) => {
   const { hands, rest } = player;
   const benefit = rest - hands * amoutPerHand;
+  const { run } = useDebounceFn(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const number = +e.target.value;
+      if (isNaN(number)) {
+        message.error('剩余金额必须为正');
+        return;
+      }
+      onChange({ ...player, rest: number });
+    },
+    { wait: 500 },
+  );
   return (
     <div className={styles.container}>
       <div className={styles.playerContainer}>
@@ -37,32 +54,10 @@ const PlayResult: FC<IPlayerResultProps> = ({
           </div>
         </div>
       </div>
-      <div className={styles.restContainer}>
+      <div className={styles.playerContainer}>
         <div className={styles.inputForm}>
           <div>REST</div>
-          <Form>
-            <Form.Item
-              name="rest"
-              rules={[
-                {
-                  required: false,
-                  pattern: new RegExp(/^[0-9]\d*$/, 'g'),
-                  message: '请输入整数',
-                },
-              ]}
-            >
-              <Input
-                prefix={<EyeOutlined />}
-                bordered={false}
-                defaultValue={rest}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  const number = +e.target.value;
-                  if (isNaN(number)) return;
-                  onChange({ ...player, rest: number });
-                }}
-              />
-            </Form.Item>
-          </Form>
+          <Input prefix={<EyeOutlined />} bordered={false} defaultValue={rest} onChange={run} />
         </div>
         <div className={styles.textContiner}>
           <div>Profit and Loss</div>

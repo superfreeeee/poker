@@ -1,23 +1,17 @@
-import React, { FC } from 'react';
-import { Button, Modal } from 'antd';
+import React from 'react';
 import { TransactionOutlined } from '@ant-design/icons';
-import Header from '../../../../components/Header';
-import StatisticsDataView from '../StatisticsDataView';
-import { ResetSetting } from '../BuyInPlaying/types';
-import { useCurrentBuyInData } from '../../../../models/buyIn';
-import PlayResult from '../PlayResult';
-import initialStyles from '../BuyInPrepare/index.module.scss';
-import styles from './index.module.scss';
+import { Modal } from 'antd';
+import { ResetSetting } from '../components/BuyInPlaying/types';
+import Header from '../../../components/Header';
+import StatisticsDataView from '../components/StatisticsDataView';
+import { useCurrentBuyInData } from '../../../models/buyIn';
+import initialStyles from '../components/BuyInPrepare/index.module.scss';
+import PlayResultView from './PlayResultView/index';
 
-interface IBuyInSettleProps {
-  enterNextState: () => void;
-}
-const BuyInSettle: FC<IBuyInSettleProps> = ({ enterNextState }: IBuyInSettleProps) => {
+const BuyInView = () => {
   const {
     buyInData: { amountPerhand, players: buyInPlayers },
     statisticsData: { totalPlayer, totalHands, totalAmount },
-    totalBenefit,
-    changePlayer,
   } = useCurrentBuyInData();
 
   const resetSetting: ResetSetting = ({ onOk, onCancel } = {}) => {
@@ -69,29 +63,16 @@ const BuyInSettle: FC<IBuyInSettleProps> = ({ enterNextState }: IBuyInSettleProp
           />
         </div>
         <div className={initialStyles.playerList}>
-          {buyInPlayers.map((player, i) => (
-            <PlayResult
+          {buyInPlayers.map((player) => (
+            <PlayResultView
               key={player.id}
               player={player}
-              amoutPerHand={amountPerhand}
-              onChange={(player) => changePlayer(player, i)}
-            ></PlayResult>
+              amoutPerhand={amountPerhand}
+            ></PlayResultView>
           ))}
-        </div>
-        <div className={styles.buttonList}>
-          <div className={styles.resUnderLine}>最终盈余总计 {totalBenefit}</div>
-          <div>
-            <Button
-              className={initialStyles.nextBtn}
-              onClick={() => enterNextState()}
-              disabled={totalBenefit != 0}
-            >
-              Show final result
-            </Button>
-          </div>
         </div>
       </div>
     </>
   );
 };
-export default BuyInSettle;
+export default BuyInView;

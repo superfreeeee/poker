@@ -3,14 +3,13 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import LogIn from './pages/LogIn';
 import { LazyBuyIn } from './pages/BuyIn/lazy';
-import BuyInPrepare from './pages/BuyIn/components/BuyInPrepare';
-import BuyInPlaying from './pages/BuyIn/components/BuyInPlaying';
-import BuyInSettle from './pages/BuyIn/components/BuyInSettle';
 import HandCreate from './pages/HandCreate';
 import HandRecordList from './pages/HandRecordList';
 import HandDetail from './pages/HandDetail';
 import RNG from './pages/RNG';
 import Redirect from './components/Redirect';
+import BuyInCreate from './pages/BuyIn/BuyInCreate';
+import BuyInView from './pages/BuyIn/BuyInView';
 
 const App = () => {
   return (
@@ -19,15 +18,9 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/buyin" element={<LazyBuyIn />}>
-          {/* Edit => data */}
-          <Route path="prepare" element={<BuyInPrepare />} />
-          <Route path="playing" element={<BuyInPlaying />} />
-          <Route path="settle" element={<BuyInSettle />} />
-          {/* data => view: <BuyInPreview data={buyInRecord} /> */}
-          {/* <Route path="preview" element={<div />} /> */}
-          {/* default => view(recordList): <BuyInList /> */}
-          {/* <Route path="" element={<div />} /> */}
-          <Route path="" element={<Redirect path="/buyin/prepare" />} />
+          <Route path="detail" element={<BuyInView />} />
+          <Route path="create" element={<BuyInCreate />} />
+          <Route path="" element={<Redirect path="/buyin/create" />} />
         </Route>
         {/* // TODO tmp page => move to sub page of GameDetail */}
         <Route path="/hand/create" element={<HandCreate />} />

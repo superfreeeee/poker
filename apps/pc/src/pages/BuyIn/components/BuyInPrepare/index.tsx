@@ -1,14 +1,19 @@
-import React from 'react';
+import React, { FC, useEffect } from 'react';
 import { Input, Button, message } from 'antd';
 import { DownCircleFilled, TransactionOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
 import Header from '../../../../components/Header';
+import { useCurrentUser } from '../../../../models/user';
 import { useCurrentBuyInData } from '../../../../models/buyIn';
 import PlayerHand from '../PlayerHand';
 import StatisticsDataView from '../StatisticsDataView';
 import styles from './index.module.scss';
 
-const BuyInPrepare = () => {
+interface IBuyInPrepareProps {
+  enterNextState: () => void;
+}
+
+const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareProps) => {
+  const currentUser = useCurrentUser();
   const {
     buyInData: { amountPerhand, players: buyInPlayers },
     statisticsData: { totalPlayer, totalHands, totalAmount },
@@ -18,7 +23,21 @@ const BuyInPrepare = () => {
     changeBuyInData,
   } = useCurrentBuyInData();
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    if (currentUser !== undefined) {
+      changeBuyInData({
+        amountPerhand: amountPerhand,
+        players: [
+          {
+            id: currentUser.id,
+            name: currentUser.name,
+            hands: 1,
+            rest: 0,
+          },
+        ],
+      });
+    }
+  }, []);
 
   const validateUserName = () => {
     let hasNull = false;
@@ -70,6 +89,7 @@ const BuyInPrepare = () => {
             <PlayerHand
               key={player.id}
               player={player}
+              isValidOperated={false}
               onRemove={removePlayer}
               onChange={(player) => changePlayer(player, i)}
             ></PlayerHand>
@@ -90,7 +110,7 @@ const BuyInPrepare = () => {
               className={styles.nextBtn}
               onClick={() => {
                 if (validateUserName()) {
-                  navigate('/buyin/playing');
+                  enterNextState();
                 } else {
                   message.error('玩家名不能为空');
                 }

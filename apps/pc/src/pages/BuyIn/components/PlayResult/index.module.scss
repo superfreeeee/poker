@@ -32,25 +32,10 @@
   }
 }
 
-.restContainer {
-  display: flex;
-  flex-direction: column;
-  width: 200px;
-}
-
 .inputForm {
-  :global {
-    .ant-form-item-control-input {
-      border-bottom: 1px solid black;
-      width: 200px;
-      overflow: hidden;
-    }
-    
-    .ant-form-item-explain-error {
-      display: flex;
-      justify-content: center;
-    }
-  }
+  border-bottom: 1px solid black;
+  width: 200px;
+  overflow: hidden;
 
   input {
     margin-left: 15px;

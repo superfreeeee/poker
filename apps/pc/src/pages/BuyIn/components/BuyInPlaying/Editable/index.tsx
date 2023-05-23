@@ -2,18 +2,22 @@ import React, { useState, FC } from 'react';
 import { Input, Button, message } from 'antd';
 import { DownCircleFilled, TransactionOutlined } from '@ant-design/icons';
 import PlayerHand from '../../PlayerHand';
-import { IPlayer, useCurrentBuyInData, useBuyInData } from '../../../../../models/buyIn';
+import { IPlayer, useBuyInData, IBuyInData } from '../../../../../models/buyIn';
 import StatisticsDataView from '../../StatisticsDataView';
 import initialStyles from '../../BuyInPrepare/index.module.scss';
 import styles from './index.module.scss';
 
 interface IEditableProps {
-  exitEdit: () => void;
+  currentBuyInData: IBuyInData;
+  onConfirm: (IBuyInData) => void;
+  onCancel: () => void;
 }
 
-const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
-  const { buyInData: currentBuyInData, changeBuyInData: changeCurrentBuyInData } =
-    useCurrentBuyInData();
+const Editable: FC<IEditableProps> = ({
+  currentBuyInData,
+  onConfirm,
+  onCancel,
+}: IEditableProps) => {
   const [editBuyInData, setEditBuyInPlayers] = useState(currentBuyInData);
 
   const {
@@ -33,6 +37,10 @@ const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
       }
     });
     return !hasNull;
+  };
+
+  const judgeValidOperation = (id: string) => {
+    return currentBuyInData.players.some((player) => player.id == id);
   };
 
   return (
@@ -74,6 +82,7 @@ const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
           <PlayerHand
             key={player.id}
             player={player}
+            isValidOperated={judgeValidOperation(player.id)}
             onRemove={(id: string) => {
               removeEditPlayer(id);
             }}
@@ -101,8 +110,12 @@ const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
               className={initialStyles.addBtn}
               onClick={() => {
                 if (validateUserName()) {
-                  changeCurrentBuyInData(editBuyInData);
-                  exitEdit();
+                  onConfirm({
+                    basicData: editBuyInData,
+                    totalPlayer: totalPlayer,
+                    totalAmount: totalAmount,
+                    totalHands: totalHands,
+                  });
                 } else {
                   message.error('玩家名不能为空');
                 }
@@ -115,7 +128,7 @@ const Editable: FC<IEditableProps> = ({ exitEdit }: IEditableProps) => {
             <Button
               className={initialStyles.nextBtn}
               onClick={() => {
-                exitEdit();
+                onCancel();
               }}
             >
               Cancel Change

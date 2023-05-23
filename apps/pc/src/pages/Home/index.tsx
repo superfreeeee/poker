@@ -50,7 +50,7 @@ const Home = () => {
         <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
           <h3>Pages:</h3>
           <PageLink title="HandRecordList" path="/hands" />
-          <PageLink title="BuyIn" path="/buyin/prepare" />
+          <PageLink title="BuyIn" path="/buyin/create" />
           <PageLink title="RNG" path="/rng" />
         </div>
         {IS_DEV && <HomeTest />}

@@ -2,22 +2,17 @@ $color-match: #c2d7ef;
 
 .container {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: stretch;
   border-radius: 10px;
   padding: 16px 30px;
   background-color: white;
 }
 
-.firstLine {
+.firstCol {
   display: flex;
-  justify-content: space-between;
-
-  .btnContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  flex-direction: column;
+  gap: 15px;
 }
 
 .inputForm {
@@ -30,25 +25,24 @@ $color-match: #c2d7ef;
   }
 }
 
-.secondLine {
+.secondCol {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
 }
 
+.btnContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .numberBtnWrap {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
-  border-radius: 20px;
-  border: 2px solid #cdc8c8;
-  width: 60px;
-  height: 30px;
-
-  .btnSplitLine {
-    width: 1.8vw;
-    border-right: 1px solid #cdc8c8;
-  }
+  gap:10px;
 }
 
 .btnBG {
