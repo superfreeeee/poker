@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent } from 'react';
+import React, { FC, ChangeEvent, useState } from 'react';
 import { Button, Input, message } from 'antd';
 import {
   DeleteOutlined,
@@ -25,6 +25,8 @@ const PlayerHand: FC<IPlayerHandProps> = ({
   onChange,
 }: IPlayerHandProps) => {
   const { id, name, hands } = player;
+
+  const [upper, setUpper] = useState(0);
 
   const { run } = useDebounceFn(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -88,13 +90,14 @@ const PlayerHand: FC<IPlayerHandProps> = ({
         </div>
         <div className={styles.numberBtnWrap}>
           <Button
-            disabled={isValidOperated}
+            disabled={isValidOperated && upper <= 0}
             icon={<MinusOutlined />}
             className={styles.btnBG}
             onClick={() => {
               if (hands == 1) {
                 message.info('买入数量不能为0');
               } else {
+                setUpper(upper - 1);
                 onChange({ ...player, hands: hands - 1 });
               }
             }}
@@ -106,6 +109,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({
               if (hands == 50) {
                 message.info('买入数量不能超过50');
               } else {
+                setUpper(upper + 1);
                 onChange({ ...player, hands: hands + 1 });
               }
             }}

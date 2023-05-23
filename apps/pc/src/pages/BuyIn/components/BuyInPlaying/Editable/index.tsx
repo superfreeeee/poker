@@ -110,12 +110,7 @@ const Editable: FC<IEditableProps> = ({
               className={initialStyles.addBtn}
               onClick={() => {
                 if (validateUserName()) {
-                  onConfirm({
-                    basicData: editBuyInData,
-                    totalPlayer: totalPlayer,
-                    totalAmount: totalAmount,
-                    totalHands: totalHands,
-                  });
+                  onConfirm(editBuyInData);
                 } else {
                   message.error('玩家名不能为空');
                 }

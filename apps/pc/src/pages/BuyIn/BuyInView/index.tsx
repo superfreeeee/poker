@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TransactionOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
 import { ResetSetting } from '../components/BuyInPlaying/types';
@@ -14,11 +15,13 @@ const BuyInView = () => {
     statisticsData: { totalPlayer, totalHands, totalAmount },
   } = useCurrentBuyInData();
 
+  const navigate = useNavigate();
+
   const resetSetting: ResetSetting = ({ onOk, onCancel } = {}) => {
     return new Promise((resolve) => {
       Modal.confirm({
-        title: 'Reset buyIn data',
-        content: 'Are you sure to reset buy-in data?',
+        title: 'Back to Home',
+        content: 'Are you sure to go back to home?',
         centered: true,
         closable: true,
         maskClosable: true,
@@ -42,9 +45,9 @@ const BuyInView = () => {
   return (
     <>
       <Header
-        title="BuyIn Playing"
-        back="/buyin/create"
-        beforeNavigate={() => resetSetting()}
+        title="BuyIn Detail"
+        back="/"
+        beforeNavigate={() => resetSetting({ onOk: () => navigate('/') })}
         style={{ alignSelf: 'stretch' }}
       />
       <div className={initialStyles.container}>

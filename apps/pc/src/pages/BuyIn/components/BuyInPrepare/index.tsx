@@ -3,7 +3,7 @@ import { Input, Button, message } from 'antd';
 import { DownCircleFilled, TransactionOutlined } from '@ant-design/icons';
 import Header from '../../../../components/Header';
 import { useCurrentUser } from '../../../../models/user';
-import { useCurrentBuyInData } from '../../../../models/buyIn';
+import { useCreateBuyInData } from '../../model';
 import PlayerHand from '../PlayerHand';
 import StatisticsDataView from '../StatisticsDataView';
 import styles from './index.module.scss';
@@ -21,7 +21,7 @@ const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareP
     removePlayer,
     changePlayer,
     changeBuyInData,
-  } = useCurrentBuyInData();
+  } = useCreateBuyInData();
 
   useEffect(() => {
     if (currentUser !== undefined) {

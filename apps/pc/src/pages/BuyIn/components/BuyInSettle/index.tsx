@@ -4,27 +4,31 @@ import { TransactionOutlined } from '@ant-design/icons';
 import Header from '../../../../components/Header';
 import StatisticsDataView from '../StatisticsDataView';
 import { ResetSetting } from '../BuyInPlaying/types';
-import { useCurrentBuyInData } from '../../../../models/buyIn';
+import { useCreateBuyInData } from '../../model';
 import PlayResult from '../PlayResult';
 import initialStyles from '../BuyInPrepare/index.module.scss';
 import styles from './index.module.scss';
 
 interface IBuyInSettleProps {
+  enterPrevState: () => void;
   enterNextState: () => void;
 }
-const BuyInSettle: FC<IBuyInSettleProps> = ({ enterNextState }: IBuyInSettleProps) => {
+const BuyInSettle: FC<IBuyInSettleProps> = ({
+  enterPrevState,
+  enterNextState,
+}: IBuyInSettleProps) => {
   const {
     buyInData: { amountPerhand, players: buyInPlayers },
     statisticsData: { totalPlayer, totalHands, totalAmount },
     totalBenefit,
     changePlayer,
-  } = useCurrentBuyInData();
+  } = useCreateBuyInData();
 
   const resetSetting: ResetSetting = ({ onOk, onCancel } = {}) => {
     return new Promise((resolve) => {
       Modal.confirm({
-        title: 'Reset buyIn data',
-        content: 'Are you sure to reset buy-in data?',
+        title: 'Back to playing',
+        content: 'Are you sure to go back to playing stage?',
         centered: true,
         closable: true,
         maskClosable: true,
@@ -48,9 +52,15 @@ const BuyInSettle: FC<IBuyInSettleProps> = ({ enterNextState }: IBuyInSettleProp
   return (
     <>
       <Header
-        title="BuyIn Playing"
+        title="BuyIn Settle"
         back="/buyin/create"
-        beforeNavigate={() => resetSetting()}
+        beforeNavigate={() =>
+          resetSetting({
+            onOk: () => {
+              enterPrevState();
+            },
+          })
+        }
         style={{ alignSelf: 'stretch' }}
       />
       <div className={initialStyles.container}>

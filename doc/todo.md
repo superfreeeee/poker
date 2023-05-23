@@ -42,8 +42,8 @@
 - [ ] Detail 页面多展示每个人计算后的总买入totalBuyIn
 - [ ] Settle 页面改变 UI（hands x amount = totalBuyIn; totalBuyIn - _rest_ = profit）
 - [ ] PlayResult、PlayResultView 抽成一个组件
-- [ ] Header 返回逻辑
-  - [ ] Prepare => Home
-  - [ ] Playing => check(Modal) => Prepare
-  - [ ] Settle => Playing
-  - [ ] Detail => Home
+- [x] Header 返回逻辑
+  - [x] Prepare => Home
+  - [x] Playing => check(Modal) => Prepare
+  - [x] Settle => Playing
+  - [x] Detail => Home
