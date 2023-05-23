@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Button, Modal } from 'antd';
 import { TransactionOutlined, EditFilled, BackwardFilled } from '@ant-design/icons';
 import { IBuyInData, IPlayer, useCurrentBuyInData } from '../../../../models/buyIn';
@@ -24,7 +24,8 @@ interface IbuyInRecord {
 
 interface IBuyInHistory {
   buyInRecords: IbuyInRecord[];
-  ptr: number;
+  viewPtr: number;
+  realPtr: number;
 }
 const BuyInPlaying: FC<IBuyInPlayingProps> = ({
   enterNextState,
@@ -32,21 +33,22 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
 }: IBuyInPlayingProps) => {
   const [isEdit, setEdit] = useState(false);
   const {
-    buyInData: { amountPerhand, players: buyInPlayers },
-    statisticsData: { totalPlayer, totalHands, totalAmount },
+    buyInData: buyInData,
+    statisticsData: statisticsData,
     changeBuyInData,
   } = useCurrentBuyInData();
 
   const defaultBuyInHistory: IBuyInHistory = {
     buyInRecords: [
       {
-        basicData: { amountPerhand: amountPerhand, players: buyInPlayers },
-        totalPlayer: totalPlayer,
-        totalHands: totalHands,
-        totalAmount: totalAmount,
+        basicData: { amountPerhand: buyInData.amountPerhand, players: buyInData.players },
+        totalPlayer: statisticsData.totalPlayer,
+        totalHands: statisticsData.totalHands,
+        totalAmount: statisticsData.totalAmount,
       },
     ],
-    ptr: 0,
+    viewPtr: 0,
+    realPtr: 0,
   };
 
   const [buyInHistory, setBuyInHistory] = useState(defaultBuyInHistory);
@@ -56,7 +58,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
     totalAmount: totalAmountView,
     totalHands: totalHandsView,
     totalPlayer: totalPlayerView,
-  } = buyInHistory.buyInRecords[buyInHistory.ptr];
+  } = buyInHistory.buyInRecords[buyInHistory.viewPtr];
 
   const resetSetting: ResetSetting = ({ onOk, onCancel } = {}) => {
     return new Promise((resolve) => {
@@ -83,6 +85,8 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
     });
   };
 
+  useEffect(()=>{console.log(buyInHistory)},[])
+
   return (
     <div>
       <Header
@@ -93,12 +97,13 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
       />
       {isEdit ? (
         <Editable
-          currentBuyInData={buyInHistory.buyInRecords[buyInHistory.ptr].basicData}
+          currentBuyInData={buyInHistory.buyInRecords[buyInHistory.viewPtr].basicData}
           onConfirm={(editBuyInData) => {
             setEdit(false);
             setBuyInHistory({
               buyInRecords: [...buyInHistory.buyInRecords, editBuyInData],
-              ptr: buyInHistory.ptr + 1,
+              viewPtr: buyInHistory.viewPtr + 1,
+              realPtr: buyInHistory.realPtr + 1,
             });
           }}
           onCancel={() => {
@@ -133,9 +138,9 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                 <Button
                   className={styles.prevBtn}
                   icon={<EditFilled className={initialStyles.btnSvg} />}
-                  disabled={buyInHistory.ptr === 0}
+                  disabled={buyInHistory.viewPtr === 0}
                   onClick={() => {
-                    setBuyInHistory({ ...buyInHistory, ptr: buyInHistory.ptr - 1 });
+                    setBuyInHistory({ ...buyInHistory, viewPtr: buyInHistory.viewPtr - 1 });
                   }}
                 >
                   上一次编辑
@@ -147,10 +152,11 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                     className={initialStyles.addBtn}
                     onClick={() => {
                       const arr = buyInHistory.buyInRecords;
-                      arr.splice(buyInHistory.ptr + 1);
+                      arr.splice(buyInHistory.viewPtr + 1);
                       setBuyInHistory({
+                        ...buyInHistory,
                         buyInRecords: arr,
-                        ptr: buyInHistory.ptr,
+                        realPtr: buyInHistory.viewPtr,
                       });
                     }}
                   >
@@ -163,7 +169,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                     onClick={() => {
                       setBuyInHistory({
                         ...buyInHistory,
-                        ptr: buyInHistory.buyInRecords.length - 1,
+                        viewPtr: buyInHistory.realPtr,
                       });
                     }}
                   >
@@ -209,10 +215,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                 <Button
                   className={styles.nextBtn}
                   onClick={() => {
-                    changeBuyInData({
-                      amountPerhand: amountPerhandView,
-                      players: buyInPlayersView,
-                    });
+                    changeBuyInData(buyInHistory.buyInRecords[buyInHistory.realPtr].basicData);
                     enterNextState();
                   }}
                 >
