@@ -7,6 +7,10 @@
     background-color: #eee;
   }
 
+  &.narrow {
+    padding: 4px 20px;
+  }
+
   & > .wrapper {
     display: flex;
     justify-content: center;
@@ -27,11 +31,5 @@
   .chips,
   .potSize {
     font-weight: 600;
-  }
-}
-
-@media screen and (max-width: 800px) {
-  .actionContainer {
-    padding: 4px 20px;
   }
 }

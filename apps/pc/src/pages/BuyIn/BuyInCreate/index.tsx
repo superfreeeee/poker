@@ -13,7 +13,6 @@ const BuyInCreate = () => {
         <BuyInPrepare
           enterNextState={() => {
             setBuyInState(1);
-            // console.log('xx')
           }}
         ></BuyInPrepare>
       ) : buyInState == 1 ? (

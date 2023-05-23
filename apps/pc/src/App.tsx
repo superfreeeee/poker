@@ -6,6 +6,7 @@ import { LazyBuyIn } from './pages/BuyIn/lazy';
 import HandCreate from './pages/HandCreate';
 import HandRecordList from './pages/HandRecordList';
 import HandDetail from './pages/HandDetail';
+import RNG from './pages/RNG';
 import Redirect from './components/Redirect';
 import BuyInCreate from './pages/BuyIn/BuyInCreate';
 import BuyInView from './pages/BuyIn/BuyInView';
@@ -26,6 +27,7 @@ const App = () => {
         {/* // TODO tmp page => switch to GameList */}
         <Route path="/hands" element={<HandRecordList />} />
         <Route path="/hand/:handId" element={<HandDetail />} />
+        <Route path="/rng" element={<RNG />} />
         <Route path="*" element={<Redirect path="/" />} />
       </Routes>
     </BrowserRouter>

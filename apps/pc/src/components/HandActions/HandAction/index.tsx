@@ -1,15 +1,20 @@
 import React, { FC, useMemo } from 'react';
 import classNames from 'classnames';
-import { renderCardText } from '../../../../components/Card';
-import { HandStage, HandAction as IHandAction } from '../../../../models/hand';
+import { renderCardText } from '../../Card';
+import { HandStage, HandAction as IHandAction } from '../../../models/hand';
 import styles from './index.module.scss';
+
+interface IHandActionProps {
+  action: IHandAction;
+  narrow?: boolean;
+}
 
 /**
  * 一手牌中单个操作记录展示
  * @param param0
  * @returns
  */
-const HandAction: FC<{ action: IHandAction }> = ({ action }) => {
+const HandAction: FC<IHandActionProps> = ({ action, narrow = false }) => {
   const content = useMemo(() => {
     const { type } = action;
     if (type === 'stageBlinds') {
@@ -74,6 +79,7 @@ const HandAction: FC<{ action: IHandAction }> = ({ action }) => {
     <div
       className={classNames(styles.actionContainer, {
         [styles.stage]: isStage,
+        [styles.narrow]: narrow,
       })}
     >
       {content}

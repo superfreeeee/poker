@@ -5,9 +5,10 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 
 interface IBackProps {
   path?: string;
+  beforeNavigate?: () => Promise<boolean> | boolean;
 }
 
-const Back: FC<IBackProps> = ({ path = '/' }) => {
+const Back: FC<IBackProps> = ({ path = '/', beforeNavigate }) => {
   const navigate = useNavigate();
   return (
     <Button
@@ -15,8 +16,15 @@ const Back: FC<IBackProps> = ({ path = '/' }) => {
       size="large"
       style={{ fontSize: 20 }}
       icon={<ArrowLeftOutlined />}
-      onClick={() => {
-        navigate(path);
+      onClick={async () => {
+        if (!beforeNavigate) {
+          return navigate(path);
+        }
+
+        const enable = await beforeNavigate();
+        if (enable) {
+          navigate(path);
+        }
       }}
     />
   );
