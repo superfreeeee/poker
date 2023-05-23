@@ -8,14 +8,14 @@ import {
   MinusOutlined,
 } from '@ant-design/icons';
 import { useDebounceFn } from 'ahooks';
-import { IPlayer } from '../../../../models/buyIn';
+import { BuyInPlayer } from '../../../../models/buyIn';
 import styles from './index.module.scss';
 
 interface IPlayerHandProps {
-  player: IPlayer;
+  player: BuyInPlayer;
   isValidOperated: boolean;
   onRemove: (id: string) => void;
-  onChange: (targetPlayer: IPlayer) => void;
+  onChange: (targetPlayer: BuyInPlayer) => void;
 }
 
 const PlayerHand: FC<IPlayerHandProps> = ({

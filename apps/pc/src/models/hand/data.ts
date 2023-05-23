@@ -36,7 +36,7 @@ export const useLocalHandRecord = (recordId: string) => {
   const localRecords = useAtomValue(localHandRecordsAtom);
 
   return useMemo(
-    () => localRecords.find((record) => record.id === recordId),
+    () => localRecords.find((record) => record.id === recordId) ?? null,
     [localRecords, recordId],
   );
 };
