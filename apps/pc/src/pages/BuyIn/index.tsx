@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { Outlet } from 'react-router-dom';
-import { IBuyInData } from '../../models/buyIn';
+import { BuyInData } from '../../models/buyIn';
 import styles from './index.module.scss';
 
 interface IBuyInProps {
-  data?: IBuyInData;
+  data?: BuyInData;
 }
 
 const BuyIn: FC<IBuyInProps> = () => {

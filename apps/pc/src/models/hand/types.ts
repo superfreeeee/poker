@@ -1,4 +1,5 @@
 import { Card, EncodedCard } from '../card';
+import { BaseRecord } from '../common';
 import { Player, PlayerSeat } from '../player';
 
 export enum HandStage {
@@ -84,17 +85,15 @@ export type HandAction =
       chips?: number;
     };
 
-export type HandRecord = {
+export interface HandRecord extends BaseRecord {
   version: 'v1';
-  id: string;
   players: Player[];
   seatMap: { [seat in PlayerSeat]?: string };
   blinds: HandBlindRecord[];
   actions: HandAction[];
   boardCards: Card[];
   winnerId: string;
-  createTime: number;
-};
+}
 
 export type SerializedHandAction =
   | readonly ['stageBlinds', number]

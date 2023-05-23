@@ -1,8 +1,8 @@
 import { atom, useAtom, useAtomValue } from 'jotai';
 import { useState } from 'react';
-import { IBuyInData } from '../../models/buyIn';
+import { BuyInData } from '../../models/buyIn';
 
-const createBuyInDataHistoryAtom = atom<IBuyInData[]>([]);
+const createBuyInDataHistoryAtom = atom<BuyInData[]>([]);
 
 const createBuyInDataIndexAtom = atom<number>(0);
 
@@ -13,7 +13,7 @@ const createBuyInDataAtom = atom(
     const index = get(createBuyInDataIndexAtom);
     return history[index];
   },
-  (get, set, newBuyInData: IBuyInData) => {
+  (get, set, newBuyInData: BuyInData) => {
     const history = get(createBuyInDataHistoryAtom).slice();
     const index = get(createBuyInDataIndexAtom);
 

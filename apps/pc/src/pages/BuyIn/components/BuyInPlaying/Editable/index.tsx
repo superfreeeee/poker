@@ -1,15 +1,15 @@
 import React, { useState, FC } from 'react';
 import { Input, Button, message } from 'antd';
 import { DownCircleFilled, TransactionOutlined } from '@ant-design/icons';
+import { BuyInPlayer, useBuyInData, BuyInData } from '../../../../../models/buyIn';
 import PlayerHand from '../../PlayerHand';
-import { IPlayer, useBuyInData, IBuyInData } from '../../../../../models/buyIn';
 import StatisticsDataView from '../../StatisticsDataView';
 import initialStyles from '../../BuyInPrepare/index.module.scss';
 import styles from './index.module.scss';
 
 interface IEditableProps {
-  currentBuyInData: IBuyInData;
-  onConfirm: (IBuyInData) => void;
+  currentBuyInData: BuyInData;
+  onConfirm: (BuyInData) => void;
   onCancel: () => void;
 }
 
@@ -86,7 +86,7 @@ const Editable: FC<IEditableProps> = ({
             onRemove={(id: string) => {
               removeEditPlayer(id);
             }}
-            onChange={(targetPlayer: IPlayer) => {
+            onChange={(targetPlayer: BuyInPlayer) => {
               changeEditPlayer(targetPlayer, i);
             }}
           ></PlayerHand>
