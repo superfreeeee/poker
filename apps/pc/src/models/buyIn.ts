@@ -1,14 +1,14 @@
-import { message } from 'antd';
+import { useMemo } from 'react';
 import { atom, useAtom } from 'jotai';
 import { nanoid } from 'nanoid';
-import { useMemo } from 'react';
+import { message } from 'antd';
 
-export interface IBuyInData {
+export interface BuyInData {
   amountPerhand: number;
-  players: IPlayer[];
+  players: BuyInPlayer[];
 }
 
-export interface IPlayer {
+export interface BuyInPlayer {
   id: string;
   name: string;
   hands: number; // 买入手数
@@ -26,7 +26,7 @@ export interface IPlayer {
 
 // }
 
-export const defaultBuyInData: IBuyInData = {
+export const defaultBuyInData: BuyInData = {
   amountPerhand: 0,
   players: [],
 };
@@ -38,12 +38,12 @@ export const useCurrentBuyInData = () => {
   return useBuyInData({ buyInData: currentBuyInData, setBuyInData: setCurrentBuyInData });
 };
 
-interface IBuyInDataProps {
-  buyInData: IBuyInData;
-  setBuyInData: (buyInData: IBuyInData) => void;
+interface IUseBuyInDataProps {
+  buyInData: BuyInData;
+  setBuyInData: (buyInData: BuyInData) => void;
 }
 
-export const useBuyInData = ({ buyInData, setBuyInData }: IBuyInDataProps) => {
+export const useBuyInData = ({ buyInData, setBuyInData }: IUseBuyInDataProps) => {
   const statisticsData = useMemo(() => {
     return calcStatisticsData(buyInData);
   }, [buyInData]);
@@ -62,14 +62,14 @@ export const useBuyInData = ({ buyInData, setBuyInData }: IBuyInDataProps) => {
   };
 };
 
-type IBuyInDataEntry = [buyInData: IBuyInData, setBuyInData: (data: IBuyInData) => void];
+type BuyInDataEntry = [buyInData: BuyInData, setBuyInData: (data: BuyInData) => void];
 
 /**
  * 基于 buyInData 返回可选操作
  * @param param0
  * @returns
  */
-export const useBuyInDataActions = ([buyInData, setBuyInData]: IBuyInDataEntry) => {
+export const useBuyInDataActions = ([buyInData, setBuyInData]: BuyInDataEntry) => {
   const addPlayer = () => {
     setBuyInData({
       ...buyInData,
@@ -92,11 +92,11 @@ export const useBuyInDataActions = ([buyInData, setBuyInData]: IBuyInDataEntry) 
         players: buyInData.players.filter((player) => player.id != targetId),
       });
     } else {
-      message.error("玩家不能为空")
+      message.error('玩家不能为空');
     }
   };
 
-  const changePlayer = (targetPlayer: IPlayer, index: number) => {
+  const changePlayer = (targetPlayer: BuyInPlayer, index: number) => {
     const originPlayers = buyInData.players.slice();
     if (index < 0 || index >= originPlayers.length) {
       throw new Error(`Invalid index=${index} at changePlayer`);
@@ -108,7 +108,7 @@ export const useBuyInDataActions = ([buyInData, setBuyInData]: IBuyInDataEntry) 
     });
   };
 
-  const changeBuyInData = (data: IBuyInData) => {
+  const changeBuyInData = (data: BuyInData) => {
     setBuyInData(data);
   };
 
@@ -120,7 +120,7 @@ export const useBuyInDataActions = ([buyInData, setBuyInData]: IBuyInDataEntry) 
   };
 };
 
-export interface IStatisticsData {
+export interface BuyInStatistics {
   totalPlayer: number;
   totalHands: number;
   totalAmount: number;
@@ -131,9 +131,9 @@ export interface IStatisticsData {
  * @param param0
  * @returns
  */
-export const calcStatisticsData = ({ amountPerhand, players }: IBuyInData): IStatisticsData => {
+export const calcStatisticsData = ({ amountPerhand, players }: BuyInData): BuyInStatistics => {
   const totalHands = players.reduce((sum, player) => sum + player.hands, 0);
-  const statisticsData: IStatisticsData = {
+  const statisticsData: BuyInStatistics = {
     totalPlayer: players.length,
     totalHands: totalHands,
     totalAmount: totalHands * amountPerhand,
@@ -146,6 +146,6 @@ export const calcStatisticsData = ({ amountPerhand, players }: IBuyInData): ISta
  * @param param0
  * @returns 总盈利
  */
-const calcBenfit = ({ amountPerhand, players }: IBuyInData): number => {
+const calcBenfit = ({ amountPerhand, players }: BuyInData): number => {
   return players.reduce((sum, player) => sum + player.rest - player.hands * amountPerhand, 0);
 };

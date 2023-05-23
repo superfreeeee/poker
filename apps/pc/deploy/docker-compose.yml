@@ -1,6 +1,6 @@
 version: '3'
 services:
-  # Server name
+  # Deploy front-end on nginx image
   nginx:
     image: nginx:latest
     # container : machine
@@ -13,3 +13,9 @@ services:
       - ./dist:/usr/share/nginx/html
     # 覆盖容器启动后默认执行的命令。
     command: /bin/bash -c "nginx -g 'daemon off;'"
+
+  # Deploy back-end
+  app:
+    build:
+      context: ./be
+      dockerfile: Dockerfile

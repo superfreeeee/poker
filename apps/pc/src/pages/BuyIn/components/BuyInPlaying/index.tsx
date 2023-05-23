@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Button, Modal } from 'antd';
 import { TransactionOutlined, EditFilled, BackwardFilled } from '@ant-design/icons';
-import { IBuyInData, IPlayer, useCurrentBuyInData } from '../../../../models/buyIn';
+import { BuyInData, useCurrentBuyInData } from '../../../../models/buyIn';
 import Header from '../../../../components/Header';
 import PlayerHandView from '../PlayerHandView';
 import StatisticsDataView from '../StatisticsDataView';
@@ -16,7 +16,7 @@ interface IBuyInPlayingProps {
 }
 
 interface IbuyInRecord {
-  basicData: IBuyInData;
+  basicData: BuyInData;
   totalPlayer: number;
   totalHands: number;
   totalAmount: number;
@@ -85,7 +85,9 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
     });
   };
 
-  useEffect(()=>{console.log(buyInHistory)},[])
+  useEffect(() => {
+    console.log(buyInHistory);
+  }, []);
 
   return (
     <div>
@@ -128,7 +130,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
             />
           </div>
           <div className={initialStyles.playerList}>
-            {buyInPlayersView.map((player: IPlayer) => (
+            {buyInPlayersView.map((player) => (
               <PlayerHandView key={player.id} player={player} />
             ))}
           </div>

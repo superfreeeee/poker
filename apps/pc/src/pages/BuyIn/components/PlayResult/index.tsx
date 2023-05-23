@@ -7,13 +7,13 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import { useDebounceFn } from 'ahooks';
-import { IPlayer } from '../../../../models/buyIn';
+import { BuyInPlayer } from '../../../../models/buyIn';
 import styles from './index.module.scss';
 
 interface IPlayerResultProps {
-  player: IPlayer;
+  player: BuyInPlayer;
   amoutPerHand: number;
-  onChange: (player: IPlayer) => void;
+  onChange: (player: BuyInPlayer) => void;
 }
 
 const PlayResult: FC<IPlayerResultProps> = ({

@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { UserOutlined, RedEnvelopeOutlined } from '@ant-design/icons';
-import { IPlayer } from '../../../../models/buyIn';
+import { BuyInPlayer } from '../../../../models/buyIn';
 import styles from './index.module.scss';
 
 interface IPlayerHandProps {
-  player: IPlayer;
+  player: BuyInPlayer;
 }
 
 const PlayerHandView: FC<IPlayerHandProps> = ({ player }: IPlayerHandProps) => {
