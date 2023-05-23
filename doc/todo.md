@@ -32,3 +32,18 @@
 ## HandDetail
 
 - [ ] 基础信息展示
+
+## BuyIn
+
+- [ ] Playing 页面的下面操作区域修改
+- [ ] Detail 页面把 buyInData.id 加到 url
+- [ ] Detail 页面把 数据源与 create 页分开
+- [ ] currentBuyInData => createBuyInData => 把 Create 页与 Detail 页的状态管理区分开来
+- [ ] Detail 页面多展示每个人计算后的总买入totalBuyIn
+- [ ] Settle 页面改变 UI（hands x amount = totalBuyIn; totalBuyIn - _rest_ = profit）
+- [ ] PlayResult、PlayResultView 抽成一个组件
+- [ ] Header 返回逻辑
+  - [ ] Prepare => Home
+  - [ ] Playing => check(Modal) => Prepare
+  - [ ] Settle => Playing
+  - [ ] Detail => Home
