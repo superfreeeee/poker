@@ -5,8 +5,8 @@ $color-match: #c2d7ef;
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
-  width: 50%;
-  gap: 1vh;
+  width: 40%;
+  gap: 10px;
 }
 
 .twoBtnContainer {
@@ -21,4 +21,12 @@ $color-match: #c2d7ef;
   .btnSvg {
     color: $color-match;
   }
+}
+
+.btn{
+  border-radius: 10px;
+}
+
+.deepBtn{
+  background-color: $color-match;
 }

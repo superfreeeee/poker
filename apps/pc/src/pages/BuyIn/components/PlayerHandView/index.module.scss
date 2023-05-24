@@ -9,6 +9,11 @@
   background-color: white;
 }
 
+.handList{
+  display: flex;
+  align-items: center;
+}
+
 .textContiner {
   display: flex;
   flex-direction: column;
@@ -16,16 +21,25 @@
   width: 200px;
 }
 
+.title{
+  font-weight: 600;
+  color: gray;
+}
+
 .text {
   display: flex;
   justify-content: start;
   align-items: center;
   gap: 10px;
-  border-bottom: 1px solid black;
   padding-left: 10px;
   text-align: center;
 }
 
 .btnMargin {
   margin-right: 10px;
+}
+
+.amountIcon{
+  color:gray;
+  font-size: 24px;
 }

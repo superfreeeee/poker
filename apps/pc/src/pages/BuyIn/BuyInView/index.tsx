@@ -4,16 +4,16 @@ import { TransactionOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
 import { ResetSetting } from '../components/BuyInPlaying/types';
 import Header from '../../../components/Header';
+import PlayResult from '../components/PlayResult';
 import StatisticsDataView from '../components/StatisticsDataView';
-import { useCurrentBuyInData } from '../../../models/buyIn';
 import initialStyles from '../components/BuyInPrepare/index.module.scss';
-import PlayResultView from '../components/PlayResultView/index';
+import { useCreateBuyInData } from '../model';
 
 const BuyInView = () => {
   const {
     buyInData: { amountPerhand, players: buyInPlayers },
     statisticsData: { totalPlayer, totalHands, totalAmount },
-  } = useCurrentBuyInData();
+  } = useCreateBuyInData();
 
   const navigate = useNavigate();
 
@@ -67,11 +67,12 @@ const BuyInView = () => {
         </div>
         <div className={initialStyles.playerList}>
           {buyInPlayers.map((player) => (
-            <PlayResultView
+            <PlayResult
               key={player.id}
               player={player}
-              amoutPerhand={amountPerhand}
-            ></PlayResultView>
+              amountPerhand={amountPerhand}
+              isEditable={false}
+            ></PlayResult>
           ))}
         </div>
       </div>

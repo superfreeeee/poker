@@ -88,6 +88,7 @@ const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareP
           {buyInPlayers.map((player, i) => (
             <PlayerHand
               key={player.id}
+              amoutPerhand={amountPerhand}
               player={player}
               isValidOperated={false}
               onRemove={removePlayer}

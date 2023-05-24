@@ -81,6 +81,7 @@ const Editable: FC<IEditableProps> = ({
         {editBuyInPlayers.map((player, i) => (
           <PlayerHand
             key={player.id}
+            amoutPerhand={editAmoutPerhand}
             player={player}
             isValidOperated={judgeValidOperation(player.id)}
             onRemove={(id: string) => {
@@ -107,7 +108,7 @@ const Editable: FC<IEditableProps> = ({
         <div className={styles.twoBtnContainer}>
           <div>
             <Button
-              className={initialStyles.nextBtn}
+              className={styles.btn}
               onClick={() => {
                 onCancel();
               }}
@@ -117,7 +118,7 @@ const Editable: FC<IEditableProps> = ({
           </div>
           <div>
             <Button
-              className={initialStyles.addBtn}
+              className={`${styles.btn} ${styles.deepBtn}`}
               onClick={() => {
                 if (validateUserName()) {
                   onConfirm(editBuyInData);

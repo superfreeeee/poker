@@ -6,12 +6,14 @@ import {
   RedEnvelopeOutlined,
   PlusOutlined,
   MinusOutlined,
+  ArrowRightOutlined,
 } from '@ant-design/icons';
 import { useDebounceFn } from 'ahooks';
 import { BuyInPlayer } from '../../../../models/buyIn';
 import styles from './index.module.scss';
 
 interface IPlayerHandProps {
+  amoutPerhand: number;
   player: BuyInPlayer;
   isValidOperated: boolean;
   onRemove: (id: string) => void;
@@ -19,6 +21,7 @@ interface IPlayerHandProps {
 }
 
 const PlayerHand: FC<IPlayerHandProps> = ({
+  amoutPerhand,
   player,
   isValidOperated,
   onRemove,
@@ -42,7 +45,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({
     <div className={styles.container}>
       <div className={styles.firstCol}>
         <div className={styles.inputForm}>
-          <div>USERNAME</div>
+          <div className={styles.title}>USERNAME</div>
           <Input
             prefix={<UserOutlined />}
             defaultValue={name}
@@ -54,25 +57,35 @@ const PlayerHand: FC<IPlayerHandProps> = ({
             onChange={run}
           />
         </div>
-        <div className={styles.inputForm}>
-          <div>HANDS</div>
-          <Input
-            value={hands}
-            prefix={<RedEnvelopeOutlined />}
-            bordered={false}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              let number = +e.target.value;
-              if (isNaN(number)) {
-                message.error('买入数量必须为正整数');
-                return;
-              }
-              if (number > 50) {
-                number = 50;
-                message.info('买入数量不能超过50');
-              }
-              onChange({ ...player, hands: number });
-            }}
-          />
+        <div className={styles.handList}>
+          <div className={styles.inputForm}>
+            <div className={styles.title}>HANDS</div>
+            <Input
+              value={hands}
+              prefix={<RedEnvelopeOutlined />}
+              bordered={false}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                let number = +e.target.value;
+                if (isNaN(number)) {
+                  message.error('买入数量必须为正整数');
+                  return;
+                }
+                if (number > 50) {
+                  number = 50;
+                  message.info('买入数量不能超过50');
+                }
+                onChange({ ...player, hands: number });
+              }}
+            />
+          </div>
+          <div className={styles.textContiner}>
+            <div>
+              <ArrowRightOutlined  className={`${styles.btnMargin} ${styles.amountIcon}`} />
+            </div>
+            <div>
+              <div className={styles.title}>AMOUNT</div> <div>{player.hands * amoutPerhand}</div>
+            </div>
+          </div>
         </div>
       </div>
       <div className={styles.secondCol}>

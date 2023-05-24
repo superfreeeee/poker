@@ -116,7 +116,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
           </div>
           <div className={initialStyles.playerList}>
             {buyInPlayers.map((player) => (
-              <PlayerHandView key={player.id} player={player} />
+              <PlayerHandView key={player.id} player={player} amountPerhand={amoutPerhand}/>
             ))}
           </div>
           <>

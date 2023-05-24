@@ -83,8 +83,9 @@ const BuyInSettle: FC<IBuyInSettleProps> = ({
             <PlayResult
               key={player.id}
               player={player}
-              amoutPerHand={amountPerhand}
+              amountPerhand={amountPerhand}
               onChange={(player) => changePlayer(player, i)}
+              isEditable={true}
             ></PlayResult>
           ))}
         </div>

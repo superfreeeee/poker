@@ -1,28 +1,26 @@
 import React, { FC, ChangeEvent } from 'react';
 import { Input, message } from 'antd';
-import {
-  EyeOutlined,
-  LineChartOutlined,
-  RedEnvelopeOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { EyeOutlined, RedEnvelopeOutlined, UserOutlined } from '@ant-design/icons';
+import { isUndefined } from 'lodash-es';
 import { useDebounceFn } from 'ahooks';
 import { BuyInPlayer } from '../../../../models/buyIn';
 import styles from './index.module.scss';
 
 interface IPlayerResultProps {
   player: BuyInPlayer;
-  amoutPerHand: number;
-  onChange: (player: BuyInPlayer) => void;
+  amountPerhand: number;
+  onChange?: (player: BuyInPlayer) => void;
+  isEditable: boolean;
 }
 
 const PlayResult: FC<IPlayerResultProps> = ({
   player,
-  amoutPerHand,
+  amountPerhand,
   onChange,
+  isEditable,
 }: IPlayerResultProps) => {
   const { hands, rest } = player;
-  const benefit = rest - hands * amoutPerHand;
+  const benefit = rest - hands * amountPerhand;
   const { run } = useDebounceFn(
     (e: ChangeEvent<HTMLInputElement>) => {
       const number = +e.target.value;
@@ -30,7 +28,9 @@ const PlayResult: FC<IPlayerResultProps> = ({
         message.error('剩余金额必须为正');
         return;
       }
-      onChange({ ...player, rest: number });
+      if (!isUndefined(onChange)) {
+        onChange({ ...player, rest: number });
+      }
     },
     { wait: 500 },
   );
@@ -38,7 +38,7 @@ const PlayResult: FC<IPlayerResultProps> = ({
     <div className={styles.container}>
       <div className={styles.playerContainer}>
         <div className={styles.textContiner}>
-          <div>USERNAME</div>
+          <div className={styles.title}>USERNAME</div>
           <div className={styles.text}>
             <div>
               <UserOutlined className={styles.btnMargin} />
@@ -47,7 +47,7 @@ const PlayResult: FC<IPlayerResultProps> = ({
           </div>
         </div>
         <div className={styles.textContiner}>
-          <div>HANDS</div>
+          <div className={styles.title}>HANDS</div>
           <div className={styles.text}>
             <RedEnvelopeOutlined className={styles.btnMargin} />
             {player.hands}
@@ -55,14 +55,40 @@ const PlayResult: FC<IPlayerResultProps> = ({
         </div>
       </div>
       <div className={styles.playerContainer}>
-        <div className={styles.inputForm}>
-          <div>REST</div>
-          <Input prefix={<EyeOutlined />} bordered={false} defaultValue={rest} onChange={run} />
-        </div>
-        <div className={styles.textContiner}>
-          <div>Profit and Loss</div>
-          <div className={styles.text}>
-            <LineChartOutlined className={styles.btnMargin} /> {benefit}
+        {isEditable ? (
+          <div className={styles.inputForm}>
+            <div className={styles.title}>REST</div>
+            <Input prefix={<EyeOutlined />} bordered={false} defaultValue={rest} onChange={run} />
+          </div>
+        ) : (
+          <div className={styles.textContiner}>
+            <div className={styles.title}>REST</div>
+            <div className={styles.text}>
+              <EyeOutlined className={styles.btnMargin} />
+              {player.rest}
+            </div>
+          </div>
+        )}
+        <div className={styles.calcList}>
+          <div className={styles.textContiner}>
+            <div className={styles.title}>Rest</div>
+            <div className={styles.calcText}>{rest}</div>
+          </div>
+          <div className={styles.textContiner}>
+            <div className={styles.title}>-</div>
+            <div className={styles.otherText}>-</div>
+          </div>
+          <div className={styles.textContiner}>
+            <div className={styles.title}>Amount</div>
+            <div className={styles.calcText}>{amountPerhand * hands}</div>
+          </div>
+          <div className={styles.textContiner}>
+            <div className={styles.title}>=</div>
+            <div className={styles.otherText}>=</div>
+          </div>
+          <div className={styles.textContiner}>
+            <div className={styles.title}>Profit and Loss</div>
+            <div className={styles.calcText}>{benefit}</div>
           </div>
         </div>
       </div>

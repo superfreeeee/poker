@@ -1,17 +1,18 @@
 import React, { FC } from 'react';
-import { UserOutlined, RedEnvelopeOutlined } from '@ant-design/icons';
+import { UserOutlined, RedEnvelopeOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import { BuyInPlayer } from '../../../../models/buyIn';
 import styles from './index.module.scss';
 
 interface IPlayerHandProps {
   player: BuyInPlayer;
+  amountPerhand: number;
 }
 
-const PlayerHandView: FC<IPlayerHandProps> = ({ player }: IPlayerHandProps) => {
+const PlayerHandView: FC<IPlayerHandProps> = ({ player, amountPerhand }: IPlayerHandProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.textContiner}>
-        <div>USERNAME</div>
+        <div className={styles.title}>USERNAME</div>
         <div className={styles.text}>
           <div>
             <UserOutlined className={styles.btnMargin} />
@@ -19,11 +20,20 @@ const PlayerHandView: FC<IPlayerHandProps> = ({ player }: IPlayerHandProps) => {
           <div>{player.name}</div>
         </div>
       </div>
-      <div className={styles.textContiner}>
-        <div>HANDS</div>
-        <div className={styles.text}>
-          <RedEnvelopeOutlined className={styles.btnMargin} />
-          {player.hands}
+      <div className={styles.handList}>
+        <div className={styles.textContiner}>
+          <div className={styles.title}>HANDS</div>
+          <div className={styles.text}>
+            <RedEnvelopeOutlined className={styles.btnMargin} />
+            {player.hands}
+          </div>
+        </div>
+        <div>
+          <ArrowRightOutlined className={`${styles.btnMargin} ${styles.amountIcon}`} />
+        </div>
+        <div className={styles.textContiner}>
+          <div className={styles.title}>AMOUNT</div>
+          <div className={styles.text}>{player.hands * amountPerhand}</div>
         </div>
       </div>
     </div>
