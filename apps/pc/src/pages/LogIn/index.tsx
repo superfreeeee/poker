@@ -4,7 +4,7 @@ import { Button, Input, Space } from 'antd';
 import { createLogger } from '../../common/commonLogger';
 import { useInput } from '../../hooks/useInput';
 import { useCurrentUserAtom } from '../../models/user';
-import { loginService } from '../../services/user';
+import { useLoginService } from '../../services/user';
 import styles from './index.module.scss';
 
 const loginPageLogger = createLogger('pages/LogIn');
@@ -15,11 +15,13 @@ const LogIn = () => {
 
   const navigate = useNavigate();
 
+  const loginService = useLoginService();
+
   const login = async (e: SyntheticEvent) => {
     if ((e.nativeEvent as KeyboardEvent)?.isComposing) return;
 
     loginPageLogger.log(`login: name = ${name}`);
-    const user = await loginService(name);
+    const user = await loginService({ name });
     if (user) {
       setCurrentUser(user);
       navigate('/home');

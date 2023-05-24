@@ -1,3 +1,5 @@
+import { logger } from '../common/commonLogger';
+
 export interface Player {
   id: string;
   name: string;
@@ -88,8 +90,9 @@ export const getPlayerSeats = (
         PlayerSeat.BTN,
       ];
     default:
-      console.warn(`[getPlayerSeats] Invalid players = ${players}`);
+      logger.warn(`[getPlayerSeats] Invalid players = ${players}`);
 
+    // eslint-disable-next-line no-fallthrough
     case 10:
       return ALL_PLAYER_SEATS;
   }
