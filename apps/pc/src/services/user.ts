@@ -1,4 +1,4 @@
-import { useLoginAPI } from '../api/user';
+import { ILoginParams, useLoginAPI } from '../api/user';
 import { createLogger } from '../common/commonLogger';
 import { isSuccess } from './utils';
 
@@ -11,15 +11,15 @@ const userSerivceLogger = createLogger('services/user');
 export const useLoginService = () => {
   const { send: loginAPI } = useLoginAPI();
 
-  const loginService = async (name: string) => {
+  const loginService = async (params: ILoginParams) => {
     try {
-      const res = await loginAPI({ name });
+      const res = await loginAPI(params);
       if (isSuccess(res) && res.data) {
         return res.data;
       }
       return null;
     } catch {
-      userSerivceLogger.error('loginAPI failed', { name });
+      userSerivceLogger.error('loginAPI failed', { name: params.name });
       return null;
     }
   };

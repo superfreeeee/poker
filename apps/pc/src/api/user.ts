@@ -3,7 +3,7 @@ import { IUser } from '../models/user';
 import { alovaInstance } from './alova';
 import { Response } from './interface';
 
-interface ILoginParams {
+export interface ILoginParams {
   name: string;
 }
 

@@ -21,7 +21,7 @@ const LogIn = () => {
     if ((e.nativeEvent as KeyboardEvent)?.isComposing) return;
 
     loginPageLogger.log(`login: name = ${name}`);
-    const user = await loginService(name);
+    const user = await loginService({ name });
     if (user) {
       setCurrentUser(user);
       navigate('/home');
