@@ -14,7 +14,6 @@ export const useLoginService = () => {
   const loginService = async (name: string) => {
     try {
       const res = await loginAPI({ name });
-      console.log(`login: res =`, res, { ...res });
       if (isSuccess(res) && res.data) {
         return res.data;
       }
