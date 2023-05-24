@@ -26,7 +26,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({
 }: IPlayerHandProps) => {
   const { id, name, hands } = player;
 
-  const [upper, setUpper] = useState(0);
+  const [upper, setUpper] = useState<number>(0);
 
   const { run } = useDebounceFn(
     (e: ChangeEvent<HTMLInputElement>) => {

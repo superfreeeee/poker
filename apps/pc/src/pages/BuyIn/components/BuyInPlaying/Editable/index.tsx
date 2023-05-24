@@ -107,6 +107,16 @@ const Editable: FC<IEditableProps> = ({
         <div className={styles.twoBtnContainer}>
           <div>
             <Button
+              className={initialStyles.nextBtn}
+              onClick={() => {
+                onCancel();
+              }}
+            >
+              Cancel Change
+            </Button>
+          </div>
+          <div>
+            <Button
               className={initialStyles.addBtn}
               onClick={() => {
                 if (validateUserName()) {
@@ -117,16 +127,6 @@ const Editable: FC<IEditableProps> = ({
               }}
             >
               Confirm Change
-            </Button>
-          </div>
-          <div>
-            <Button
-              className={initialStyles.nextBtn}
-              onClick={() => {
-                onCancel();
-              }}
-            >
-              Cancel Change
             </Button>
           </div>
         </div>

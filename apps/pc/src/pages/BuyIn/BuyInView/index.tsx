@@ -7,7 +7,7 @@ import Header from '../../../components/Header';
 import StatisticsDataView from '../components/StatisticsDataView';
 import { useCurrentBuyInData } from '../../../models/buyIn';
 import initialStyles from '../components/BuyInPrepare/index.module.scss';
-import PlayResultView from './PlayResultView/index';
+import PlayResultView from '../components/PlayResultView/index';
 
 const BuyInView = () => {
   const {

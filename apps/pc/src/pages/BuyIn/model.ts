@@ -68,9 +68,12 @@ export const useCreateBuyInDataHistory = () => {
     setViewIndex(createBuyInDataIndex + 1);
   };
 
+  const totalIndex = [...Array(createBuyInDataHistory.length)].map((el,index)=>({title:index+1}))
+
   return {
     viewBuyInData: createBuyInDataHistory[viewIndex],
     viewStatisticData: calcStatisticsData(createBuyInDataHistory[viewIndex]),
+    indexSteps:{viewIndex:viewIndex,totalData:totalIndex},
     hasLastRecord,
     hasNextRecord,
     viewLastRecord,

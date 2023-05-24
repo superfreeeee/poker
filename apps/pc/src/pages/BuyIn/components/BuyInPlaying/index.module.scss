@@ -1,53 +1,30 @@
 $color-match: #c2d7ef;
 
+.stepList{
+  padding-top: 20px;
+  max-width: 600px;
+  overflow: auto;
+}
+
 .buttonList {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  width: 60%;
-}
-
-.historyChangeBtns {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 5px 4px;
-  border: 2px dashed $color-match;
-}
-
-.historyBtnSecond {
-  display: flex;
-  justify-content: space-between;
-  gap:10px;
-}
-
-.prevBtn{
-  width: 150px;
-}
-
-.stateChangeBtns {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 250px;
-  gap: 10px;
-  padding: 5px 4px;
-  border: 2px dashed $color-match;
+  align-items:stretch;
+  gap:10px;
+  min-width: 300px;
 }
 
-.stateBtnSecond {
+.btnRow{
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.nextBtnWrap {
-  align-self: center;
-}
-
-.nextBtn {
-  width: 200px;
+.btn{
   border-radius: 10px;
+}
+
+.deepBtn{
   background-color: $color-match;
 }
