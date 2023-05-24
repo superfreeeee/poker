@@ -10,7 +10,7 @@
     "build:pc": "pnpm --filter @youxian/poker-pc build",
     "build:pc:dev": "pnpm --filter @youxian/poker-pc build:dev",
     "upload:pc": "make upload-pc",
-    "deploy:pc": "pnpm build:pc && pnpm upload:pc && make remote-restart",
+    "deploy:pc": "make deploy-pc",
     "test": "pnpm --filter @youxian/poker-pc test",
     "lint": "pnpm lint:type && pnpm lint:es",
     "lint:es": "eslint .",
