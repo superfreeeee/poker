@@ -1,20 +1,29 @@
-import { nanoid } from 'nanoid';
-import { loginAPI } from '../api/user';
+import { useLoginAPI } from '../api/user';
 import { createLogger } from '../common/commonLogger';
-import { IUser } from '../models/user';
 import { isSuccess } from './utils';
 
 const userSerivceLogger = createLogger('services/user');
 
-export const loginService = async (name: string): Promise<IUser | null> => {
-  try {
-    const res = await loginAPI({ id: nanoid(), name });
-    if (isSuccess(res) && res.data) {
-      return res.data;
+/**
+ * Login service
+ * @returns
+ */
+export const useLoginService = () => {
+  const { send: loginAPI } = useLoginAPI();
+
+  const loginService = async (name: string) => {
+    try {
+      const res = await loginAPI({ name });
+      console.log(`login: res =`, res, { ...res });
+      if (isSuccess(res) && res.data) {
+        return res.data;
+      }
+      return null;
+    } catch {
+      userSerivceLogger.error('loginAPI failed', { name });
+      return null;
     }
-    return null;
-  } catch {
-    userSerivceLogger.error('loginAPI failed', { name });
-    return null;
-  }
+  };
+
+  return loginService;
 };
