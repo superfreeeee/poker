@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Button, Modal, Steps } from 'antd';
+import { Button, Steps } from 'antd';
 import {
   TransactionOutlined,
   EditFilled,
@@ -9,14 +9,15 @@ import {
   CloseOutlined,
   CheckOutlined,
 } from '@ant-design/icons';
+import classNames from 'classnames';
 import Header from '../../../../components/Header';
 import PlayerHandView from '../PlayerHandView';
 import StatisticsDataView from '../StatisticsDataView';
-import { useCreateBuyInData, useCreateBuyInDataHistory } from '../../model';
+import { useCreateBuyInDataHistory } from '../../model';
+import { confirmModal } from '../../utils';
 import initialStyles from '../BuyInPrepare/index.module.scss';
-import Editable from './Editable';
+import PlayingEditable from './Editable';
 import styles from './index.module.scss';
-import { ResetSetting } from './types';
 
 interface IBuyInPlayingProps {
   enterNextState: () => void;
@@ -30,42 +31,31 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
   const [isEdit, setEdit] = useState<boolean>(false);
   const [isHistoryVisible, setHistoryVisibile] = useState<boolean>(false);
   const {
+    viewBuyInData, // history[index]
     viewBuyInData: { amountPerhand: amoutPerhand, players: buyInPlayers },
     viewStatisticData,
-    indexSteps: { viewIndex, totalData },
+    stepIndex: { viewIndex, totalData },
+    historyLength,
     hasLastRecord,
     hasNextRecord,
     viewLastRecord,
     viewNextRecord,
     confirmView,
     cancelView,
-    addEdit,
+    pushState,
+    resetHistory,
   } = useCreateBuyInDataHistory();
-  const { buyInData, changeBuyInData } = useCreateBuyInData();
 
-  const resetSetting: ResetSetting = ({ onOk, onCancel } = {}) => {
-    return new Promise((resolve) => {
-      Modal.confirm({
-        title: 'Reset buyIn data',
-        content: 'Are you sure to reset buy-in data?',
-        centered: true,
-        closable: true,
-        maskClosable: true,
-        okButtonProps: {
-          type: 'primary',
-          danger: true,
-        },
-        okText: 'Reset',
-        onOk: () => {
-          onOk?.();
-          resolve(true);
-        },
-        onCancel: () => {
-          onCancel?.();
-          resolve(false);
-        },
-      });
+  const backPrepare = async () => {
+    await confirmModal({
+      title: 'Reset buyIn data',
+      content: 'Are you sure to reset buy-in data?',
+      onOk: () => {
+        resetHistory();
+        enterPrevState();
+      },
     });
+    return false;
   };
 
   return (
@@ -73,25 +63,14 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
       <Header
         title="BuyIn Playing"
         back="/buyin/create"
-        beforeNavigate={() =>
-          resetSetting({
-            onOk: () => {
-              changeBuyInData({
-                amountPerhand: 0,
-                players: [],
-              });
-              enterPrevState();
-            },
-          })
-        }
+        beforeNavigate={backPrepare}
         style={{ alignSelf: 'stretch' }}
       />
       {isEdit ? (
-        <Editable
-          currentBuyInData={buyInData}
+        <PlayingEditable
+          defaultBuyInData={viewBuyInData}
           onConfirm={(editBuyInData) => {
-            addEdit();
-            changeBuyInData(editBuyInData);
+            pushState(editBuyInData);
             setEdit(false);
           }}
           onCancel={() => {
@@ -116,7 +95,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
           </div>
           <div className={initialStyles.playerList}>
             {buyInPlayers.map((player) => (
-              <PlayerHandView key={player.id} player={player} amountPerhand={amoutPerhand}/>
+              <PlayerHandView key={player.id} player={player} amountPerhand={amoutPerhand} />
             ))}
           </div>
           <>
@@ -132,9 +111,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                         className={styles.btn}
                         icon={<EditFilled className={initialStyles.btnSvg} />}
                         disabled={!hasLastRecord}
-                        onClick={() => {
-                          viewLastRecord();
-                        }}
+                        onClick={viewLastRecord}
                       >
                         上一次编辑
                       </Button>
@@ -144,9 +121,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                         className={styles.btn}
                         icon={<EditFilled className={initialStyles.btnSvg} />}
                         disabled={!hasNextRecord}
-                        onClick={() => {
-                          viewNextRecord();
-                        }}
+                        onClick={viewNextRecord}
                       >
                         下一次编辑
                       </Button>
@@ -167,7 +142,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                     </div>
                     <div>
                       <Button
-                        className={`${styles.btn} ${styles.deepBtn}`}
+                        className={classNames(styles.btn, styles.deepBtn)}
                         icon={<CheckOutlined />}
                         onClick={() => {
                           confirmView();
@@ -187,7 +162,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                     <Button
                       className={styles.btn}
                       icon={<RollbackOutlined className={initialStyles.btnSvg} />}
-                      disabled={!hasLastRecord}
+                      disabled={historyLength <= 1}
                       onClick={() => {
                         setHistoryVisibile(true);
                       }}
@@ -212,17 +187,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                     <Button
                       className={styles.btn}
                       icon={<BackwardFilled className={initialStyles.btnSvg} />}
-                      onClick={() => {
-                        resetSetting({
-                          onOk: () => {
-                            changeBuyInData({
-                              amountPerhand: 0,
-                              players: [],
-                            });
-                            enterPrevState();
-                          },
-                        });
-                      }}
+                      onClick={backPrepare}
                     >
                       进入重置阶段
                     </Button>
@@ -231,9 +196,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                     <Button
                       className={`${styles.btn} ${styles.deepBtn}`}
                       icon={<ForwardOutlined className={initialStyles.btnSvg} />}
-                      onClick={() => {
-                        enterNextState();
-                      }}
+                      onClick={enterNextState}
                     >
                       进入结算阶段
                     </Button>

@@ -1,24 +1,25 @@
 import React, { useState, FC } from 'react';
 import { Input, Button, message } from 'antd';
 import { DownCircleFilled, TransactionOutlined } from '@ant-design/icons';
-import { BuyInPlayer, useBuyInData, BuyInData } from '../../../../../models/buyIn';
+import { BuyInData } from '../../../../../models/buyIn';
+import { useBuyInData } from '../../../model';
 import PlayerHand from '../../PlayerHand';
 import StatisticsDataView from '../../StatisticsDataView';
 import initialStyles from '../../BuyInPrepare/index.module.scss';
 import styles from './index.module.scss';
 
 interface IEditableProps {
-  currentBuyInData: BuyInData;
-  onConfirm: (BuyInData) => void;
+  defaultBuyInData: BuyInData;
+  onConfirm: (buyInData: BuyInData) => void;
   onCancel: () => void;
 }
 
-const Editable: FC<IEditableProps> = ({
-  currentBuyInData,
+const PlayingEditable: FC<IEditableProps> = ({
+  defaultBuyInData,
   onConfirm,
   onCancel,
 }: IEditableProps) => {
-  const [editBuyInData, setEditBuyInPlayers] = useState(currentBuyInData);
+  const [editBuyInData, setEditBuyInPlayers] = useState(defaultBuyInData);
 
   const {
     buyInData: { amountPerhand: editAmoutPerhand, players: editBuyInPlayers },
@@ -39,8 +40,14 @@ const Editable: FC<IEditableProps> = ({
     return !hasNull;
   };
 
-  const judgeValidOperation = (id: string) => {
-    return currentBuyInData.players.some((player) => player.id == id);
+  /**
+   * 判断当前用户是否可以删除
+   * @param id
+   * @returns
+   */
+  const enableDelete = (id: string) => {
+    const isRecentDelete = defaultBuyInData.players.some((player) => player.id == id);
+    return !isRecentDelete;
   };
 
   return (
@@ -83,11 +90,13 @@ const Editable: FC<IEditableProps> = ({
             key={player.id}
             amoutPerhand={editAmoutPerhand}
             player={player}
-            isValidOperated={judgeValidOperation(player.id)}
-            onRemove={(id: string) => {
-              removeEditPlayer(id);
-            }}
-            onChange={(targetPlayer: BuyInPlayer) => {
+            initHands={
+              defaultBuyInData.players.find((defaultPlayer) => defaultPlayer.id === player.id)
+                ?.hands
+            }
+            enableDelete={enableDelete(player.id)}
+            onRemove={removeEditPlayer}
+            onChange={(targetPlayer) => {
               changeEditPlayer(targetPlayer, i);
             }}
           ></PlayerHand>
@@ -135,4 +144,4 @@ const Editable: FC<IEditableProps> = ({
     </div>
   );
 };
-export default Editable;
+export default PlayingEditable;

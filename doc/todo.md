@@ -40,10 +40,15 @@
 - [x] Detail 页面把 数据源与 create 页分开
 - [x] currentBuyInData => createBuyInData => 把 Create 页与 Detail 页的状态管理区分开来
 - [x] Detail 页面多展示每个人计算后的总买入totalBuyIn
-- [x] Settle 页面改变 UI（hands x amount = totalBuyIn; totalBuyIn - _rest_ = profit）
+- [ ] Settle 页面改变 UI（hands x amount = totalBuyIn; _rest_ - totalBuyIn = profit）
 - [x] PlayResult、PlayResultView 抽成一个组件
 - [x] Header 返回逻辑
   - [x] Prepare => Home
   - [x] Playing => check(Modal) => Prepare
   - [x] Settle => Playing
   - [x] Detail => Home
+- [ ] fix: 一手金额 > 0
+- [ ] fix: Playing 的 UI
+- [ ] fix: Playing 的按钮名称可以简化一点
+- [ ] fix: History 下文案：上一步、下一步、取消、确认，进入按钮 icon
+- [ ] feat: 宽度 400px 下 UI 正常

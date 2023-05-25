@@ -1,55 +1,28 @@
-import React from 'react';
-import { useNavigate} from 'react-router-dom';
+import React, { useMemo } from 'react';
 import { TransactionOutlined } from '@ant-design/icons';
-import { Modal } from 'antd';
-import { ResetSetting } from '../components/BuyInPlaying/types';
 import Header from '../../../components/Header';
 import PlayResult from '../components/PlayResult';
 import StatisticsDataView from '../components/StatisticsDataView';
 import initialStyles from '../components/BuyInPrepare/index.module.scss';
-import { useCreateBuyInData } from '../model';
+import { calcStatisticsData, useCurrentBuyInData } from '../model';
+import mockBuyInData from './mockBuyInData.json';
 
 const BuyInView = () => {
-  const {
-    buyInData: { amountPerhand, players: buyInPlayers },
-    statisticsData: { totalPlayer, totalHands, totalAmount },
-  } = useCreateBuyInData(); //此时数据应该是 根据id查询得到的
+  // TODO
+  // const buyInData = useXxxAPI();
 
-  const navigate = useNavigate();
+  const currentBuyInData = useCurrentBuyInData();
+  const buyInData = currentBuyInData.players.length > 0 ? currentBuyInData : mockBuyInData;
 
-  const resetSetting: ResetSetting = ({ onOk, onCancel } = {}) => {
-    return new Promise((resolve) => {
-      Modal.confirm({
-        title: 'Back to Home',
-        content: 'Are you sure to go back to home?',
-        centered: true,
-        closable: true,
-        maskClosable: true,
-        okButtonProps: {
-          type: 'primary',
-          danger: true,
-        },
-        okText: 'Reset',
-        onOk: () => {
-          onOk?.();
-          resolve(true);
-        },
-        onCancel: () => {
-          onCancel?.();
-          resolve(false);
-        },
-      });
-    });
-  };
+  const { amountPerhand, players: buyInPlayers } = buyInData;
+  const { totalPlayer, totalHands, totalAmount } = useMemo(
+    () => calcStatisticsData(buyInData),
+    [buyInData],
+  );
 
   return (
     <>
-      <Header
-        title="BuyIn Detail"
-        back="/"
-        beforeNavigate={() => resetSetting({ onOk: () => navigate('/') })}
-        style={{ alignSelf: 'stretch' }}
-      />
+      <Header title="BuyIn Detail" back="/" style={{ alignSelf: 'stretch' }} />
       <div className={initialStyles.container}>
         <div className={initialStyles.header}>
           <div className={initialStyles.leftWrap}>

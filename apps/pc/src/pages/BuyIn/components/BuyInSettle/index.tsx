@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
-import { Button, Modal } from 'antd';
+import { Button } from 'antd';
 import { TransactionOutlined } from '@ant-design/icons';
 import Header from '../../../../components/Header';
 import StatisticsDataView from '../StatisticsDataView';
-import { ResetSetting } from '../BuyInPlaying/types';
 import { useCreateBuyInData } from '../../model';
 import PlayResult from '../PlayResult';
 import initialStyles from '../BuyInPrepare/index.module.scss';
+import { confirmModal } from '../../utils';
 import styles from './index.module.scss';
 
 interface IBuyInSettleProps {
@@ -24,43 +24,21 @@ const BuyInSettle: FC<IBuyInSettleProps> = ({
     changePlayer,
   } = useCreateBuyInData();
 
-  const resetSetting: ResetSetting = ({ onOk, onCancel } = {}) => {
-    return new Promise((resolve) => {
-      Modal.confirm({
-        title: 'Back to playing',
-        content: 'Are you sure to go back to playing stage?',
-        centered: true,
-        closable: true,
-        maskClosable: true,
-        okButtonProps: {
-          type: 'primary',
-          danger: true,
-        },
-        okText: 'Reset',
-        onOk: () => {
-          onOk?.();
-          resolve(true);
-        },
-        onCancel: () => {
-          onCancel?.();
-          resolve(false);
-        },
-      });
-    });
-  };
-
   return (
     <>
       <Header
         title="BuyIn Settle"
         back="/buyin/create"
-        beforeNavigate={() =>
-          resetSetting({
+        beforeNavigate={async () => {
+          await confirmModal({
+            title: 'Back to playing',
+            content: 'Are you sure to go back to playing stage?',
             onOk: () => {
               enterPrevState();
             },
-          })
-        }
+          });
+          return false;
+        }}
         style={{ alignSelf: 'stretch' }}
       />
       <div className={initialStyles.container}>

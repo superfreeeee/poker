@@ -1,15 +1,19 @@
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import { useMemo, useState } from 'react';
 import { message } from 'antd';
 import { nanoid } from 'nanoid';
 import { BuyInData, BuyInPlayer } from '../../models/buyIn';
+import { INIT_BUYIN_HANDS } from './constants';
 
-const createBuyInDataHistoryAtom = atom<BuyInData[]>([
-  {
-    amountPerhand: 0,
-    players: [],
-  },
-]);
+/**
+ * 初始记录
+ */
+const initialBuyInData: BuyInData = {
+  amountPerhand: 0,
+  players: [],
+};
+
+const createBuyInDataHistoryAtom = atom<BuyInData[]>([initialBuyInData]);
 
 const createBuyInDataIndexAtom = atom<number>(0);
 
@@ -26,6 +30,8 @@ const createBuyInDataAtom = atom(
     set(createBuyInDataHistoryAtom, history);
   },
 );
+
+export const useCurrentBuyInData = () => useAtomValue(createBuyInDataAtom);
 
 /**
  * 【BuyInPlaying】Buy In History
@@ -60,27 +66,36 @@ export const useCreateBuyInDataHistory = () => {
     setViewIndex(createBuyInDataIndex);
   };
 
-  const addEdit = () => {
-    const history = createBuyInDataHistory.slice();
-    history.splice(createBuyInDataIndex + 1);
+  const pushState = (nextState: BuyInData) => {
+    const history = [...createBuyInDataHistory.slice(0, createBuyInDataIndex + 1), nextState];
+    const nextIndex = history.length - 1;
     setCreateBuyInDataHistory(history);
-    setCreateBuyInDataIndex(createBuyInDataIndex + 1);
-    setViewIndex(createBuyInDataIndex + 1);
+    setCreateBuyInDataIndex(nextIndex);
+    setViewIndex(nextIndex);
   };
 
-  const totalIndex = [...Array(createBuyInDataHistory.length)].map((el,index)=>({title:index+1}))
+  const resetHistory = () => {
+    setCreateBuyInDataHistory([initialBuyInData]);
+    setCreateBuyInDataIndex(0);
+  };
+
+  const totalIndex = [...Array(createBuyInDataHistory.length)].map((el, index) => ({
+    title: index + 1,
+  }));
 
   return {
     viewBuyInData: createBuyInDataHistory[viewIndex],
     viewStatisticData: calcStatisticsData(createBuyInDataHistory[viewIndex]),
-    indexSteps:{viewIndex:viewIndex,totalData:totalIndex},
+    stepIndex: { viewIndex, totalData: totalIndex },
+    historyLength: createBuyInDataHistory.length,
     hasLastRecord,
     hasNextRecord,
     viewLastRecord,
     viewNextRecord,
     confirmView,
     cancelView,
-    addEdit,
+    pushState,
+    resetHistory,
   };
 };
 
@@ -99,6 +114,11 @@ interface IUseBuyInDataProps {
   setBuyInData: (buyInData: BuyInData) => void;
 }
 
+/**
+ * BuyInData(data) => statisticsData, totalBenefit, actions
+ * @param param0
+ * @returns
+ */
 export const useBuyInData = ({ buyInData, setBuyInData }: IUseBuyInDataProps) => {
   const statisticsData = useMemo(() => {
     return calcStatisticsData(buyInData);
@@ -134,7 +154,7 @@ export const useBuyInDataActions = ([buyInData, setBuyInData]: BuyInDataEntry) =
         {
           id: nanoid(),
           name: '',
-          hands: 1,
+          hands: INIT_BUYIN_HANDS,
           rest: 0,
         },
       ],

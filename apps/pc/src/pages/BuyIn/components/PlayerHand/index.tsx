@@ -8,14 +8,16 @@ import {
   MinusOutlined,
   ArrowRightOutlined,
 } from '@ant-design/icons';
-import { useDebounceFn } from 'ahooks';
+import classNames from 'classnames';
 import { BuyInPlayer } from '../../../../models/buyIn';
+import { INIT_BUYIN_HANDS, MAX_BUYIN_HANDS } from '../../constants';
 import styles from './index.module.scss';
 
 interface IPlayerHandProps {
   amoutPerhand: number;
   player: BuyInPlayer;
-  isValidOperated: boolean;
+  initHands?: number;
+  enableDelete?: boolean; // 不可删除
   onRemove: (id: string) => void;
   onChange: (targetPlayer: BuyInPlayer) => void;
 }
@@ -23,23 +25,21 @@ interface IPlayerHandProps {
 const PlayerHand: FC<IPlayerHandProps> = ({
   amoutPerhand,
   player,
-  isValidOperated,
+  initHands = INIT_BUYIN_HANDS,
+  enableDelete = true,
   onRemove,
   onChange,
 }: IPlayerHandProps) => {
   const { id, name, hands } = player;
 
-  const [upper, setUpper] = useState<number>(0);
+  const [increaseHands, setIncreaseHands] = useState<number>(0); // 该次编辑增量
 
-  const { run } = useDebounceFn(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      onChange({
-        ...player,
-        name: e.target.value,
-      });
-    },
-    { wait: 500 },
-  );
+  const onNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onChange({
+      ...player,
+      name: e.target.value,
+    });
+  };
 
   return (
     <div className={styles.container}>
@@ -48,13 +48,13 @@ const PlayerHand: FC<IPlayerHandProps> = ({
           <div className={styles.title}>USERNAME</div>
           <Input
             prefix={<UserOutlined />}
-            defaultValue={name}
+            value={name}
             placeholder="Input your name"
             allowClear
             showCount
             maxLength={30}
             bordered={false}
-            onChange={run}
+            onChange={onNameChange}
           />
         </div>
         <div className={styles.handList}>
@@ -70,8 +70,8 @@ const PlayerHand: FC<IPlayerHandProps> = ({
                   message.error('买入数量必须为正整数');
                   return;
                 }
-                if (number > 50) {
-                  number = 50;
+                if (number > MAX_BUYIN_HANDS) {
+                  number = MAX_BUYIN_HANDS;
                   message.info('买入数量不能超过50');
                 }
                 onChange({ ...player, hands: number });
@@ -80,7 +80,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({
           </div>
           <div className={styles.textContiner}>
             <div>
-              <ArrowRightOutlined  className={`${styles.btnMargin} ${styles.amountIcon}`} />
+              <ArrowRightOutlined className={classNames(styles.btnMargin, styles.amountIcon)} />
             </div>
             <div>
               <div className={styles.title}>AMOUNT</div> <div>{player.hands * amoutPerhand}</div>
@@ -91,7 +91,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({
       <div className={styles.secondCol}>
         <div className={styles.btnContainer}>
           <Button
-            disabled={isValidOperated}
+            disabled={!enableDelete}
             shape="circle"
             size="large"
             icon={<DeleteOutlined />}
@@ -103,14 +103,14 @@ const PlayerHand: FC<IPlayerHandProps> = ({
         </div>
         <div className={styles.numberBtnWrap}>
           <Button
-            disabled={isValidOperated && upper <= 0}
+            disabled={hands <= initHands}
             icon={<MinusOutlined />}
             className={styles.btnBG}
             onClick={() => {
               if (hands == 1) {
                 message.info('买入数量不能为0');
               } else {
-                setUpper(upper - 1);
+                setIncreaseHands(increaseHands - 1);
                 onChange({ ...player, hands: hands - 1 });
               }
             }}
@@ -122,7 +122,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({
               if (hands == 50) {
                 message.info('买入数量不能超过50');
               } else {
-                setUpper(upper + 1);
+                setIncreaseHands(increaseHands + 1);
                 onChange({ ...player, hands: hands + 1 });
               }
             }}
