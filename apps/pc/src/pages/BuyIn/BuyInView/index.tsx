@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import { TransactionOutlined } from '@ant-design/icons';
 import { Modal } from 'antd';
 import { ResetSetting } from '../components/BuyInPlaying/types';
@@ -13,7 +13,7 @@ const BuyInView = () => {
   const {
     buyInData: { amountPerhand, players: buyInPlayers },
     statisticsData: { totalPlayer, totalHands, totalAmount },
-  } = useCreateBuyInData();
+  } = useCreateBuyInData(); //此时数据应该是 根据id查询得到的
 
   const navigate = useNavigate();
 

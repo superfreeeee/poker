@@ -19,7 +19,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/buyin" element={<LazyBuyIn />}>
-          <Route path="detail" element={<BuyInView />} />
+          <Route path="detail/:id" element={<BuyInView />} />
           <Route path="create" element={<BuyInCreate />} />
           <Route path="" element={<Redirect path="/buyin/create" />} />
         </Route>

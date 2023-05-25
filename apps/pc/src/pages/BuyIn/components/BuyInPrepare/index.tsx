@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { Input, Button, message } from 'antd';
 import { DownCircleFilled, TransactionOutlined } from '@ant-design/icons';
 import Header from '../../../../components/Header';
@@ -48,6 +48,8 @@ const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareP
     });
     return !hasNull;
   };
+
+  const playListRef = useRef(null);
 
   return (
     <>
@@ -101,7 +103,10 @@ const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareP
             <Button
               className={styles.addBtn}
               icon={<DownCircleFilled className={styles.btnSvg} />}
-              onClick={addPlayer}
+              onClick={() => {
+                addPlayer();
+                console.log(playListRef.current);
+              }}
             >
               Add more player
             </Button>
