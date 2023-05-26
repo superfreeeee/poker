@@ -2,7 +2,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 80px;
+  gap: 120px;
   border-radius: 10px;
   padding: 16px 30px;
   background-color: white;
@@ -11,13 +11,14 @@
 .playerContainer {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  justify-content: space-around;
+  height: 120px;
 }
 
 .textContiner {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 5px;
 }
 
 .text {
@@ -31,7 +32,7 @@
   vertical-align: middle;
 }
 
-.calcText{
+.calcText {
   display: flex;
   justify-content: start;
   align-items: center;
@@ -42,7 +43,7 @@
   vertical-align: middle;
 }
 
-.otherText{
+.otherText {
   display: flex;
   justify-content: start;
   align-items: center;
@@ -53,15 +54,10 @@
   vertical-align: middle;
 }
 
-
 .inputForm {
   border-bottom: 1px solid gray;
-  width: 200px;
+  width: 60px;
   overflow: hidden;
-
-  input {
-    margin-left: 15px;
-  }
 }
 
 .btnMargin {
@@ -72,13 +68,13 @@
   overflow: auto;
 }
 
-.title{
+.title {
   font-weight: 600;
   color: gray;
 }
 
-.calcList{
+.calcList {
   display: flex;
-  align-items: center;
-  gap:10px
+  align-items: flex-start;
+  gap: 10px;
 }

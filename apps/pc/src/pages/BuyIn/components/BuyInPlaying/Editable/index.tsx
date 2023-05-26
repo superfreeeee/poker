@@ -1,10 +1,10 @@
 import React, { useState, FC } from 'react';
-import { Input, Button, message } from 'antd';
-import { DownCircleFilled, TransactionOutlined } from '@ant-design/icons';
+import { Button, message } from 'antd';
+import { DownCircleFilled } from '@ant-design/icons';
 import { BuyInData } from '../../../../../models/buyIn';
 import { useBuyInData } from '../../../model';
 import PlayerHand from '../../PlayerHand';
-import StatisticsDataView from '../../StatisticsDataView';
+import TitleBar from '../../TitleBar';
 import initialStyles from '../../BuyInPrepare/index.module.scss';
 import styles from './index.module.scss';
 
@@ -23,7 +23,7 @@ const PlayingEditable: FC<IEditableProps> = ({
 
   const {
     buyInData: { amountPerhand: editAmoutPerhand, players: editBuyInPlayers },
-    statisticsData: { totalPlayer, totalHands, totalAmount },
+    statisticsData,
     addPlayer: addEditPlayer,
     removePlayer: removeEditPlayer,
     changePlayer: changeEditPlayer,
@@ -52,43 +52,24 @@ const PlayingEditable: FC<IEditableProps> = ({
 
   return (
     <div className={initialStyles.container}>
-      <div className={initialStyles.header}>
-        <div className={initialStyles.leftWrap}>
-          <div style={{ fontSize: 20 }}>编辑状态</div>
-          <div className={initialStyles.inputForm}>
-            <div>一手金额</div>
-            <Input
-              placeholder="Input here"
-              maxLength={11}
-              value={editAmoutPerhand}
-              bordered={false}
-              prefix={<TransactionOutlined />}
-              onChange={(e) => {
-                const amount = +e.target.value;
-                if (isNaN(amount)) {
-                  message.error('一手金额必须为正整数');
-                  return;
-                }
-                changeEditBuyInData({
-                  players: editBuyInPlayers,
-                  amountPerhand: amount,
-                });
-              }}
-            />
-          </div>
-        </div>
-
-        <StatisticsDataView
-          totalPlayer={totalPlayer}
-          totalHands={totalHands}
-          totalAmount={totalAmount}
-        />
-      </div>
+      <TitleBar
+        isEditable={true}
+        title="编辑状态"
+        amountPerhand={editAmoutPerhand}
+        statisticsData={statisticsData}
+        handleAmountPerhandChange={(amount) => {
+          changeEditBuyInData({
+            players: editBuyInPlayers,
+            amountPerhand: amount,
+          });
+        }}
+      ></TitleBar>
       <div className={initialStyles.playerList}>
         {editBuyInPlayers.map((player, i) => (
           <PlayerHand
             key={player.id}
-            amoutPerhand={editAmoutPerhand}
+            isEditable={true}
+            amountPerhand={editAmoutPerhand}
             player={player}
             initHands={
               defaultBuyInData.players.find((defaultPlayer) => defaultPlayer.id === player.id)

@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
-import { TransactionOutlined } from '@ant-design/icons';
 import Header from '../../../components/Header';
 import PlayResult from '../components/PlayResult';
-import StatisticsDataView from '../components/StatisticsDataView';
+import TitleBar from '../components/TitleBar';
 import initialStyles from '../components/BuyInPrepare/index.module.scss';
 import { calcStatisticsData, useCurrentBuyInData } from '../model';
 import mockBuyInData from './mockBuyInData.json';
@@ -15,29 +14,18 @@ const BuyInView = () => {
   const buyInData = currentBuyInData.players.length > 0 ? currentBuyInData : mockBuyInData;
 
   const { amountPerhand, players: buyInPlayers } = buyInData;
-  const { totalPlayer, totalHands, totalAmount } = useMemo(
-    () => calcStatisticsData(buyInData),
-    [buyInData],
-  );
+  const statisticsData = useMemo(() => calcStatisticsData(buyInData), [buyInData]);
 
   return (
     <>
       <Header title="BuyIn Detail" back="/" style={{ alignSelf: 'stretch' }} />
       <div className={initialStyles.container}>
-        <div className={initialStyles.header}>
-          <div className={initialStyles.leftWrap}>
-            <div style={{ fontSize: 20 }}>结算状态</div>
-            <div>
-              <TransactionOutlined className={initialStyles.iconMargin} /> 一手金额 {amountPerhand}
-            </div>
-          </div>
-
-          <StatisticsDataView
-            totalPlayer={totalPlayer}
-            totalHands={totalHands}
-            totalAmount={totalAmount}
-          />
-        </div>
+        <TitleBar
+          isEditable={false}
+          title="结算状态"
+          amountPerhand={amountPerhand}
+          statisticsData={statisticsData}
+        ></TitleBar>
         <div className={initialStyles.playerList}>
           {buyInPlayers.map((player) => (
             <PlayResult

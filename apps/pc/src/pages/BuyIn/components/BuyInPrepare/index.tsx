@@ -1,11 +1,11 @@
 import React, { FC, useEffect } from 'react';
-import { Input, Button, message } from 'antd';
-import { DownCircleFilled, TransactionOutlined } from '@ant-design/icons';
+import { Button, message } from 'antd';
+import { DownCircleFilled } from '@ant-design/icons';
 import Header from '../../../../components/Header';
 import { useCurrentUser } from '../../../../models/user';
 import { useCreateBuyInData } from '../../model';
 import PlayerHand from '../PlayerHand';
-import StatisticsDataView from '../StatisticsDataView';
+import TitleBar from '../TitleBar';
 import styles from './index.module.scss';
 
 interface IBuyInPrepareProps {
@@ -16,7 +16,7 @@ const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareP
   const currentUser = useCurrentUser();
   const {
     buyInData: { amountPerhand, players: buyInPlayers },
-    statisticsData: { totalPlayer, totalHands, totalAmount },
+    statisticsData,
     addPlayer,
     removePlayer,
     changePlayer,
@@ -49,46 +49,32 @@ const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareP
     return !hasNull;
   };
 
+  const validateAmountPerhand = () => {
+    return amountPerhand > 0;
+  };
+
   return (
     <>
       <Header title="BuyIn Prepare" back style={{ alignSelf: 'stretch' }} />
       <div className={styles.container}>
-        <div className={styles.header}>
-          <div className={styles.leftWrap}>
-            <div style={{ fontSize: 20 }}>初始状态</div>
-            <div className={styles.inputForm}>
-              <div>一手金额</div>
-              <Input
-                placeholder="Input here"
-                maxLength={11}
-                value={amountPerhand}
-                bordered={false}
-                prefix={<TransactionOutlined />}
-                onChange={(e) => {
-                  const amount = +e.target.value;
-                  if (isNaN(amount)) {
-                    message.error('一手金额必须为正整数');
-                    return;
-                  }
-                  changeBuyInData({
-                    players: buyInPlayers,
-                    amountPerhand: amount,
-                  });
-                }}
-              />
-            </div>
-          </div>
-          <StatisticsDataView
-            totalPlayer={totalPlayer}
-            totalHands={totalHands}
-            totalAmount={totalAmount}
-          />
-        </div>
+        <TitleBar
+          title="初始状态"
+          isEditable={true}
+          amountPerhand={amountPerhand}
+          statisticsData={statisticsData}
+          handleAmountPerhandChange={(amount) => {
+            changeBuyInData({
+              players: buyInPlayers,
+              amountPerhand: amount,
+            });
+          }}
+        ></TitleBar>
         <div className={styles.playerList}>
           {buyInPlayers.map((player, i) => (
             <PlayerHand
               key={player.id}
-              amoutPerhand={amountPerhand}
+              isEditable={true}
+              amountPerhand={amountPerhand}
               enableDelete={buyInPlayers.length > 1}
               player={player}
               onRemove={removePlayer}
@@ -111,7 +97,11 @@ const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareP
               className={styles.nextBtn}
               onClick={() => {
                 if (validateUserName()) {
-                  enterNextState();
+                  if (validateAmountPerhand()) {
+                    enterNextState();
+                  } else {
+                    message.error('一手金额大于0');
+                  }
                 } else {
                   message.error('玩家名不能为空');
                 }

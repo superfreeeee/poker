@@ -30,6 +30,11 @@ $color-match: #c2d7ef;
   }
 }
 
+.nameWithAmount {
+  display: flex;
+  gap: 5px;
+}
+
 .secondCol {
   display: flex;
   flex-direction: column;
@@ -58,18 +63,48 @@ $color-match: #c2d7ef;
   display: flex;
   justify-content: start;
   align-items: center;
+  gap: 5px;
 }
 
-.title{
+.title {
   font-weight: 600;
   color: gray;
 }
 
-.btnMargin {
-  margin-right: 10px;
+.calcText {
+  width: 60px;
+  overflow: hidden;
+  text-align: center;
+  vertical-align: middle;
 }
 
-.amountIcon{
+.otherText {
+  width: 10px;
+  text-align: center;
+}
+
+.btnMargin {
+  margin-right: 10px;
+  color: gray;
+}
+
+.amountIcon {
   font-size: 24px;
   color: gray;
+}
+
+.btnList {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 300px;
+}
+
+.visibleLine{
+  display: flex;
+  align-items: center;
+}
+
+.content{
+  margin-left: 10px;
 }

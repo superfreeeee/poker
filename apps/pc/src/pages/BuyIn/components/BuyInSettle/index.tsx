@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
 import { Button } from 'antd';
-import { TransactionOutlined } from '@ant-design/icons';
 import Header from '../../../../components/Header';
-import StatisticsDataView from '../StatisticsDataView';
+import TitleBar from '../TitleBar';
 import { useCreateBuyInData } from '../../model';
 import PlayResult from '../PlayResult';
 import initialStyles from '../BuyInPrepare/index.module.scss';
@@ -19,7 +18,7 @@ const BuyInSettle: FC<IBuyInSettleProps> = ({
 }: IBuyInSettleProps) => {
   const {
     buyInData: { amountPerhand, players: buyInPlayers },
-    statisticsData: { totalPlayer, totalHands, totalAmount },
+    statisticsData,
     totalBenefit,
     changePlayer,
   } = useCreateBuyInData();
@@ -42,20 +41,12 @@ const BuyInSettle: FC<IBuyInSettleProps> = ({
         style={{ alignSelf: 'stretch' }}
       />
       <div className={initialStyles.container}>
-        <div className={initialStyles.header}>
-          <div className={initialStyles.leftWrap}>
-            <div style={{ fontSize: 20 }}>结算状态</div>
-            <div>
-              <TransactionOutlined className={initialStyles.iconMargin} /> 一手金额 {amountPerhand}
-            </div>
-          </div>
-
-          <StatisticsDataView
-            totalPlayer={totalPlayer}
-            totalHands={totalHands}
-            totalAmount={totalAmount}
-          />
-        </div>
+        <TitleBar
+          isEditable={false}
+          title="结算状态"
+          amountPerhand={amountPerhand}
+          statisticsData={statisticsData}
+        ></TitleBar>
         <div className={initialStyles.playerList}>
           {buyInPlayers.map((player, i) => (
             <PlayResult

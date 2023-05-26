@@ -1,18 +1,17 @@
 import React, { FC, useState } from 'react';
 import { Button, Steps } from 'antd';
 import {
-  TransactionOutlined,
   EditFilled,
   BackwardFilled,
   ForwardOutlined,
-  RollbackOutlined,
   CloseOutlined,
   CheckOutlined,
+  ClockCircleOutlined,
 } from '@ant-design/icons';
 import classNames from 'classnames';
 import Header from '../../../../components/Header';
-import PlayerHandView from '../PlayerHandView';
-import StatisticsDataView from '../StatisticsDataView';
+import PlayerHand from '../PlayerHand';
+import TitleBar from '../TitleBar';
 import { useCreateBuyInDataHistory } from '../../model';
 import { confirmModal } from '../../utils';
 import initialStyles from '../BuyInPrepare/index.module.scss';
@@ -79,23 +78,20 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
         />
       ) : (
         <div className={initialStyles.container}>
-          <div className={initialStyles.header}>
-            <div className={initialStyles.leftWrap}>
-              <div style={{ fontSize: 20 }}>等待状态</div>
-              <div>
-                <TransactionOutlined className={initialStyles.iconMargin} /> 一手金额 {amoutPerhand}
-              </div>
-            </div>
-
-            <StatisticsDataView
-              totalPlayer={viewStatisticData.totalPlayer}
-              totalHands={viewStatisticData.totalHands}
-              totalAmount={viewStatisticData.totalAmount}
-            />
-          </div>
+          <TitleBar
+            isEditable={false}
+            title="等待状态"
+            statisticsData={viewStatisticData}
+            amountPerhand={amoutPerhand}
+          ></TitleBar>
           <div className={initialStyles.playerList}>
             {buyInPlayers.map((player) => (
-              <PlayerHandView key={player.id} player={player} amountPerhand={amoutPerhand} />
+              <PlayerHand
+                key={player.id}
+                player={player}
+                amountPerhand={amoutPerhand}
+                isEditable={false}
+              />
             ))}
           </div>
           <>
@@ -113,7 +109,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                         disabled={!hasLastRecord}
                         onClick={viewLastRecord}
                       >
-                        上一次编辑
+                        上一步
                       </Button>
                     </div>
                     <div>
@@ -123,7 +119,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                         disabled={!hasNextRecord}
                         onClick={viewNextRecord}
                       >
-                        下一次编辑
+                        下一步
                       </Button>
                     </div>
                   </div>
@@ -137,7 +133,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                           setHistoryVisibile(false);
                         }}
                       >
-                        取消修改
+                        取消
                       </Button>
                     </div>
                     <div>
@@ -149,7 +145,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                           setHistoryVisibile(false);
                         }}
                       >
-                        确认修改
+                        确认
                       </Button>
                     </div>
                   </div>
@@ -161,13 +157,13 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                   <div>
                     <Button
                       className={styles.btn}
-                      icon={<RollbackOutlined className={initialStyles.btnSvg} />}
+                      icon={<ClockCircleOutlined className={initialStyles.btnSvg} />}
                       disabled={historyLength <= 1}
                       onClick={() => {
                         setHistoryVisibile(true);
                       }}
                     >
-                      进入历史编辑
+                      历史状态
                     </Button>
                   </div>
                   <div>
@@ -178,7 +174,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                         setEdit(true);
                       }}
                     >
-                      进入编辑阶段
+                      编辑
                     </Button>
                   </div>
                 </div>
@@ -189,7 +185,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                       icon={<BackwardFilled className={initialStyles.btnSvg} />}
                       onClick={backPrepare}
                     >
-                      进入重置阶段
+                      重置
                     </Button>
                   </div>
                   <div>
@@ -198,7 +194,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                       icon={<ForwardOutlined className={initialStyles.btnSvg} />}
                       onClick={enterNextState}
                     >
-                      进入结算阶段
+                      结算
                     </Button>
                   </div>
                 </div>

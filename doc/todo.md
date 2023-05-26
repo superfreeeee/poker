@@ -47,8 +47,8 @@
   - [x] Playing => check(Modal) => Prepare
   - [x] Settle => Playing
   - [x] Detail => Home
-- [ ] fix: 一手金额 > 0
-- [ ] fix: Playing 的 UI
-- [ ] fix: Playing 的按钮名称可以简化一点
-- [ ] fix: History 下文案：上一步、下一步、取消、确认，进入按钮 icon
+- [x] fix: 一手金额 > 0
+- [x] fix: Playing 的 UI
+- [x] fix: Playing 的按钮名称可以简化一点
+- [x] fix: History 下文案：上一步、下一步、取消、确认，进入按钮 icon
 - [ ] feat: 宽度 400px 下 UI 正常
