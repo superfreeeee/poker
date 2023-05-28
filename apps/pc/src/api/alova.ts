@@ -14,13 +14,16 @@ export const alovaInstance = createAlova({
   statesHook: ReactHook,
   requestAdapter: GlobalFetch(),
   beforeRequest: (options) => {
+    options.config.credentials = 'include';
+    options.config.headers['Content-Type'] = 'application/json';
+
     apiLogger.log('request', options);
   },
   responded: async (response) => {
     // fetch response => json
     const data = await response.json();
 
-    apiLogger.log('request', data);
+    apiLogger.log('response', data);
 
     return data;
   },
