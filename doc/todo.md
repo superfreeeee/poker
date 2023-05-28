@@ -40,7 +40,7 @@
 - [x] Detail 页面把 数据源与 create 页分开
 - [x] currentBuyInData => createBuyInData => 把 Create 页与 Detail 页的状态管理区分开来
 - [x] Detail 页面多展示每个人计算后的总买入totalBuyIn
-- [ ] Settle 页面改变 UI（hands x amount = totalBuyIn; _rest_ - totalBuyIn = profit）
+- [x] Settle 页面改变 UI（hands x amount = totalBuyIn; _rest_ - totalBuyIn = profit）
 - [x] PlayResult、PlayResultView 抽成一个组件
 - [x] Header 返回逻辑
   - [x] Prepare => Home

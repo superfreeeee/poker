@@ -83,33 +83,29 @@ const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareP
           ))}
         </div>
         <div className={styles.buttonList}>
-          <div>
-            <Button
-              className={styles.addBtn}
-              icon={<DownCircleFilled className={styles.btnSvg} />}
-              onClick={addPlayer}
-            >
-              Add more player
-            </Button>
-          </div>
-          <div>
-            <Button
-              className={styles.nextBtn}
-              onClick={() => {
-                if (validateUserName()) {
-                  if (validateAmountPerhand()) {
-                    enterNextState();
-                  } else {
-                    message.error('一手金额大于0');
-                  }
+          <Button
+            className={styles.addBtn}
+            icon={<DownCircleFilled className={styles.btnSvg} />}
+            onClick={addPlayer}
+          >
+            Add more player
+          </Button>
+          <Button
+            className={styles.deepBtn}
+            onClick={() => {
+              if (validateUserName()) {
+                if (validateAmountPerhand()) {
+                  enterNextState();
                 } else {
-                  message.error('玩家名不能为空');
+                  message.error('一手金额大于0');
                 }
-              }}
-            >
-              Start play
-            </Button>
-          </div>
+              } else {
+                message.error('玩家名不能为空');
+              }
+            }}
+          >
+            Start play
+          </Button>
         </div>
       </div>
     </>

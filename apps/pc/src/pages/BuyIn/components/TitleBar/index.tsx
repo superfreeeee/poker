@@ -21,45 +21,43 @@ const TitleBar = ({
   handleAmountPerhandChange,
 }: ITitleBarProps) => {
   return (
-    <>
-      <div className={styles.header}>
-        <div className={styles.leftWrap}>
-          <div style={{ fontSize: 20 }}>{title}</div>
-          {isEditable ? (
-            <div className={styles.inputForm}>
-              <div>一手金额</div>
-              <Input
-                placeholder="Input here"
-                maxLength={11}
-                value={amountPerhand}
-                bordered={false}
-                prefix={<TransactionOutlined />}
-                onChange={(e) => {
-                  const amount = +e.target.value;
-                  if (isNaN(amount)) {
-                    message.error('一手金额必须为正整数');
-                    return;
-                  }
-                  isUndefined(handleAmountPerhandChange) ? null : handleAmountPerhandChange(amount);
-                }}
-              />
+    <div className={styles.header}>
+      <div className={styles.leftWrap}>
+        <div style={{ fontSize: 20 }}>{title}</div>
+        {isEditable ? (
+          <div className={styles.inputForm}>
+            <div>一手金额</div>
+            <Input
+              placeholder="Input here"
+              maxLength={11}
+              value={amountPerhand}
+              bordered={false}
+              prefix={<TransactionOutlined />}
+              onChange={(e) => {
+                const amount = +e.target.value;
+                if (isNaN(amount)) {
+                  message.error('一手金额必须为正整数');
+                  return;
+                }
+                isUndefined(handleAmountPerhandChange) ? null : handleAmountPerhandChange(amount);
+              }}
+            />
+          </div>
+        ) : (
+          <>
+            <div>
+              <TransactionOutlined /> 一手金额
+              {amountPerhand}
             </div>
-          ) : (
-            <>
-              <div>
-                <TransactionOutlined /> 一手金额
-                {amountPerhand}
-              </div>
-            </>
-          )}
-        </div>
-        <StatisticsDataView
-          totalPlayer={statisticsData.totalPlayer}
-          totalHands={statisticsData.totalHands}
-          totalAmount={statisticsData.totalAmount}
-        />
+          </>
+        )}
       </div>
-    </>
+      <StatisticsDataView
+        totalPlayer={statisticsData.totalPlayer}
+        totalHands={statisticsData.totalHands}
+        totalAmount={statisticsData.totalAmount}
+      />
+    </div>
   );
 };
 export default TitleBar;

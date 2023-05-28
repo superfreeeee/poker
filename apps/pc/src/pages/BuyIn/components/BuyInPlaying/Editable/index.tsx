@@ -84,43 +84,34 @@ const PlayingEditable: FC<IEditableProps> = ({
         ))}
       </div>
       <div className={styles.buttonList}>
-        <div>
-          <Button
-            className={styles.singleBtn}
-            icon={<DownCircleFilled className={styles.btnSvg} />}
-            onClick={() => {
-              addEditPlayer();
-            }}
-          >
-            Add more player
-          </Button>
-        </div>
-        <div className={styles.twoBtnContainer}>
-          <div>
-            <Button
-              className={styles.btn}
-              onClick={() => {
-                onCancel();
-              }}
-            >
-              Cancel Change
-            </Button>
-          </div>
-          <div>
-            <Button
-              className={`${styles.btn} ${styles.deepBtn}`}
-              onClick={() => {
-                if (validateUserName()) {
-                  onConfirm(editBuyInData);
-                } else {
-                  message.error('玩家名不能为空');
-                }
-              }}
-            >
-              Confirm Change
-            </Button>
-          </div>
-        </div>
+        <Button
+          icon={<DownCircleFilled className={styles.btnSvg} />}
+          onClick={() => {
+            addEditPlayer();
+          }}
+        >
+          Add more player
+        </Button>
+        <Button
+          className={styles.bottomBtn}
+          onClick={() => {
+            onCancel();
+          }}
+        >
+          Cancel Change
+        </Button>
+        <Button
+          className={`${styles.btn} ${styles.deepBtn}`}
+          onClick={() => {
+            if (validateUserName()) {
+              onConfirm(editBuyInData);
+            } else {
+              message.error('玩家名不能为空');
+            }
+          }}
+        >
+          Confirm Change
+        </Button>
       </div>
     </div>
   );

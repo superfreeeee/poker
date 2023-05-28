@@ -1,80 +1,10 @@
-.container {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 120px;
-  border-radius: 10px;
-  padding: 16px 30px;
-  background-color: white;
-}
-
-.playerContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  height: 120px;
-}
-
-.textContiner {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.text {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  gap: 10px;
-  width: 200px;
-  overflow: hidden;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.calcText {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  gap: 10px;
-  width: 60px;
-  overflow: hidden;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.otherText {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  gap: 10px;
-  width: 10px;
-  overflow: hidden;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.inputForm {
-  border-bottom: 1px solid gray;
-  width: 60px;
-  overflow: hidden;
-}
-
-.btnMargin {
-  margin-right: 10px;
-}
-
-.rightWrap {
-  overflow: auto;
-}
-
-.title {
-  font-weight: 600;
-  color: gray;
-}
-
-.calcList {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
+.input {
+  width: 70px;
+  height: 40px;
+  align-self: center;
+  
+  input {
+    height: 20px;
+    margin-left: 0;
+  }
 }

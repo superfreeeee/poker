@@ -62,7 +62,7 @@ const BuyInSettle: FC<IBuyInSettleProps> = ({
           <div className={styles.resUnderLine}>最终盈余总计 {totalBenefit}</div>
           <div>
             <Button
-              className={initialStyles.nextBtn}
+              className={initialStyles.deepBtn}
               onClick={() => enterNextState()}
               disabled={totalBenefit != 0}
             >

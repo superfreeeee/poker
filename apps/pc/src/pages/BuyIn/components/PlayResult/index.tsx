@@ -2,9 +2,11 @@ import React, { FC, ChangeEvent } from 'react';
 import { Input, message } from 'antd';
 import { RedEnvelopeOutlined, UserOutlined } from '@ant-design/icons';
 import { isUndefined } from 'lodash-es';
+import classNames from 'classnames';
 import { useDebounceFn } from 'ahooks';
 import { BuyInPlayer } from '../../../../models/buyIn';
-import styles from './index.module.scss';
+import playerContentStyles from '../PlayerHand/index.module.scss';
+import styles from "./index.module.scss";
 
 interface IPlayerResultProps {
   player: BuyInPlayer;
@@ -35,70 +37,67 @@ const PlayResult: FC<IPlayerResultProps> = ({
     { wait: 500 },
   );
   return (
-    <div className={styles.container}>
-      <div className={styles.playerContainer}>
-        <div className={styles.calcList}>
-          <UserOutlined className={styles.btnMargin} />
-          <div className={styles.title}>USERNAME</div>
-          <div className={styles.content}>{player.name}</div>
+    <div className={playerContentStyles.container}>
+      <div className={playerContentStyles.visibleLine}>
+        <UserOutlined className={playerContentStyles.btnMargin} />
+        <div className={playerContentStyles.title}>USERNAME</div>
+        <div className={playerContentStyles.content}>{player.name}</div>
+      </div>
+      <div className={playerContentStyles.visibleLine}>
+        <RedEnvelopeOutlined className={playerContentStyles.btnMargin} />
+        <div className={playerContentStyles.title}>HANDS</div>
+        <div className={playerContentStyles.content}>{player.hands}</div>
+      </div>
+      <div className={playerContentStyles.textContiner}>
+        <div>
+          <div className={playerContentStyles.title}>Amount</div>
+          <div className={playerContentStyles.calcText}>{player.hands * amountPerhand}</div>
         </div>
-        <div className={styles.calcList}>
-          <RedEnvelopeOutlined className={styles.btnMargin} />
-          <div className={styles.title}>HANDS</div>
-          <div className={styles.content}>{player.hands}</div>
+        <div>
+          <div className={playerContentStyles.title}>=</div>
+          <div className={playerContentStyles.otherText}>=</div>
+        </div>
+        <div>
+          <div className={playerContentStyles.title}>HANDS</div>
+          <div className={playerContentStyles.calcText}>{hands}</div>
+        </div>
+        <div>
+          <div className={playerContentStyles.title}>*</div>
+          <div className={playerContentStyles.otherText}>*</div>
+        </div>
+        <div>
+          <div className={playerContentStyles.title}>一手金额</div>
+          <div className={playerContentStyles.calcText}>{amountPerhand}</div>
         </div>
       </div>
-      <div className={styles.playerContainer}>
-        <div className={styles.calcList}>
-          <div className={styles.textContiner}>
-            <div className={styles.title}>Amount</div>
-            <div className={styles.calcText}>{player.hands * amountPerhand}</div>
+
+      <div className={playerContentStyles.textContiner}>
+        {isEditable ? (
+          <div className={classNames(playerContentStyles.inputForm,styles.input)}>
+            <div className={playerContentStyles.title}>REST</div>
+            <Input bordered={false} defaultValue={rest} onChange={onRestChange} />
           </div>
-          <div className={styles.textContiner}>
-            <div className={styles.title}>=</div>
-            <div className={styles.otherText}>=</div>
+        ) : (
+          <div>
+            <div className={playerContentStyles.title}>REST</div>
+            <div className={playerContentStyles.calcText}>{player.rest}</div>
           </div>
-          <div className={styles.textContiner}>
-            <div className={styles.title}>HANDS</div>
-            <div className={styles.calcText}>{hands}</div>
-          </div>
-          <div className={styles.textContiner}>
-            <div className={styles.title}>*</div>
-            <div className={styles.otherText}>*</div>
-          </div>
-          <div className={styles.textContiner}>
-            <div className={styles.title}>一手金额</div>
-            <div className={styles.calcText}>{amountPerhand}</div>
-          </div>
+        )}
+        <div>
+          <div className={playerContentStyles.title}>-</div>
+          <div className={playerContentStyles.otherText}>-</div>
         </div>
-        <div className={styles.calcList}>
-          {isEditable ? (
-            <div className={styles.inputForm}>
-              <div className={styles.title}>REST</div>
-              <Input bordered={false} defaultValue={rest} onChange={onRestChange} />
-            </div>
-          ) : (
-            <div className={styles.textContiner}>
-              <div className={styles.title}>REST</div>
-              <div className={styles.calcText}>{player.rest}</div>
-            </div>
-          )}
-          <div className={styles.textContiner}>
-            <div className={styles.title}>-</div>
-            <div className={styles.otherText}>-</div>
-          </div>
-          <div className={styles.textContiner}>
-            <div className={styles.title}>Amount</div>
-            <div className={styles.calcText}>{amountPerhand * hands}</div>
-          </div>
-          <div className={styles.textContiner}>
-            <div className={styles.title}>=</div>
-            <div className={styles.otherText}>=</div>
-          </div>
-          <div className={styles.textContiner}>
-            <div className={styles.title}>Profit and Loss</div>
-            <div className={styles.calcText}>{benefit}</div>
-          </div>
+        <div>
+          <div className={playerContentStyles.title}>Amount</div>
+          <div className={playerContentStyles.calcText}>{amountPerhand * hands}</div>
+        </div>
+        <div>
+          <div className={playerContentStyles.title}>=</div>
+          <div className={playerContentStyles.otherText}>=</div>
+        </div>
+        <div>
+          <div className={playerContentStyles.title}>Profit and Loss</div>
+          <div className={playerContentStyles.calcText}>{benefit}</div>
         </div>
       </div>
     </div>

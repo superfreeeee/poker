@@ -2,27 +2,33 @@ $color-match: #c2d7ef;
 
 .container {
   display: flex;
-  justify-content: space-between;
-  align-items: stretch;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: center;
   border-radius: 10px;
   padding: 16px 30px;
+  margin-bottom: 20px;
   background-color: white;
-}
 
-.firstCol {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
+  > div {
+    width: 45%;
+  }
 
-.handList {
-  display: flex;
-  gap: 10px;
+  > div:nth-child(1) {
+    margin-bottom: 20px;
+  }
+
+  > div:nth-child(2) {
+    margin-bottom: 20px;
+  }
+
+  > div:nth-child(2n-1) {
+    margin-right: 50px;
+  }
 }
 
 .inputForm {
   border-bottom: 1px solid gray;
-  width: 250px;
   overflow: hidden;
 
   input {
@@ -30,40 +36,47 @@ $color-match: #c2d7ef;
   }
 }
 
-.nameWithAmount {
-  display: flex;
-  gap: 5px;
-}
-
-.secondCol {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.btnContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.numberBtnWrap {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-}
-
-.btnBG {
-  background-color: $color-match;
-}
-
 .textContiner {
   display: flex;
   justify-content: start;
   align-items: center;
   gap: 5px;
+
+  .calcText {
+    overflow: hidden;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .otherText {
+    text-align: center;
+  }
+}
+
+.btnList {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .numberBtnWrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.visibleLine {
+  display: flex;
+  align-items: center;
+
+  .content {
+    margin-left: 10px;
+  }
+}
+
+.btnBG {
+  background-color: $color-match;
 }
 
 .title {
@@ -71,40 +84,23 @@ $color-match: #c2d7ef;
   color: gray;
 }
 
-.calcText {
-  width: 60px;
-  overflow: hidden;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.otherText {
-  width: 10px;
-  text-align: center;
-}
-
 .btnMargin {
   margin-right: 10px;
   color: gray;
 }
 
-.amountIcon {
-  font-size: 24px;
-  color: gray;
-}
+@media screen and (max-width: 800px) {
+  .container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 16px 10px;
 
-.btnList {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 300px;
-}
-
-.visibleLine{
-  display: flex;
-  align-items: center;
-}
-
-.content{
-  margin-left: 10px;
+    > div {
+      width: 90%;
+      margin-bottom: 10px;
+      margin-right: 0 !important;
+    }
+  }
 }

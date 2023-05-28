@@ -94,113 +94,88 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
               />
             ))}
           </div>
-          <>
-            {isHistoryVisible ? (
-              <>
-                <div className={styles.stepList}>
-                  <Steps progressDot current={viewIndex} items={totalData} />
-                </div>
-                <div className={styles.buttonList}>
-                  <div className={styles.btnRow}>
-                    <div>
-                      <Button
-                        className={styles.btn}
-                        icon={<EditFilled className={initialStyles.btnSvg} />}
-                        disabled={!hasLastRecord}
-                        onClick={viewLastRecord}
-                      >
-                        上一步
-                      </Button>
-                    </div>
-                    <div>
-                      <Button
-                        className={styles.btn}
-                        icon={<EditFilled className={initialStyles.btnSvg} />}
-                        disabled={!hasNextRecord}
-                        onClick={viewNextRecord}
-                      >
-                        下一步
-                      </Button>
-                    </div>
-                  </div>
-                  <div className={styles.btnRow}>
-                    <div>
-                      <Button
-                        className={styles.btn}
-                        icon={<CloseOutlined />}
-                        onClick={() => {
-                          cancelView();
-                          setHistoryVisibile(false);
-                        }}
-                      >
-                        取消
-                      </Button>
-                    </div>
-                    <div>
-                      <Button
-                        className={classNames(styles.btn, styles.deepBtn)}
-                        icon={<CheckOutlined />}
-                        onClick={() => {
-                          confirmView();
-                          setHistoryVisibile(false);
-                        }}
-                      >
-                        确认
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <div className={styles.buttonList}>
-                <div className={styles.btnRow}>
-                  <div>
-                    <Button
-                      className={styles.btn}
-                      icon={<ClockCircleOutlined className={initialStyles.btnSvg} />}
-                      disabled={historyLength <= 1}
-                      onClick={() => {
-                        setHistoryVisibile(true);
-                      }}
-                    >
-                      历史状态
-                    </Button>
-                  </div>
-                  <div>
-                    <Button
-                      className={styles.btn}
-                      icon={<EditFilled className={initialStyles.btnSvg} />}
-                      onClick={() => {
-                        setEdit(true);
-                      }}
-                    >
-                      编辑
-                    </Button>
-                  </div>
-                </div>
-                <div className={styles.btnRow}>
-                  <div>
-                    <Button
-                      className={styles.btn}
-                      icon={<BackwardFilled className={initialStyles.btnSvg} />}
-                      onClick={backPrepare}
-                    >
-                      重置
-                    </Button>
-                  </div>
-                  <div>
-                    <Button
-                      className={`${styles.btn} ${styles.deepBtn}`}
-                      icon={<ForwardOutlined className={initialStyles.btnSvg} />}
-                      onClick={enterNextState}
-                    >
-                      结算
-                    </Button>
-                  </div>
-                </div>
+
+          {isHistoryVisible ? (
+            <>
+              <div className={styles.stepList}>
+                <Steps progressDot current={viewIndex} items={totalData} />
               </div>
-            )}
-          </>
+              <div className={styles.buttonList}>
+                <Button
+                  className={styles.btn}
+                  icon={<EditFilled className={initialStyles.btnSvg} />}
+                  disabled={!hasLastRecord}
+                  onClick={viewLastRecord}
+                >
+                  上一步
+                </Button>
+                <Button
+                  className={styles.btn}
+                  icon={<EditFilled className={initialStyles.btnSvg} />}
+                  disabled={!hasNextRecord}
+                  onClick={viewNextRecord}
+                >
+                  下一步
+                </Button>
+                <Button
+                  className={styles.btn}
+                  icon={<CloseOutlined />}
+                  onClick={() => {
+                    cancelView();
+                    setHistoryVisibile(false);
+                  }}
+                >
+                  取消
+                </Button>
+                <Button
+                  className={classNames(styles.btn, styles.deepBtn)}
+                  icon={<CheckOutlined />}
+                  onClick={() => {
+                    confirmView();
+                    setHistoryVisibile(false);
+                  }}
+                >
+                  确认
+                </Button>
+              </div>
+            </>
+          ) : (
+            <div className={styles.buttonList}>
+              <Button
+                className={styles.btn}
+                icon={<ClockCircleOutlined className={initialStyles.btnSvg} />}
+                disabled={historyLength <= 1}
+                onClick={() => {
+                  setHistoryVisibile(true);
+                }}
+              >
+                历史状态
+              </Button>
+              <Button
+                className={styles.btn}
+                icon={<EditFilled className={initialStyles.btnSvg} />}
+                onClick={() => {
+                  setEdit(true);
+                }}
+              >
+                编辑
+              </Button>
+              <Button
+                className={styles.btn}
+                icon={<BackwardFilled className={initialStyles.btnSvg} />}
+                onClick={backPrepare}
+              >
+                重置
+              </Button>
+              <Button
+                className={`${styles.btn} ${styles.deepBtn}`}
+                icon={<ForwardOutlined className={initialStyles.btnSvg} />}
+                onClick={enterNextState}
+              >
+                结算
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </div>
