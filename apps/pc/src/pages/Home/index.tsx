@@ -1,10 +1,10 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { useLoginCheck } from '../../hooks/useLoginCheck';
-import { useAddGameService, useGameListService } from '../../services/game';
 import { useCurrentUser } from '../../models/user';
+import GameList from '../GameList';
 import styles from './index.module.scss';
 
 interface IPageLinkProps {
@@ -29,13 +29,6 @@ const Home = () => {
   const currentUser = useCurrentUser();
   const navigate = useNavigate();
 
-  const addGameService = useAddGameService();
-  const { gameList, updateGameList } = useGameListService();
-
-  useEffect(() => {
-    console.log('gameList', gameList);
-  }, [gameList]);
-
   const switchUser = () => {
     navigate('/login');
   };
@@ -58,27 +51,7 @@ const Home = () => {
           <PageLink title="BuyIn" path="/buyin/create" />
           <PageLink title="RNG" path="/rng" />
         </div>
-        <Button
-          onClick={() => {
-            addGameService({
-              location: '万科望尚庭',
-              date: Date.now(),
-              comment: `userId: ${currentUser?.id}`,
-            }).then(() => {
-              updateGameList();
-            });
-          }}
-        >
-          Add
-        </Button>
-        {gameList.map((gameDetail) => {
-          return (
-            <div key={gameDetail.id}>
-              <div>Date: {new Date(gameDetail.date).toLocaleString()}</div>
-              <div>{JSON.stringify(gameDetail)}</div>
-            </div>
-          );
-        })}
+        <GameList />
       </div>
     </div>
   );

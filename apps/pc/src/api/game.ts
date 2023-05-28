@@ -1,5 +1,7 @@
 import { useRequest } from 'alova';
+import { GameRecord } from '../models/game/types';
 import { alovaInstance } from './alova';
+import { Response } from './interface';
 
 /**
  * Create new GameRecord
@@ -16,7 +18,15 @@ export const useAddGameAPI = () => {
  * @returns
  */
 export const useGetGameListAPI = () => {
-  return useRequest(alovaInstance.Get('/api/game'), {
+  return useRequest(alovaInstance.Get<Response<GameRecord[]>>('/api/game'), {
     force: (force: boolean) => !!force,
   });
+};
+
+/**
+ * Fetch taget game record
+ * @returns
+ */
+export const useGetGameDetailAPI = (gameId: string) => {
+  return useRequest(alovaInstance.Get<Response<GameRecord>>(`/api/game/${gameId}`));
 };
