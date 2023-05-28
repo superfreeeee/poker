@@ -3,6 +3,9 @@ import { BaseRecord } from '../common';
 import { HandRecord } from '../hand';
 
 export interface GameRecord extends BaseRecord {
-  buyInInfo: BuyInData;
+  location: string;
+  date: number;
+  comment?: string;
+  buyInData: BuyInData | null;
   handRecords: HandRecord[];
 }

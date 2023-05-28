@@ -2,10 +2,9 @@ import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
-import { IS_DEV } from '../../common/env';
 import { useLoginCheck } from '../../hooks/useLoginCheck';
 import { useCurrentUser } from '../../models/user';
-import HomeTest from './Test';
+import GameList from '../GameList';
 import styles from './index.module.scss';
 
 interface IPageLinkProps {
@@ -30,16 +29,15 @@ const Home = () => {
   const currentUser = useCurrentUser();
   const navigate = useNavigate();
 
+  const switchUser = () => {
+    navigate('/login');
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1>Home</h1>
-        <Button
-          type="primary"
-          danger
-          className={styles.switchUser}
-          onClick={() => navigate('/login')}
-        >
+        <Button type="primary" danger className={styles.switchUser} onClick={switchUser}>
           Switch User
         </Button>
       </div>
@@ -53,7 +51,7 @@ const Home = () => {
           <PageLink title="BuyIn" path="/buyin/create" />
           <PageLink title="RNG" path="/rng" />
         </div>
-        {IS_DEV && <HomeTest />}
+        <GameList />
       </div>
     </div>
   );
