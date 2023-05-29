@@ -51,4 +51,21 @@
 - [x] fix: Playing 的 UI
 - [x] fix: Playing 的按钮名称可以简化一点
 - [x] fix: History 下文案：上一步、下一步、取消、确认，进入按钮 icon
-- [ ] feat: 宽度 400px 下 UI 正常
+- [x] feat: 宽度 400px 下 UI 正常
+- [ ] Final Result(BuyInView) => GameDetail
+  - [ ] Post 请求更新到服务端
+  - [ ] fetch 要求 getGameDetail 接口重新请求
+
+## Common (multi-page utils)
+
+- [ ] 检查当前用户登录态，未登陆 / 登陆 ID 无效 => go Login page
+  - [ ] react-route-dom 记录跳转前路由，登陆后回到上次的路由
+  - [ ] "" => "/game/detail" => "/login" => "/game/detail" ("/game/detail")
+
+# Backend API
+
+- [ ] POST /api/buyin
+  - body: { gameId, buyInData: BuyInData }
+  - response: { code: 200, data: null }
+- [ ] GET /api/user/{userId}
+  - response: { code: 200, data: User | null }

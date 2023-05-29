@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { PlusSquareOutlined } from '@ant-design/icons';
 import { createLogger } from '../../common/commonLogger';
 import { useGameDetailService } from '../../services/game';
+import BuyInView from '../BuyIn/BuyInView';
 import Header from '../../components/Header';
 import HandList from './HandList';
 import styles from './index.module.scss';
@@ -39,7 +40,10 @@ const GameDetail = () => {
           <Divider />
           {/* BuyIn data */}
           {gameDetail.buyInData ? (
-            <div></div>
+            <div>
+              {/* // TODO show buyInData Detail */}
+              <BuyInView data={gameDetail.buyInData} />
+            </div>
           ) : (
             <Button type="primary" icon={<PlusSquareOutlined />} onClick={goCreateBuyInPage}>
               Append buy-in record

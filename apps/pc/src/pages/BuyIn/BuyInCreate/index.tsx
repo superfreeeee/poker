@@ -40,6 +40,8 @@ const BuyInCreate = () => {
             setBuyInState(BuyInStage.Playing);
           }}
           enterNextState={() => {
+            // post
+            // fetch gamedetail
             navigate(generatePath('/buyin/detail/:id', { id: '234567' }));
           }}
         ></BuyInSettle>

@@ -1,10 +1,46 @@
-import React, { FC, ChangeEvent } from 'react';
+import React, { FC, ChangeEvent, ReactNode } from 'react';
 import { Input, message } from 'antd';
 import { RedEnvelopeOutlined, UserOutlined } from '@ant-design/icons';
 import classNames from 'classnames';
 import { BuyInPlayer } from '../../../../models/buyIn';
 import playerContentStyles from '../PlayerHand/index.module.scss';
 import styles from './index.module.scss';
+
+interface IFormulaItem {
+  label: string;
+  value: number | ReactNode;
+}
+
+interface IFormulaWithLabelProps {
+  x: IFormulaItem;
+  sign: string;
+  y: IFormulaItem;
+  z: IFormulaItem;
+}
+
+const FormulaWithLabel: FC<IFormulaWithLabelProps> = ({ x, sign, y, z }) => {
+  return (
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, auto)',
+        alignItems: 'center',
+      }}
+    >
+      <span>{x.label}</span>
+      <span>{sign}</span>
+      <span>{y.label}</span>
+      <span>=</span>
+      <span>{z.label}</span>
+
+      <span>{x.value}</span>
+      <span>{sign}</span>
+      <span>{y.value}</span>
+      <span>=</span>
+      <span>{z.value}</span>
+    </div>
+  );
+};
 
 interface IPlayerResultProps {
   player: BuyInPlayer;
@@ -43,6 +79,12 @@ const PlayResult: FC<IPlayerResultProps> = ({
         <div className={playerContentStyles.title}>HANDS</div>
         <div className={playerContentStyles.content}>{player.hands}</div>
       </div>
+      <FormulaWithLabel
+        x={{ label: 'Hands', value: hands }}
+        sign="*"
+        y={{ label: 'Amount per hand', value: amountPerhand }}
+        z={{ label: 'Total buy-in', value: hands * amountPerhand }}
+      />
       <div className={playerContentStyles.textContiner}>
         <div>
           <div className={playerContentStyles.title}>Amount</div>

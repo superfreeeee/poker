@@ -4,11 +4,16 @@ import PlayResult from '../components/PlayResult';
 import TitleBar from '../components/TitleBar';
 import initialStyles from '../components/BuyInPrepare/index.module.scss';
 import { calcStatisticsData, useCurrentBuyInData } from '../model';
+import { BuyInData } from '../../../models/buyIn';
 import mockBuyInData from './mockBuyInData.json';
 
-const BuyInView = () => {
+interface IBuyInViewProps {
+  data?: BuyInData;
+}
+
+const BuyInView = ({ data }: IBuyInViewProps) => {
   const currentBuyInData = useCurrentBuyInData();
-  const buyInData = currentBuyInData.players.length > 0 ? currentBuyInData : mockBuyInData;
+  const buyInData = data ?? currentBuyInData.players.length > 0 ? currentBuyInData : mockBuyInData;
 
   const { amountPerhand, players: buyInPlayers } = buyInData;
   const statisticsData = useMemo(() => calcStatisticsData(buyInData), [buyInData]);
