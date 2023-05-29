@@ -14,9 +14,16 @@
   margin: 0 100px;
   transition: margin 750ms;
 
-  .switchUser {
-    margin-left: 16px;
+  .profile {
+    padding: 4px 8px;
+    user-select: none;
   }
+}
+
+.profileDetail {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .content {
