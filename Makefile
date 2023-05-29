@@ -21,8 +21,8 @@ upload-pc:
 	@echo "========================================"
 	@echo ">>>>>   upload-pc"
 	@echo "========================================"
-	scp -r apps/pc/dist/ root@remote:/root/poker-dist/
-	scp -r apps/pc/deploy/* root@remote:/root/poker-dist/
+	scp -r apps/pc/dist/ root@remote:/root/poker-dist/fe/
+	scp -r apps/pc/deploy/* root@remote:/root/poker-dist/fe/
 
 deploy-pc: build-pc upload-pc remote-restart
 
@@ -30,4 +30,4 @@ remote-restart:
 	@echo "========================================"
 	@echo ">>>>>   remote-restart"
 	@echo "========================================"
-	ssh root@remote "cd /root/poker-dist/; ./restart.sh"
+	ssh root@remote "cd /root/poker-dist/fe; docker-compose down; docker-compose up -d; docker-compose ps"

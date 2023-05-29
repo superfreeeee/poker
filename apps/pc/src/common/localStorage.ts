@@ -4,12 +4,14 @@ import { createLogger } from './commonLogger';
 const logger = createLogger('common/localStorage');
 
 export enum ELocalStorageKey {
+  Dev = 'development',
   Me = 'current_user',
   UserList = 'user_list',
   HandRecordList = 'hand_record_list',
 }
 
 type ILocalStorage = {
+  [ELocalStorageKey.Dev]: boolean;
   [ELocalStorageKey.Me]: IUser;
   [ELocalStorageKey.UserList]: IUser[];
   [ELocalStorageKey.HandRecordList]: string[];

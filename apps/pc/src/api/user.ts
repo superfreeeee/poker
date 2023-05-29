@@ -10,11 +10,7 @@ export interface ILoginParams {
 export const useLoginAPI = () => {
   return useRequest(
     ({ name }: ILoginParams) =>
-      alovaInstance.Post<Response<IUser>, ILoginParams>(
-        '/api/user',
-        { name },
-        { headers: { 'Content-Type': 'application/json' } },
-      ),
+      alovaInstance.Post<Response<IUser>, ILoginParams>('/api/user', { name }),
     { immediate: false },
   );
 };

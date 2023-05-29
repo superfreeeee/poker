@@ -8,30 +8,31 @@
   .resUnderLine {
     border-bottom: 1px solid black;
     overflow: hidden;
+    font-size: 16px;
+    font-weight: 500;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
 
-  >div{
+  > div {
     width: 45%;
   }
 
-  button{
+  button {
     width: 100%;
+    height: 40px;
     margin-top: 10px;
     border-radius: 10px;
   }
 }
 
-@media screen and (max-width:800px) {
-  .buttonList{
+@media screen and (max-width: 800px) {
+  .buttonList {
     flex-wrap: wrap;
     justify-content: center;
 
-    >div{
+    > div {
       width: 80%;
-    }  
-
-    
+    }
   }
 }

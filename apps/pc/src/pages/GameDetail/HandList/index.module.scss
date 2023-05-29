@@ -1,24 +1,26 @@
 .container {
   display: flex;
   flex-direction: column;
+  gap: 14px;
   width: 100%;
   height: 100%;
+  transition: padding 750ms;
 
-  .main {
-    padding: 0 100px;
-    transition: padding 750ms;
+  .banner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
   }
 
   .records {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin-top: 14px;
   }
 }
 
 @media screen and (max-width: 800px) {
-  .container .main {
+  .container {
     padding: 0 10px;
   }
 }
