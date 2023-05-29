@@ -18,17 +18,21 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
+        {/* GameList / Statistic / Setting */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LogIn />} />
+        {/* // TODO move to game detail page */}
         <Route path="/buyin" element={<LazyBuyIn />}>
           <Route path="detail" element={<BuyInView />} />
           <Route path="create" element={<BuyInCreate />} />
           <Route path="" element={<Redirect path="/buyin/create" />} />
         </Route>
-        <Route path="/hand/:handId" element={<HandDetail />} />
+        {/* GameDetail */}
         <Route path="/game/:gameId">
           <Route path="" element={<GameDetail />} />
           <Route path="hand/create" element={<HandCreate />} />
+          <Route path="hand/:handId" element={<HandDetail />} />
+          <Route path="buyin/create" element={<BuyInCreate />} />
         </Route>
         <Route path="/rng" element={<RNG />} />
         <Route

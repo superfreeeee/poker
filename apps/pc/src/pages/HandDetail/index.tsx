@@ -20,7 +20,7 @@ const HandDetail = () => {
 
   return (
     <div className={styles.container}>
-      <Header title="Hand Detail" back="/hands" />
+      <Header title="Hand Detail" back=".." />
       {record ? (
         <div className={styles.content}>
           <div className={styles.info}>
