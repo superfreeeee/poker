@@ -1,7 +1,6 @@
 import React from 'react';
 import { Input, message } from 'antd';
 import { TransactionOutlined } from '@ant-design/icons';
-import { isUndefined } from 'lodash-es';
 import { BuyInStatistics } from '../../model';
 import StatisticsDataView from '../StatisticsDataView';
 import styles from './index.module.scss';
@@ -39,17 +38,15 @@ const TitleBar = ({
                   message.error('一手金额必须为正整数');
                   return;
                 }
-                isUndefined(handleAmountPerhandChange) ? null : handleAmountPerhandChange(amount);
+                handleAmountPerhandChange?.(amount);
               }}
             />
           </div>
         ) : (
-          <>
-            <div>
-              <TransactionOutlined /> 一手金额
-              {amountPerhand}
-            </div>
-          </>
+          <div>
+            <TransactionOutlined /> 一手金额
+            {amountPerhand}
+          </div>
         )}
       </div>
       <StatisticsDataView

@@ -1,12 +1,10 @@
 import React, { FC, ChangeEvent } from 'react';
 import { Input, message } from 'antd';
 import { RedEnvelopeOutlined, UserOutlined } from '@ant-design/icons';
-import { isUndefined } from 'lodash-es';
 import classNames from 'classnames';
-import { useDebounceFn } from 'ahooks';
 import { BuyInPlayer } from '../../../../models/buyIn';
 import playerContentStyles from '../PlayerHand/index.module.scss';
-import styles from "./index.module.scss";
+import styles from './index.module.scss';
 
 interface IPlayerResultProps {
   player: BuyInPlayer;
@@ -23,19 +21,16 @@ const PlayResult: FC<IPlayerResultProps> = ({
 }: IPlayerResultProps) => {
   const { hands, rest } = player;
   const benefit = rest - hands * amountPerhand;
-  const { run: onRestChange } = useDebounceFn(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const number = +e.target.value;
-      if (isNaN(number)) {
-        message.error('剩余金额必须为正');
-        return;
-      }
-      if (!isUndefined(onChange)) {
-        onChange({ ...player, rest: number });
-      }
-    },
-    { wait: 500 },
-  );
+
+  const onRestChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const number = +e.target.value;
+    if (isNaN(number)) {
+      message.error('剩余金额必须为正');
+      return;
+    }
+    onChange?.({ ...player, rest: number });
+  };
+
   return (
     <div className={playerContentStyles.container}>
       <div className={playerContentStyles.visibleLine}>
@@ -73,9 +68,9 @@ const PlayResult: FC<IPlayerResultProps> = ({
 
       <div className={playerContentStyles.textContiner}>
         {isEditable ? (
-          <div className={classNames(playerContentStyles.inputForm,styles.input)}>
+          <div className={classNames(playerContentStyles.inputForm, styles.input)}>
             <div className={playerContentStyles.title}>REST</div>
-            <Input bordered={false} defaultValue={rest} onChange={onRestChange} />
+            <Input bordered={false} value={rest} onChange={onRestChange} />
           </div>
         ) : (
           <div>

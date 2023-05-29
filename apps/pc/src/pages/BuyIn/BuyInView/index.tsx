@@ -7,9 +7,6 @@ import { calcStatisticsData, useCurrentBuyInData } from '../model';
 import mockBuyInData from './mockBuyInData.json';
 
 const BuyInView = () => {
-  // TODO
-  // const buyInData = useXxxAPI();
-
   const currentBuyInData = useCurrentBuyInData();
   const buyInData = currentBuyInData.players.length > 0 ? currentBuyInData : mockBuyInData;
 

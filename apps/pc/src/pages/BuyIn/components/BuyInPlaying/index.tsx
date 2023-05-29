@@ -94,7 +94,6 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
               />
             ))}
           </div>
-
           {isHistoryVisible ? (
             <>
               <div className={styles.stepList}>
@@ -168,7 +167,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
                 重置
               </Button>
               <Button
-                className={`${styles.btn} ${styles.deepBtn}`}
+                className={classNames(styles.btn, styles.deepBtn)}
                 icon={<ForwardOutlined className={initialStyles.btnSvg} />}
                 onClick={enterNextState}
               >

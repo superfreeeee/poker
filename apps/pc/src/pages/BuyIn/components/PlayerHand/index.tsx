@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent, useState } from 'react';
+import React, { FC, ChangeEvent } from 'react';
 import { Button, Input, message } from 'antd';
 import {
   DeleteOutlined,
@@ -7,7 +7,6 @@ import {
   PlusOutlined,
   MinusOutlined,
 } from '@ant-design/icons';
-import { isUndefined } from 'lodash-es';
 import { BuyInPlayer } from '../../../../models/buyIn';
 import { INIT_BUYIN_HANDS, MAX_BUYIN_HANDS } from '../../constants';
 import styles from './index.module.scss';
@@ -33,15 +32,11 @@ const PlayerHand: FC<IPlayerHandProps> = ({
 }: IPlayerHandProps) => {
   const { id, name, hands } = player;
 
-  const [increaseHands, setIncreaseHands] = useState<number>(0); // 该次编辑增量
-
   const onNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    isUndefined(onChange)
-      ? null
-      : onChange({
-          ...player,
-          name: e.target.value,
-        });
+    onChange?.({
+      ...player,
+      name: e.target.value,
+    });
   };
 
   return (
@@ -85,7 +80,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({
                 number = MAX_BUYIN_HANDS;
                 message.info('买入数量不能超过50');
               }
-              isUndefined(onChange) ? null : onChange({ ...player, hands: number });
+              onChange?.({ ...player, hands: number });
             }}
           />
         </div>
@@ -130,8 +125,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({
                 if (hands == 1) {
                   message.info('买入数量不能为0');
                 } else {
-                  setIncreaseHands(increaseHands - 1);
-                  isUndefined(onChange) ? null : onChange({ ...player, hands: hands - 1 });
+                  onChange?.({ ...player, hands: hands - 1 })
                 }
               }}
             ></Button>
@@ -142,8 +136,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({
                 if (hands == 50) {
                   message.info('买入数量不能超过50');
                 } else {
-                  setIncreaseHands(increaseHands + 1);
-                  isUndefined(onChange) ? null : onChange({ ...player, hands: hands + 1 });
+                  onChange?.({ ...player, hands: hands + 1 })
                 }
               }}
             ></Button>
@@ -156,9 +149,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({
               icon={<DeleteOutlined />}
               className={styles.btnBG}
               onClick={() => {
-                if (!isUndefined(onRemove)) {
-                  onRemove(id);
-                }
+                onRemove?.(id);
               }}
             />
           </div>
