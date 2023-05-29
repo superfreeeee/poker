@@ -1,10 +1,11 @@
-import { Alert, Button } from 'antd';
+import { Alert, Button, Divider } from 'antd';
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PlusSquareOutlined } from '@ant-design/icons';
 import { createLogger } from '../../common/commonLogger';
 import { useGameDetailService } from '../../services/game';
 import Header from '../../components/Header';
+import HandRecordList from './HandRecordList';
 import styles from './index.module.scss';
 
 const logger = createLogger('pages/GameDetail');
@@ -28,19 +29,31 @@ const GameDetail = () => {
     <div className={styles.container}>
       <Header title="Game Detail" back />
       {gameDetail ? (
+        // 1. Game record
         <div className={styles.content}>
+          {/* GameInfo */}
+          <div>
+            <h3>Game Info</h3>
+            <div>{JSON.stringify(gameDetail)}</div>
+          </div>
+          <Divider />
+          {/* BuyIn data */}
           {gameDetail.buyInData ? (
             <div></div>
           ) : (
             <Button type="primary" icon={<PlusSquareOutlined />} onClick={goCreateBuyInPage}>
-              New buy-in record
+              Append buy-in record
             </Button>
           )}
-          {JSON.stringify(gameDetail)}
+          <Divider />
+          {/* Hand records */}
+          <HandRecordList />
         </div>
       ) : loading ? (
+        // 2. Loading
         <div>Loading Game Record(id={gameId})...</div>
       ) : (
+        // 3. Not found / error
         <div className={styles.content}>
           <Alert
             type="error"

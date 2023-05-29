@@ -4,7 +4,7 @@ import { Button } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import { useLoginCheck } from '../../hooks/useLoginCheck';
 import { useCurrentUser } from '../../models/user';
-import GameList from '../GameList';
+import GameList from './GameList';
 import styles from './index.module.scss';
 
 interface IPageLinkProps {

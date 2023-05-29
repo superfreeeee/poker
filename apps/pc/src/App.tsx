@@ -4,13 +4,12 @@ import Home from './pages/Home';
 import LogIn from './pages/LogIn';
 import { LazyBuyIn } from './pages/BuyIn/lazy';
 import HandCreate from './pages/HandCreate';
-import HandRecordList from './pages/HandRecordList';
 import HandDetail from './pages/HandDetail';
 import GameDetail from './pages/GameDetail';
-import RNG from './pages/RNG';
-import Redirect from './components/Redirect';
 import BuyInCreate from './pages/BuyIn/BuyInCreate';
 import BuyInView from './pages/BuyIn/BuyInView';
+import RNG from './pages/RNG';
+import Redirect from './components/Redirect';
 
 const App = () => {
   return (
@@ -26,7 +25,6 @@ const App = () => {
         {/* // TODO tmp page => move to sub page of GameDetail */}
         <Route path="/hand/create" element={<HandCreate />} />
         {/* // TODO tmp page => switch to GameList */}
-        <Route path="/hands" element={<HandRecordList />} />
         <Route path="/hand/:handId" element={<HandDetail />} />
         <Route path="/game/:gameId" element={<GameDetail />} />
         <Route path="/rng" element={<RNG />} />
