@@ -35,7 +35,7 @@ const GameDetail = () => {
           {/* GameInfo */}
           <div>
             <h3>Game Info</h3>
-            <div>{JSON.stringify(gameDetail)}</div>
+            <div style={{ wordBreak: 'break-all' }}>{JSON.stringify(gameDetail)}</div>
           </div>
           <Divider />
           {/* BuyIn data */}
