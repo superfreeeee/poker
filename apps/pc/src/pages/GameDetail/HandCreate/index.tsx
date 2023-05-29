@@ -203,7 +203,7 @@ const HandCreate = () => {
     };
 
     addRecord(record);
-    navigate(`/hand/${record.id}`);
+    navigate(`../hand/${record.id}`);
   };
 
   const selectShowdown = (seat: PlayerSeat) => {
