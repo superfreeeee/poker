@@ -22,7 +22,7 @@ const HandRecordList = () => {
     <div className={styles.container}>
       <div className={styles.banner}>
         <h3>Hand Records</h3>
-        <Button type="primary" icon={<PlusOutlined />} onClick={() => navigate('/hand/create')}>
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => navigate('./hand/create')}>
           New Record
         </Button>
       </div>

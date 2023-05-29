@@ -3,13 +3,16 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import LogIn from './pages/LogIn';
 import { LazyBuyIn } from './pages/BuyIn/lazy';
-import HandCreate from './pages/HandCreate';
+import HandCreate from './pages/GameDetail/HandCreate';
 import HandDetail from './pages/HandDetail';
 import GameDetail from './pages/GameDetail';
 import BuyInCreate from './pages/BuyIn/BuyInCreate';
 import BuyInView from './pages/BuyIn/BuyInView';
 import RNG from './pages/RNG';
 import Redirect from './components/Redirect';
+import { createLogger } from './common/commonLogger';
+
+const appLogger = createLogger('/App');
 
 const App = () => {
   return (
@@ -22,13 +25,23 @@ const App = () => {
           <Route path="create" element={<BuyInCreate />} />
           <Route path="" element={<Redirect path="/buyin/create" />} />
         </Route>
-        {/* // TODO tmp page => move to sub page of GameDetail */}
-        <Route path="/hand/create" element={<HandCreate />} />
-        {/* // TODO tmp page => switch to GameList */}
         <Route path="/hand/:handId" element={<HandDetail />} />
-        <Route path="/game/:gameId" element={<GameDetail />} />
+        <Route path="/game/:gameId">
+          <Route path="" element={<GameDetail />} />
+          <Route path="hand/create" element={<HandCreate />} />
+        </Route>
         <Route path="/rng" element={<RNG />} />
-        <Route path="*" element={<Redirect path="/" />} />
+        <Route
+          path="*"
+          element={
+            <Redirect
+              path="/"
+              beforeRedirect={(path) => {
+                appLogger.warn(`unknown path: ${path}, redirect to "/"`);
+              }}
+            />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

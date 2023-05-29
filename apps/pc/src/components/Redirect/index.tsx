@@ -1,12 +1,19 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { FC, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-const Redirect = ({ path }: { path: string }) => {
+interface IRedirectProps {
+  path: string;
+  beforeRedirect?: (path: string) => void;
+}
+
+const Redirect: FC<IRedirectProps> = ({ path, beforeRedirect }) => {
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
+    beforeRedirect?.(location.pathname);
     navigate(path);
-  }, [navigate, path]);
+  }, [beforeRedirect, location.pathname, navigate, path]);
 
   return <></>;
 };

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { keyBy } from 'lodash-es';
-import { HandBlindRecord, PlayerAction } from '../../../models/hand';
-import { getPlayerSeats, PlayerSeat, PlayerState } from '../../../models/player';
+import { HandBlindRecord, PlayerAction } from '../../../../models/hand';
+import { getPlayerSeats, PlayerSeat, PlayerState } from '../../../../models/player';
 
 interface IUsePlayerStatesProps {
   lastPotSize: number;

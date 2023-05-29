@@ -11,13 +11,13 @@ import {
   HandRecord,
   HandBlindRecord,
   useLocalHandRecords,
-} from '../../models/hand';
-import { Card } from '../../models/card';
-import { PlayerSeat } from '../../models/player';
-import { useWindowSize } from '../../hooks/useWindowSize';
-import Header from '../../components/Header';
-import { CardSelectorModal } from '../../components/CardSelectorModal';
-import HandActions from '../../components/HandActions';
+} from '../../../models/hand';
+import { Card } from '../../../models/card';
+import { PlayerSeat } from '../../../models/player';
+import { useWindowSize } from '../../../hooks/useWindowSize';
+import Header from '../../../components/Header';
+import { CardSelectorModal } from '../../../components/CardSelectorModal';
+import HandActions from '../../../components/HandActions';
 import CompactInput from './components/CompactInput';
 import StageSetting, { IStageSettingProps } from './components/StageSetting';
 import { usePlayerStates } from './hooks/usePlayerStates';
@@ -223,7 +223,7 @@ const HandCreate = () => {
 
   return (
     <div className={styles.container}>
-      <Header title="Create Hand Record" back="/hands" className={styles.header} />
+      <Header title="Create Hand Record" back=".." className={styles.header} />
       <div className={styles.main}>
         {/* Left part: Preview current actions */}
         <div className={styles.preview}>
