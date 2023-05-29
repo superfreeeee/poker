@@ -28,7 +28,7 @@ const GameDetail = () => {
 
   // TODO remove me
   const mockCreateBuyIn = () => {
-    fetch('http://localhost:8080/api/buyin', {
+    fetch('http://124.221.113.80:8080/api/buyin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
