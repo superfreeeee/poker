@@ -26,6 +26,22 @@ const GameDetail = () => {
     navigate('./buyin/create');
   };
 
+  // TODO remove me
+  const mockCreateBuyIn = () => {
+    fetch('http://localhost:8080/api/buyin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        gameId,
+        chipsPerHand: 100,
+        players: [
+          { id: '1', name: 'user1', buyInChips: 300, resetChips: 300 },
+          { id: '2', name: 'user2', buyInChips: 100, resetChips: 500 },
+        ],
+      }),
+    });
+  };
+
   return (
     <div className={styles.container}>
       <Header title="Game Detail" back />
@@ -45,9 +61,16 @@ const GameDetail = () => {
               <BuyInView data={gameDetail.buyInData} />
             </div>
           ) : (
-            <Button type="primary" icon={<PlusSquareOutlined />} onClick={goCreateBuyInPage}>
-              Append buy-in record
-            </Button>
+            <>
+              <Button type="primary" icon={<PlusSquareOutlined />} onClick={goCreateBuyInPage}>
+                Append buy-in record
+              </Button>
+              {/* // TODO remove mock createBuyIn */}
+              <Divider />
+              <Button type="primary" icon={<PlusSquareOutlined />} onClick={mockCreateBuyIn}>
+                Mock: Append buy-in record
+              </Button>
+            </>
           )}
           <Divider />
           {/* Hand records */}
