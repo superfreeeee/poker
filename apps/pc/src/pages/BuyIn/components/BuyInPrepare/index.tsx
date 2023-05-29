@@ -1,4 +1,5 @@
 import React, { FC, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Input, Button, message } from 'antd';
 import { DownCircleFilled, TransactionOutlined } from '@ant-design/icons';
 import Header from '../../../../components/Header';
@@ -49,9 +50,11 @@ const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareP
     return !hasNull;
   };
 
+  const { gameId } = useParams();
+
   return (
     <>
-      <Header title="BuyIn Prepare" back style={{ alignSelf: 'stretch' }} />
+      <Header title="BuyIn Prepare" back={gameId ? '..' : true} style={{ alignSelf: 'stretch' }} />
       <div className={styles.container}>
         <div className={styles.header}>
           <div className={styles.leftWrap}>

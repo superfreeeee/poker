@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
-import { useAddGameService, useGameListService } from '../../services/game';
-import { useCurrentUser } from '../../models/user';
-import { useLoginCheck } from '../../hooks/useLoginCheck';
-import { createLogger } from '../../common/commonLogger';
+import { useAddGameService, useGameListService } from '../../../services/game';
+import { useCurrentUser } from '../../../models/user';
+import { useLoginCheck } from '../../../hooks/useLoginCheck';
+import { createLogger } from '../../../common/commonLogger';
 import styles from './index.module.scss';
 
 const gameListLogger = createLogger('pages/GameList');
