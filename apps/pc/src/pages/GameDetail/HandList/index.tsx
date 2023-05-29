@@ -9,7 +9,7 @@ import styles from './index.module.scss';
 
 const logger = createLogger('pages/HandRecordList');
 
-const HandRecordList = () => {
+const HandList = () => {
   const { localRecords } = useLocalHandRecords();
 
   const navigate = useNavigate();
@@ -45,4 +45,4 @@ const HandRecordList = () => {
   );
 };
 
-export default HandRecordList;
+export default HandList;

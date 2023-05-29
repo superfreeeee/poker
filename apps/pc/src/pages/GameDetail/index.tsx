@@ -5,7 +5,7 @@ import { PlusSquareOutlined } from '@ant-design/icons';
 import { createLogger } from '../../common/commonLogger';
 import { useGameDetailService } from '../../services/game';
 import Header from '../../components/Header';
-import HandRecordList from './HandRecordList';
+import HandList from './HandList';
 import styles from './index.module.scss';
 
 const logger = createLogger('pages/GameDetail');
@@ -22,7 +22,7 @@ const GameDetail = () => {
   }, [gameDetail]);
 
   const goCreateBuyInPage = () => {
-    navigate('/buyin/create');
+    navigate('./buyin/create');
   };
 
   return (
@@ -47,7 +47,7 @@ const GameDetail = () => {
           )}
           <Divider />
           {/* Hand records */}
-          <HandRecordList />
+          <HandList />
         </div>
       ) : loading ? (
         // 2. Loading
