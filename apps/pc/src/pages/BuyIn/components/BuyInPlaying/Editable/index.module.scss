@@ -2,23 +2,44 @@ $color-match: #c2d7ef;
 
 .buttonList {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   justify-content: center;
-  align-items: stretch;
-  width: 50%;
-  gap: 1vh;
-}
+  align-items: center;
+  width: 60%;
 
-.twoBtnContainer {
-  display: flex;
-  justify-content: space-between;
-}
-
-.singleBtn {
-  width: 100%;
-  border-radius: 10px;
-
-  .btnSvg {
-    color: $color-match;
+  button {
+    height: 40px;
+    border-radius: 10px;
   }
+
+  button + button {
+    width: 38%;
+    margin-top: 10px;
+  }
+  
+  button:nth-child(1) {
+    width: 80%;
+  }
+
+  .bottomBtn {
+    margin-right: 20px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .buttonList {
+    justify-content: flex-start;
+
+    button {
+      width: 80% !important;
+    }
+  }
+}
+
+.btnSvg {
+  color: $color-match;
+}
+
+.deepBtn {
+  background-color: $color-match;
 }

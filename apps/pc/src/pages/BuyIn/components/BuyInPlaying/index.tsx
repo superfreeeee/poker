@@ -1,112 +1,76 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Button, Modal } from 'antd';
-import { TransactionOutlined, EditFilled, BackwardFilled } from '@ant-design/icons';
-import { BuyInData, useCurrentBuyInData } from '../../../../models/buyIn';
+import React, { FC, useState } from 'react';
+import { Button, Steps } from 'antd';
+import {
+  EditFilled,
+  BackwardFilled,
+  ForwardOutlined,
+  CloseOutlined,
+  CheckOutlined,
+  ClockCircleOutlined,
+} from '@ant-design/icons';
+import classNames from 'classnames';
 import Header from '../../../../components/Header';
-import PlayerHandView from '../PlayerHandView';
-import StatisticsDataView from '../StatisticsDataView';
+import PlayerHand from '../PlayerHand';
+import TitleBar from '../TitleBar';
+import { useCreateBuyInDataHistory } from '../../model';
+import { confirmModal } from '../../utils';
 import initialStyles from '../BuyInPrepare/index.module.scss';
-import Editable from './Editable';
+import PlayingEditable from './Editable';
 import styles from './index.module.scss';
-import { ResetSetting } from './types';
 
 interface IBuyInPlayingProps {
   enterNextState: () => void;
   enterPrevState: () => void;
 }
 
-interface IbuyInRecord {
-  basicData: BuyInData;
-  totalPlayer: number;
-  totalHands: number;
-  totalAmount: number;
-}
-
-interface IBuyInHistory {
-  buyInRecords: IbuyInRecord[];
-  viewPtr: number;
-  realPtr: number;
-}
 const BuyInPlaying: FC<IBuyInPlayingProps> = ({
   enterNextState,
   enterPrevState,
 }: IBuyInPlayingProps) => {
-  const [isEdit, setEdit] = useState(false);
+  const [isEdit, setEdit] = useState<boolean>(false);
+  const [isHistoryVisible, setHistoryVisibile] = useState<boolean>(false);
   const {
-    buyInData: buyInData,
-    statisticsData: statisticsData,
-    changeBuyInData,
-  } = useCurrentBuyInData();
+    viewBuyInData, // history[index]
+    viewBuyInData: { amountPerhand: amoutPerhand, players: buyInPlayers },
+    viewStatisticData,
+    stepIndex: { viewIndex, totalData },
+    historyLength,
+    hasLastRecord,
+    hasNextRecord,
+    viewLastRecord,
+    viewNextRecord,
+    confirmView,
+    cancelView,
+    pushState,
+    resetHistory,
+  } = useCreateBuyInDataHistory();
 
-  const defaultBuyInHistory: IBuyInHistory = {
-    buyInRecords: [
-      {
-        basicData: { amountPerhand: buyInData.amountPerhand, players: buyInData.players },
-        totalPlayer: statisticsData.totalPlayer,
-        totalHands: statisticsData.totalHands,
-        totalAmount: statisticsData.totalAmount,
+  const backPrepare = async () => {
+    await confirmModal({
+      title: 'Reset buyIn data',
+      content: 'Are you sure to reset buy-in data?',
+      onOk: () => {
+        resetHistory();
+        enterPrevState();
       },
-    ],
-    viewPtr: 0,
-    realPtr: 0,
-  };
-
-  const [buyInHistory, setBuyInHistory] = useState(defaultBuyInHistory);
-
-  const {
-    basicData: { amountPerhand: amountPerhandView, players: buyInPlayersView },
-    totalAmount: totalAmountView,
-    totalHands: totalHandsView,
-    totalPlayer: totalPlayerView,
-  } = buyInHistory.buyInRecords[buyInHistory.viewPtr];
-
-  const resetSetting: ResetSetting = ({ onOk, onCancel } = {}) => {
-    return new Promise((resolve) => {
-      Modal.confirm({
-        title: 'Reset buyIn data',
-        content: 'Are you sure to reset buy-in data?',
-        centered: true,
-        closable: true,
-        maskClosable: true,
-        okButtonProps: {
-          type: 'primary',
-          danger: true,
-        },
-        okText: 'Reset',
-        onOk: () => {
-          onOk?.();
-          resolve(true);
-        },
-        onCancel: () => {
-          onCancel?.();
-          resolve(false);
-        },
-      });
     });
+    return false;
   };
-
-  useEffect(() => {
-    console.log(buyInHistory);
-  }, []);
 
   return (
     <div>
       <Header
         title="BuyIn Playing"
         back="/buyin/create"
-        beforeNavigate={() => resetSetting()}
+        beforeNavigate={backPrepare}
         style={{ alignSelf: 'stretch' }}
       />
       {isEdit ? (
-        <Editable
-          currentBuyInData={buyInHistory.buyInRecords[buyInHistory.viewPtr].basicData}
+        <PlayingEditable
+          defaultBuyInData={viewBuyInData}
           onConfirm={(editBuyInData) => {
+            pushState(editBuyInData);
             setEdit(false);
-            setBuyInHistory({
-              buyInRecords: [...buyInHistory.buyInRecords, editBuyInData],
-              viewPtr: buyInHistory.viewPtr + 1,
-              realPtr: buyInHistory.realPtr + 1,
-            });
           }}
           onCancel={() => {
             setEdit(false);
@@ -114,118 +78,103 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
         />
       ) : (
         <div className={initialStyles.container}>
-          <div className={initialStyles.header}>
-            <div className={initialStyles.leftWrap}>
-              <div style={{ fontSize: 20 }}>等待状态</div>
-              <div>
-                <TransactionOutlined className={initialStyles.iconMargin} /> 一手金额{' '}
-                {amountPerhandView}
-              </div>
-            </div>
-
-            <StatisticsDataView
-              totalPlayer={totalPlayerView}
-              totalHands={totalHandsView}
-              totalAmount={totalAmountView}
-            />
-          </div>
+          <TitleBar
+            isEditable={false}
+            title="等待状态"
+            statisticsData={viewStatisticData}
+            amountPerhand={amoutPerhand}
+          ></TitleBar>
           <div className={initialStyles.playerList}>
-            {buyInPlayersView.map((player) => (
-              <PlayerHandView key={player.id} player={player} />
+            {buyInPlayers.map((player) => (
+              <PlayerHand
+                key={player.id}
+                player={player}
+                amountPerhand={amoutPerhand}
+                isEditable={false}
+              />
             ))}
           </div>
-          <div className={styles.buttonList}>
-            <div className={styles.historyChangeBtns}>
-              <div>
+          {isHistoryVisible ? (
+            <>
+              <div className={styles.stepList}>
+                <Steps progressDot current={viewIndex} items={totalData} />
+              </div>
+              <div className={styles.buttonList}>
                 <Button
-                  className={styles.prevBtn}
+                  className={styles.btn}
                   icon={<EditFilled className={initialStyles.btnSvg} />}
-                  disabled={buyInHistory.viewPtr === 0}
-                  onClick={() => {
-                    setBuyInHistory({ ...buyInHistory, viewPtr: buyInHistory.viewPtr - 1 });
-                  }}
+                  disabled={!hasLastRecord}
+                  onClick={viewLastRecord}
                 >
-                  上一次编辑
+                  上一步
                 </Button>
-              </div>
-              <div className={styles.historyBtnSecond}>
-                <div>
-                  <Button
-                    className={initialStyles.addBtn}
-                    onClick={() => {
-                      const arr = buyInHistory.buyInRecords;
-                      arr.splice(buyInHistory.viewPtr + 1);
-                      setBuyInHistory({
-                        ...buyInHistory,
-                        buyInRecords: arr,
-                        realPtr: buyInHistory.viewPtr,
-                      });
-                    }}
-                  >
-                    确认
-                  </Button>
-                </div>
-                <div>
-                  <Button
-                    className={initialStyles.addBtn}
-                    onClick={() => {
-                      setBuyInHistory({
-                        ...buyInHistory,
-                        viewPtr: buyInHistory.realPtr,
-                      });
-                    }}
-                  >
-                    取消
-                  </Button>
-                </div>
-              </div>
-            </div>
-            <div className={styles.stateChangeBtns}>
-              <div className={styles.stateBtnSecond}>
-                <div>
-                  <Button
-                    className={initialStyles.nextBtn}
-                    icon={<BackwardFilled className={initialStyles.btnSvg} />}
-                    onClick={() => {
-                      resetSetting({
-                        onOk: () => {
-                          changeBuyInData({
-                            amountPerhand: 0,
-                            players: [],
-                          });
-                          enterPrevState();
-                        },
-                      });
-                    }}
-                  >
-                    重置
-                  </Button>
-                </div>
-                <div>
-                  <Button
-                    className={initialStyles.addBtn}
-                    icon={<EditFilled className={initialStyles.btnSvg} />}
-                    onClick={() => {
-                      setEdit(true);
-                    }}
-                  >
-                    进入编辑
-                  </Button>
-                </div>
-              </div>
-              <div className={styles.nextBtnWrap}>
                 <Button
-                  className={styles.nextBtn}
+                  className={styles.btn}
+                  icon={<EditFilled className={initialStyles.btnSvg} />}
+                  disabled={!hasNextRecord}
+                  onClick={viewNextRecord}
+                >
+                  下一步
+                </Button>
+                <Button
+                  className={styles.btn}
+                  icon={<CloseOutlined />}
                   onClick={() => {
-                    changeBuyInData(buyInHistory.buyInRecords[buyInHistory.realPtr].basicData);
-                    enterNextState();
+                    cancelView();
+                    setHistoryVisibile(false);
                   }}
                 >
-                  进入结算阶段
+                  取消
+                </Button>
+                <Button
+                  className={classNames(styles.btn, styles.deepBtn)}
+                  icon={<CheckOutlined />}
+                  onClick={() => {
+                    confirmView();
+                    setHistoryVisibile(false);
+                  }}
+                >
+                  确认
                 </Button>
               </div>
+            </>
+          ) : (
+            <div className={styles.buttonList}>
+              <Button
+                className={styles.btn}
+                icon={<ClockCircleOutlined className={initialStyles.btnSvg} />}
+                disabled={historyLength <= 1}
+                onClick={() => {
+                  setHistoryVisibile(true);
+                }}
+              >
+                历史状态
+              </Button>
+              <Button
+                className={styles.btn}
+                icon={<EditFilled className={initialStyles.btnSvg} />}
+                onClick={() => {
+                  setEdit(true);
+                }}
+              >
+                编辑
+              </Button>
+              <Button
+                className={styles.btn}
+                icon={<BackwardFilled className={initialStyles.btnSvg} />}
+                onClick={backPrepare}
+              >
+                重置
+              </Button>
+              <Button
+                className={classNames(styles.btn, styles.deepBtn)}
+                icon={<ForwardOutlined className={initialStyles.btnSvg} />}
+                onClick={enterNextState}
+              >
+                结算
+              </Button>
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>

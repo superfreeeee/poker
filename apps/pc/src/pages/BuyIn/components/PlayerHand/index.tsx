@@ -7,56 +7,68 @@ import {
   PlusOutlined,
   MinusOutlined,
 } from '@ant-design/icons';
-import { useDebounceFn } from 'ahooks';
 import { BuyInPlayer } from '../../../../models/buyIn';
+import { INIT_BUYIN_HANDS, MAX_BUYIN_HANDS } from '../../constants';
 import styles from './index.module.scss';
 
 interface IPlayerHandProps {
+  isEditable: boolean;
+  amountPerhand: number;
   player: BuyInPlayer;
-  isValidOperated: boolean;
-  onRemove: (id: string) => void;
-  onChange: (targetPlayer: BuyInPlayer) => void;
+  initHands?: number;
+  enableDelete?: boolean; // 不可删除
+  onRemove?: (id: string) => void;
+  onChange?: (targetPlayer: BuyInPlayer) => void;
 }
 
 const PlayerHand: FC<IPlayerHandProps> = ({
+  isEditable,
+  amountPerhand,
   player,
-  isValidOperated,
+  initHands = INIT_BUYIN_HANDS,
+  enableDelete = true,
   onRemove,
   onChange,
 }: IPlayerHandProps) => {
   const { id, name, hands } = player;
 
-  const { run } = useDebounceFn(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      onChange({
-        ...player,
-        name: e.target.value,
-      });
-    },
-    { wait: 500 },
-  );
+  const onNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    onChange?.({
+      ...player,
+      name: e.target.value,
+    });
+  };
 
   return (
     <div className={styles.container}>
-      <div className={styles.firstCol}>
+      {isEditable ? (
         <div className={styles.inputForm}>
-          <div>USERNAME</div>
+          <div className={styles.title}>USERNAME</div>
           <Input
-            prefix={<UserOutlined />}
-            defaultValue={name}
+            prefix={<UserOutlined className={styles.btnMargin} />}
+            value={name}
             placeholder="Input your name"
             allowClear
             showCount
             maxLength={30}
             bordered={false}
-            onChange={run}
+            onChange={onNameChange}
           />
         </div>
+      ) : (
+        <div className={styles.visibleLine}>
+          <UserOutlined className={styles.btnMargin} />
+          <div className={styles.title}>USERNAME</div>
+          <div className={styles.content}>{player.name}</div>
+        </div>
+      )}
+
+      {isEditable ? (
         <div className={styles.inputForm}>
-          <div>HANDS</div>
+          <div className={styles.title}>HANDS</div>
           <Input
             value={hands}
-            prefix={<RedEnvelopeOutlined />}
+            prefix={<RedEnvelopeOutlined className={styles.btnMargin} />}
             bordered={false}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               let number = +e.target.value;
@@ -64,54 +76,85 @@ const PlayerHand: FC<IPlayerHandProps> = ({
                 message.error('买入数量必须为正整数');
                 return;
               }
-              if (number > 50) {
-                number = 50;
+              if (number > MAX_BUYIN_HANDS) {
+                number = MAX_BUYIN_HANDS;
                 message.info('买入数量不能超过50');
               }
-              onChange({ ...player, hands: number });
+              onChange?.({ ...player, hands: number });
             }}
           />
         </div>
-      </div>
-      <div className={styles.secondCol}>
-        <div className={styles.btnContainer}>
-          <Button
-            disabled={isValidOperated}
-            shape="circle"
-            size="large"
-            icon={<DeleteOutlined />}
-            className={styles.btnBG}
-            onClick={() => {
-              onRemove(id);
-            }}
-          />
+      ) : (
+        <div className={styles.visibleLine}>
+          <RedEnvelopeOutlined className={styles.btnMargin} />
+          <div className={styles.title}>HANDS</div>
+          <div className={styles.content}>{player.hands}</div>
         </div>
-        <div className={styles.numberBtnWrap}>
-          <Button
-            disabled={isValidOperated}
-            icon={<MinusOutlined />}
-            className={styles.btnBG}
-            onClick={() => {
-              if (hands == 1) {
-                message.info('买入数量不能为0');
-              } else {
-                onChange({ ...player, hands: hands - 1 });
-              }
-            }}
-          ></Button>
-          <Button
-            icon={<PlusOutlined />}
-            className={styles.btnBG}
-            onClick={() => {
-              if (hands == 50) {
-                message.info('买入数量不能超过50');
-              } else {
-                onChange({ ...player, hands: hands + 1 });
-              }
-            }}
-          ></Button>
+      )}
+
+      <div className={styles.textContiner}>
+        <div>
+          <div className={styles.title}>Amount</div>
+          <div className={styles.calcText}>{player.hands * amountPerhand}</div>
+        </div>
+        <div>
+          <div className={styles.title}>=</div>
+          <div className={styles.otherText}>=</div>
+        </div>
+        <div>
+          <div className={styles.title}>HANDS</div>
+          <div className={styles.calcText}>{hands}</div>
+        </div>
+        <div>
+          <div className={styles.title}>*</div>
+          <div className={styles.otherText}>*</div>
+        </div>
+        <div>
+          <div className={styles.title}>一手金额</div>
+          <div className={styles.calcText}>{amountPerhand}</div>
         </div>
       </div>
+      {isEditable ? (
+        <div className={styles.btnList}>
+          <div className={styles.numberBtnWrap}>
+            <Button
+              disabled={hands <= initHands}
+              icon={<MinusOutlined />}
+              className={styles.btnBG}
+              onClick={() => {
+                if (hands == 1) {
+                  message.info('买入数量不能为0');
+                } else {
+                  onChange?.({ ...player, hands: hands - 1 })
+                }
+              }}
+            ></Button>
+            <Button
+              icon={<PlusOutlined />}
+              className={styles.btnBG}
+              onClick={() => {
+                if (hands == 50) {
+                  message.info('买入数量不能超过50');
+                } else {
+                  onChange?.({ ...player, hands: hands + 1 })
+                }
+              }}
+            ></Button>
+          </div>
+          <div>
+            <Button
+              disabled={!enableDelete}
+              shape="circle"
+              size="large"
+              icon={<DeleteOutlined />}
+              className={styles.btnBG}
+              onClick={() => {
+                onRemove?.(id);
+              }}
+            />
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };

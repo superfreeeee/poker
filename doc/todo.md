@@ -35,15 +35,37 @@
 
 ## BuyIn
 
-- [ ] Playing 页面的下面操作区域修改
-- [ ] Detail 页面把 buyInData.id 加到 url
-- [ ] Detail 页面把 数据源与 create 页分开
-- [ ] currentBuyInData => createBuyInData => 把 Create 页与 Detail 页的状态管理区分开来
-- [ ] Detail 页面多展示每个人计算后的总买入totalBuyIn
-- [ ] Settle 页面改变 UI（hands x amount = totalBuyIn; totalBuyIn - _rest_ = profit）
-- [ ] PlayResult、PlayResultView 抽成一个组件
-- [ ] Header 返回逻辑
-  - [ ] Prepare => Home
-  - [ ] Playing => check(Modal) => Prepare
-  - [ ] Settle => Playing
-  - [ ] Detail => Home
+- [x] Playing 页面的下面操作区域修改
+- [x] Detail 页面把 buyInData.id 加到 url
+- [x] Detail 页面把 数据源与 create 页分开
+- [x] currentBuyInData => createBuyInData => 把 Create 页与 Detail 页的状态管理区分开来
+- [x] Detail 页面多展示每个人计算后的总买入totalBuyIn
+- [x] Settle 页面改变 UI（hands x amount = totalBuyIn; _rest_ - totalBuyIn = profit）
+- [x] PlayResult、PlayResultView 抽成一个组件
+- [x] Header 返回逻辑
+  - [x] Prepare => Home
+  - [x] Playing => check(Modal) => Prepare
+  - [x] Settle => Playing
+  - [x] Detail => Home
+- [x] fix: 一手金额 > 0
+- [x] fix: Playing 的 UI
+- [x] fix: Playing 的按钮名称可以简化一点
+- [x] fix: History 下文案：上一步、下一步、取消、确认，进入按钮 icon
+- [x] feat: 宽度 400px 下 UI 正常
+- [ ] Final Result(BuyInView) => GameDetail
+  - [ ] Post 请求更新到服务端
+  - [ ] fetch 要求 getGameDetail 接口重新请求
+
+## Common (multi-page utils)
+
+- [ ] 检查当前用户登录态，未登陆 / 登陆 ID 无效 => go Login page
+  - [ ] react-route-dom 记录跳转前路由，登陆后回到上次的路由
+  - [ ] "" => "/game/detail" => "/login" => "/game/detail" ("/game/detail")
+
+# Backend API
+
+- [ ] POST /api/buyin
+  - body: { gameId, buyInData: BuyInData }
+  - response: { code: 200, data: null }
+- [ ] GET /api/user/{userId}
+  - response: { code: 200, data: User | null }

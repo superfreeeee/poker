@@ -13,45 +13,10 @@ $color-match: #c2d7ef;
   background-color: whitesmoke;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  width: 100%;
-  height: 140px;
-  padding: 16px 20px;
-  background-color: $color-match;
-
-  .leftWrap {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: flex-start;
-    gap: 10px;
-
-    :global {
-      .ant-form-item {
-        margin-bottom: 0;
-      }
-    }
-  }
-}
-
-.inputForm {
-  border-bottom: 1px solid black;
-  width: 250px;
-  overflow: hidden;
-
-  input {
-    margin-left: 15px;
-  }
-}
-
 .playerList {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 15px;
   margin: 20px 0;
   overflow: auto;
   width: 80%;
@@ -59,26 +24,28 @@ $color-match: #c2d7ef;
 
 .buttonList {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  width: 50%;
-}
+  width: 60%;
 
-.addBtn {
-  height: 30px;
-  border-radius: 10px;
-
-  .btnSvg {
-    color: $color-match;
+  button {
+    border-radius: 10px;
+    height: 40px;
+    width: 45%;
   }
 }
 
-.nextBtn {
-  height: 30px;
-  border-radius: 10px;
+@media screen and (max-width: 800px) {
+  .buttonList > button {
+    width: 80%;
+    margin-bottom: 10px;
+  }
+}
+
+.btnSvg {
+  color: $color-match;
+}
+
+.deepBtn {
   background-color: $color-match;
-
-  :where(.css-dev-only-do-not-override-yp8pcc).ant-btn-default:not(:disabled):active {
-    color: $color-match !important;
-    border-color: $color-match !important;
-  }
 }

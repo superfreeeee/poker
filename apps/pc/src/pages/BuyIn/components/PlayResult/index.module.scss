@@ -1,51 +1,10 @@
-.container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-  border-radius: 10px;
-  padding: 16px 30px;
-  background-color: white;
-}
-
-.playerContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.textContiner {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 200px;
-
-  .text {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid black;
-    padding-left: 10px;
-    text-align: center;
-    vertical-align: middle;
-  }
-}
-
-.inputForm {
-  border-bottom: 1px solid black;
-  width: 200px;
-  overflow: hidden;
-
+.input {
+  width: 70px;
+  height: 40px;
+  align-self: center;
+  
   input {
-    margin-left: 15px;
+    height: 20px;
+    margin-left: 0;
   }
-}
-
-.btnMargin {
-  margin-right: 10px;
-}
-
-.rightWrap {
-  overflow: auto;
 }

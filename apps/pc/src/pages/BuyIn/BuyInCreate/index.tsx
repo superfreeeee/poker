@@ -1,39 +1,48 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 import BuyInPrepare from '../components/BuyInPrepare';
 import BuyInPlaying from '../components/BuyInPlaying';
 import BuyInSettle from '../components/BuyInSettle';
+// import { useBuyInDataAddService } from '../../../services/buyin';
+// import { useCreateBuyInData } from '../model';
+import '../../../mock/buyIn';
 
-enum BuyInState {
+enum BuyInStage {
   Prepare = 'buyInPrepare',
   Playing = 'buyInPlaying',
   Settle = 'buyInSettle',
 }
 
 const BuyInCreate = () => {
-  const [buyInState, setBuyInState] = useState(BuyInState.Prepare);
+  const [buyInState, setBuyInState] = useState(BuyInStage.Prepare);
   const navigate = useNavigate();
+
   return (
     <div>
-      {buyInState == BuyInState.Prepare ? (
+      {buyInState == BuyInStage.Prepare ? (
         <BuyInPrepare
           enterNextState={() => {
-            setBuyInState(BuyInState.Playing);
+            setBuyInState(BuyInStage.Playing);
           }}
         ></BuyInPrepare>
-      ) : buyInState == BuyInState.Playing ? (
+      ) : buyInState == BuyInStage.Playing ? (
         <BuyInPlaying
           enterNextState={() => {
-            setBuyInState(BuyInState.Settle);
+            setBuyInState(BuyInStage.Settle);
           }}
           enterPrevState={() => {
-            setBuyInState(BuyInState.Prepare);
+            setBuyInState(BuyInStage.Prepare);
           }}
         ></BuyInPlaying>
       ) : (
         <BuyInSettle
+          enterPrevState={() => {
+            setBuyInState(BuyInStage.Playing);
+          }}
           enterNextState={() => {
-            navigate('/buyin/detail');
+            // post
+            // fetch gamedetail
+            navigate(generatePath('/buyin/detail/:id', { id: '234567' }));
           }}
         ></BuyInSettle>
       )}

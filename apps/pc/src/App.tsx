@@ -40,7 +40,7 @@ const App = () => {
 
         {/* // TODO move to game detail page */}
         <Route path="/buyin" element={<LazyBuyIn />}>
-          <Route path="detail" element={<BuyInView />} />
+          <Route path="detail/:id" element={<BuyInView />} />
           <Route path="create" element={<BuyInCreate />} />
           <Route path="" element={<Redirect path="/buyin/create" />} />
         </Route>
