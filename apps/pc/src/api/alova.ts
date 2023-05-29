@@ -9,6 +9,12 @@ const DEV_HOST = 'http://localhost:8080';
 
 const apiLogger = createLogger('api/alova');
 
+let _uid: string | null = null;
+
+export const setUid = (uid: string | null) => {
+  _uid = uid;
+};
+
 export const alovaInstance = createAlova({
   baseURL: IS_DEV ? DEV_HOST : PROD_HOST,
   statesHook: ReactHook,
@@ -16,6 +22,7 @@ export const alovaInstance = createAlova({
   beforeRequest: (options) => {
     options.config.credentials = 'include';
     options.config.headers['Content-Type'] = 'application/json';
+    _uid && (options.config.headers['token'] = _uid);
 
     apiLogger.log('request', options);
   },
