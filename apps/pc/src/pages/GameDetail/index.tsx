@@ -35,7 +35,9 @@ const GameDetail = () => {
           {/* GameInfo */}
           <div>
             <h3>Game Info</h3>
-            <div style={{ wordBreak: 'break-all' }}>{JSON.stringify(gameDetail)}</div>
+            <h4>Game Record: id={gameDetail.id}</h4>
+            <h4>{new Date(gameDetail.date).toLocaleString()}</h4>
+            {/* <div style={{ wordBreak: 'break-all' }}>{JSON.stringify(gameDetail)}</div> */}
           </div>
           <Divider />
           {/* BuyIn data */}
