@@ -16,7 +16,7 @@ const GameDetail = () => {
 
   const navigate = useNavigate();
 
-  const { gameDetail, loading } = useGameDetailService(gameId);
+  const { loading, gameDetail, reloadGameDetail } = useGameDetailService(gameId);
 
   useEffect(() => {
     logger.log('gameDetail', gameDetail);
@@ -24,22 +24,6 @@ const GameDetail = () => {
 
   const goCreateBuyInPage = () => {
     navigate('./buyin/create');
-  };
-
-  // TODO remove me
-  const mockCreateBuyIn = () => {
-    fetch('http://124.221.113.80:8080/api/buyin', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        gameId,
-        chipsPerHand: 100,
-        players: [
-          { id: '1', name: 'user1', buyInChips: 300, resetChips: 300 },
-          { id: '2', name: 'user2', buyInChips: 100, resetChips: 500 },
-        ],
-      }),
-    });
   };
 
   return (
@@ -51,7 +35,9 @@ const GameDetail = () => {
           {/* GameInfo */}
           <div>
             <h3>Game Info</h3>
-            <div style={{ wordBreak: 'break-all' }}>{JSON.stringify(gameDetail)}</div>
+            <h4>Game Record: id={gameDetail.id}</h4>
+            <h4>{new Date(gameDetail.date).toLocaleString()}</h4>
+            {/* <div style={{ wordBreak: 'break-all' }}>{JSON.stringify(gameDetail)}</div> */}
           </div>
           <Divider />
           {/* BuyIn data */}
@@ -67,14 +53,31 @@ const GameDetail = () => {
               </Button>
               {/* // TODO remove mock createBuyIn */}
               <Divider />
-              <Button type="primary" icon={<PlusSquareOutlined />} onClick={mockCreateBuyIn}>
+              <Button
+                type="primary"
+                icon={<PlusSquareOutlined />}
+                onClick={() => {
+                  fetch('http://124.221.113.80:8080/api/buyin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      gameId,
+                      chipsPerHand: 100,
+                      players: [
+                        { id: '1', name: 'user1', buyInChips: 300, restChips: 300 },
+                        { id: '2', name: 'user2', buyInChips: 100, restChips: 500 },
+                      ],
+                    }),
+                  });
+                }}
+              >
                 Mock: Append buy-in record
               </Button>
             </>
           )}
           <Divider />
           {/* Hand records */}
-          <HandList />
+          <HandList data={gameDetail.handRecords} reloadGameDetail={reloadGameDetail} />
         </div>
       ) : loading ? (
         // 2. Loading

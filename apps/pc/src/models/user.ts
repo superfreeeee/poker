@@ -1,6 +1,6 @@
 import { atom, useAtom, useAtomValue } from 'jotai';
 import { ELocalStorageKey, getItem, setItem } from '../common/localStorage';
-import { setUid } from '../api/core/alova';
+import { setUid } from '../api/core';
 
 export interface IUser {
   id: string;

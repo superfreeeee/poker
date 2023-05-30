@@ -1,4 +1,4 @@
-import { Card, EncodedCard } from '../card';
+import { Card } from '../card';
 import { BaseRecord } from '../common';
 import { Player, PlayerSeat } from '../player';
 
@@ -86,41 +86,8 @@ export type HandAction =
     };
 
 export interface HandRecord extends BaseRecord {
-  version: 'v1';
   players: Player[];
-  seatMap: { [seat in PlayerSeat]?: string };
   blinds: HandBlindRecord[];
   actions: HandAction[];
   boardCards: Card[];
-  winnerId: string;
 }
-
-export type SerializedHandAction =
-  | readonly ['stageBlinds', number]
-  | readonly [
-      'stageInfo',
-      Exclude<SettingHandStage, HandStage.Init | HandStage.Blinds>,
-      number,
-      EncodedCard[],
-    ]
-  | readonly ['playerPayBlinds', PlayerSeat, number]
-  | readonly ['playerShowdown', PlayerSeat, EncodedCard[]]
-  | readonly [
-      'playerAction',
-      PlayerSeat,
-      Exclude<PlayerAction, PlayerAction.PayBlinds | PlayerAction.Showdown>,
-      number | undefined,
-    ];
-
-export type SerializedHandRecord =
-  | [
-      version: 'v1',
-      id: string,
-      players: [id: string, name: string][],
-      seatMap: { [seat in PlayerSeat]?: string },
-      blinds: [seat: PlayerSeat, chips: number][],
-      actions: SerializedHandAction[],
-      boardCards: EncodedCard[],
-      winnerId: string,
-      createTime: number,
-    ];
