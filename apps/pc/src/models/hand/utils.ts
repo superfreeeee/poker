@@ -1,13 +1,12 @@
-import { decodeCard, encodeCard } from '../card';
-import { Player, PlayerState } from '../player';
+import { HandVO } from '../../api/hand';
+import { decodeCard } from '../card';
+import { PlayerState, isPlayerSeat } from '../player';
 import {
   ALL_PLAYER_ACTIONS,
   HandAction,
   HandBlindRecord,
   HandRecord,
   PlayerAction,
-  SerializedHandAction,
-  SerializedHandRecord,
   SettingPlayerAction,
 } from './types';
 
@@ -44,98 +43,20 @@ export const getPlayerActionOptions = ({
   });
 };
 
-const serializeActionV1 = (action: HandAction): SerializedHandAction => {
-  switch (action.type) {
-    case 'stageBlinds':
-      return [action.type, action.players] as const;
-    case 'stageInfo':
-      return [action.type, action.stage, action.potSize, action.cards.map(encodeCard)] as const;
-    case 'playerPayBlinds':
-      return [action.type, action.seat, action.chips] as const;
-    case 'playerShowdown':
-      return [action.type, action.seat, action.cards.map(encodeCard)] as const;
-    case 'playerAction':
-      return [action.type, action.seat, action.action, action.chips] as const;
-    default:
-      throw new SyntaxError(`Unknown action type: ${(action as Record<string, unknown>).type}`);
-  }
-};
+export const transformHandVOToRecord = (handVO: HandVO): HandRecord => {
+  const { id, createTime, players, blinds, boardCards, actions } = handVO;
 
-const deserializeActionV1 = (actionArr: SerializedHandAction): HandAction => {
-  switch (actionArr[0]) {
-    case 'stageBlinds':
-      return { type: actionArr[0], players: actionArr[1] };
-    case 'stageInfo':
-      return {
-        type: actionArr[0],
-        stage: actionArr[1],
-        potSize: actionArr[2],
-        cards: actionArr[3].map(decodeCard),
-      };
-    case 'playerPayBlinds':
-      return {
-        type: actionArr[0],
-        seat: actionArr[1],
-        chips: actionArr[2],
-      };
-    case 'playerShowdown':
-      return {
-        type: actionArr[0],
-        seat: actionArr[1],
-        cards: actionArr[2].map(decodeCard),
-      };
-    case 'playerAction':
-      return {
-        type: actionArr[0],
-        seat: actionArr[1],
-        action: actionArr[2],
-        chips: actionArr[3],
-      };
-    default:
-      throw new SyntaxError(`Unknown serialized action type: ${actionArr[0]}`);
-  }
-};
-
-export const serializeHandRecordV1 = (record: HandRecord): string => {
-  const recordArr = [
-    record.version,
-    record.id,
-    record.players.map((player) => [player.id, player.name]),
-    record.seatMap,
-    record.blinds.map((blind) => [blind.seat, blind.chips]),
-    record.actions.map(serializeActionV1),
-    record.boardCards.map((card) => encodeCard(card)),
-    record.winnerId,
-    record.createTime,
-  ] as SerializedHandRecord;
-  return JSON.stringify(recordArr);
-};
-
-export const deserializeHandReocrdV1 = (recordV1: string): HandRecord => {
-  const [version, id, players, seatMap, blinds, actions, boardCards, winnerId, createTime] =
-    JSON.parse(recordV1) as SerializedHandRecord;
-  const recordDetail: HandRecord = {
-    version,
+  return {
     id,
-    players: players.map(([id, name]): Player => ({ id, name })),
-    seatMap,
-    blinds: blinds.map(([seat, chips]): HandBlindRecord => ({ seat, chips })),
-    actions: actions.map(deserializeActionV1),
-    boardCards: boardCards.map(decodeCard),
-    winnerId,
     createTime,
+    players,
+    blinds: blinds.map(({ seat, chips }): HandBlindRecord => {
+      if (!isPlayerSeat(seat)) {
+        throw new SyntaxError(`Invalid seat literal: ${seat}`);
+      }
+      return { seat, chips };
+    }),
+    boardCards: boardCards.map(decodeCard),
+    actions: actions as HandAction[],
   };
-  return recordDetail;
-};
-
-export const safeDeserializeHandReocrdV1 = (
-  recordV1: string,
-  onError?: () => void,
-): HandRecord | null => {
-  try {
-    return deserializeHandReocrdV1(recordV1);
-  } catch {
-    onError?.();
-    return null;
-  }
 };

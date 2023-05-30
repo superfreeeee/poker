@@ -5,7 +5,7 @@ import { HandRecord } from '../hand';
 export interface GameRecord extends BaseRecord {
   location: string;
   date: number;
-  comment?: string;
+  comment: string | null;
   buyInData: BuyInData | null;
   handRecords: HandRecord[];
 }

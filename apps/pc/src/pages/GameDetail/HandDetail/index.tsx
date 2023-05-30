@@ -3,16 +3,16 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { createLogger } from '../../../common/commonLogger';
 import { renderCardText } from '../../../components/Card';
+import { HandRecord } from '../../../models/hand';
 import HandActions from '../../../components/HandActions';
 import Header from '../../../components/Header';
-import { useLocalHandRecord } from '../../../models/hand/data';
 import styles from './index.module.scss';
 
 const logger = createLogger('pages/HandDetail');
 
 const HandDetail = () => {
   const { handId = '' } = useParams();
-  const record = useLocalHandRecord(handId);
+  const record: HandRecord | null = null as any;
 
   useEffect(() => {
     logger.log('record', record);

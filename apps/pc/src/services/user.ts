@@ -14,7 +14,7 @@ export const useLoginService = () => {
   const loginService = async (params: ILoginParams) => {
     try {
       const res = await loginAPI(params);
-      if (isSuccess(res) && res.data) {
+      if (isSuccess(res)) {
         return res.data;
       }
       return null;

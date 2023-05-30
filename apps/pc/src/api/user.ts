@@ -1,7 +1,7 @@
 import { useRequest } from 'alova';
 import { IUser } from '../models/user';
-import { alovaInstance } from './alova';
-import { Response } from './interface';
+import { alovaInstance } from './core';
+import { Response } from './core/interface';
 
 export interface ILoginParams {
   name: string;
