@@ -1,0 +1,209 @@
+{
+  "version": "v1",
+  "id": "GAkaaaH9GvkRdkbB8sUdb",
+  "players": [],
+  "seatMap": {},
+  "blinds": [
+    {
+      "seat": "SB",
+      "chips": 0.5
+    },
+    {
+      "seat": "BB",
+      "chips": 1
+    }
+  ],
+  "actions": [
+    {
+      "type": "stageBlinds",
+      "players": 6
+    },
+    {
+      "type": "playerPayBlinds",
+      "seat": "SB",
+      "chips": 0.5
+    },
+    {
+      "type": "playerPayBlinds",
+      "seat": "BB",
+      "chips": 1
+    },
+    {
+      "type": "stageInfo",
+      "stage": "Pre-Flop",
+      "potSize": 1.5,
+      "cards": []
+    },
+    {
+      "type": "playerAction",
+      "seat": "UTG",
+      "action": "fold",
+      "chips": null
+    },
+    {
+      "type": "playerAction",
+      "seat": "MP",
+      "action": "fold",
+      "chips": null
+    },
+    {
+      "type": "playerAction",
+      "seat": "CO",
+      "action": "raise",
+      "chips": 2
+    },
+    {
+      "type": "playerAction",
+      "seat": "BTN",
+      "action": "fold",
+      "chips": null
+    },
+    {
+      "type": "playerAction",
+      "seat": "SB",
+      "action": "fold",
+      "chips": null
+    },
+    {
+      "type": "playerAction",
+      "seat": "BB",
+      "action": "call",
+      "chips": 2
+    },
+    {
+      "type": "stageInfo",
+      "stage": "Flop",
+      "potSize": 4.5,
+      "cards": [
+        {
+          "suit": "♣",
+          "num": "5"
+        },
+        {
+          "suit": "♣",
+          "num": "7"
+        },
+        {
+          "suit": "♣",
+          "num": "T"
+        }
+      ]
+    },
+    {
+      "type": "playerAction",
+      "seat": "BB",
+      "action": "check",
+      "chips": null
+    },
+    {
+      "type": "playerAction",
+      "seat": "CO",
+      "action": "check",
+      "chips": null
+    },
+    {
+      "type": "stageInfo",
+      "stage": "Turn",
+      "potSize": 4.5,
+      "cards": [
+        {
+          "suit": "♦",
+          "num": "8"
+        }
+      ]
+    },
+    {
+      "type": "playerAction",
+      "seat": "BB",
+      "action": "check",
+      "chips": null
+    },
+    {
+      "type": "playerAction",
+      "seat": "CO",
+      "action": "check",
+      "chips": null
+    },
+    {
+      "type": "stageInfo",
+      "stage": "River",
+      "potSize": 4.5,
+      "cards": [
+        {
+          "suit": "♥",
+          "num": "9"
+        }
+      ]
+    },
+    {
+      "type": "playerAction",
+      "seat": "BB",
+      "action": "check",
+      "chips": null
+    },
+    {
+      "type": "playerAction",
+      "seat": "CO",
+      "action": "check",
+      "chips": null
+    },
+    {
+      "type": "stageInfo",
+      "stage": "Showdown",
+      "potSize": 4.5,
+      "cards": []
+    },
+    {
+      "type": "playerShowdown",
+      "seat": "BB",
+      "cards": [
+        {
+          "suit": "♠",
+          "num": "8"
+        },
+        {
+          "suit": "♠",
+          "num": "9"
+        }
+      ]
+    },
+    {
+      "type": "playerShowdown",
+      "seat": "CO",
+      "cards": [
+        {
+          "suit": "♥",
+          "num": "7"
+        },
+        {
+          "suit": "♥",
+          "num": "8"
+        }
+      ]
+    }
+  ],
+  "boardCards": [
+    {
+      "suit": "♣",
+      "num": "5"
+    },
+    {
+      "suit": "♣",
+      "num": "7"
+    },
+    {
+      "suit": "♣",
+      "num": "T"
+    },
+    {
+      "suit": "♦",
+      "num": "8"
+    },
+    {
+      "suit": "♥",
+      "num": "9"
+    }
+  ],
+  "winnerId": "",
+  "createTime": 1685325422293
+}

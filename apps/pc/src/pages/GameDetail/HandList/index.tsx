@@ -1,22 +1,34 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { createLogger } from '../../../common/commonLogger';
 import { renderCardText } from '../../../components/Card';
-import { useLocalHandRecords } from '../../../models/hand';
+import { HandRecord, useLocalHandRecords } from '../../../models/hand';
+import { useAddHandService } from '../../../services/hand';
+import { encodeCard } from '../../../models/card';
+import mockHandRecord from './mockHandRecord.json';
 import styles from './index.module.scss';
 
 const logger = createLogger('pages/HandRecordList');
 
-const HandList = () => {
-  const { localRecords } = useLocalHandRecords();
+interface IHandListProps {
+  data?: HandRecord[];
+  reloadGameDetail: VoidFunction;
+}
 
+const HandList = ({ data, reloadGameDetail }: IHandListProps) => {
+  const { localRecords } = useLocalHandRecords();
+  const records = data ?? localRecords;
+
+  const { gameId = '' } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    logger.log('localRecords', localRecords);
-  }, [localRecords]);
+    logger.log('records', records);
+  }, [records]);
+
+  const addHandService = useAddHandService();
 
   return (
     <div className={styles.container}>
@@ -25,9 +37,39 @@ const HandList = () => {
         <Button type="primary" icon={<PlusOutlined />} onClick={() => navigate('./hand/create')}>
           New Record
         </Button>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={() => {
+            const { players, blinds, boardCards, actions } = mockHandRecord as HandRecord;
+            if (gameId) {
+              addHandService({
+                gameId,
+                players,
+                blinds,
+                boardCards: boardCards.map(encodeCard),
+                actions: actions.map((action) => {
+                  return {
+                    ...action,
+                    cards:
+                      action.type === 'stageInfo' || action.type === 'playerShowdown'
+                        ? action.cards.map(encodeCard)
+                        : null,
+                  };
+                }),
+              }).then((success) => {
+                if (success) {
+                  reloadGameDetail();
+                }
+              });
+            }
+          }}
+        >
+          Mock: New Record
+        </Button>
       </div>
       <div className={styles.records}>
-        {localRecords.map((record) => {
+        {records.map((record) => {
           return (
             <div
               key={record.id}

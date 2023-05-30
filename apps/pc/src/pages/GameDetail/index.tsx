@@ -6,6 +6,7 @@ import { createLogger } from '../../common/commonLogger';
 import { useGameDetailService } from '../../services/game';
 import BuyInView from '../BuyIn/BuyInView';
 import Header from '../../components/Header';
+import { decodeCard } from '../../models/card';
 import HandList from './HandList';
 import styles from './index.module.scss';
 
@@ -16,7 +17,7 @@ const GameDetail = () => {
 
   const navigate = useNavigate();
 
-  const { gameDetail, loading } = useGameDetailService(gameId);
+  const { loading, gameDetail, reloadGameDetail } = useGameDetailService(gameId);
 
   useEffect(() => {
     logger.log('gameDetail', gameDetail);
@@ -74,7 +75,21 @@ const GameDetail = () => {
           )}
           <Divider />
           {/* Hand records */}
-          <HandList />
+          <HandList
+            data={gameDetail.handRecords.map((record) => {
+              return {
+                ...record,
+                boardCards: record.boardCards.map(decodeCard),
+                actions: record.actions.map((action) => {
+                  return {
+                    ...action,
+                    cards: action.cards?.map(decodeCard) || [],
+                  };
+                }),
+              };
+            })}
+            reloadGameDetail={reloadGameDetail}
+          />
         </div>
       ) : loading ? (
         // 2. Loading

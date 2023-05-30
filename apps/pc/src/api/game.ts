@@ -1,6 +1,8 @@
 import { useRequest } from 'alova';
 import { GameRecord } from '../models/game/types';
-import { alovaInstance } from './core/alova';
+import { HandRecord } from '../models/hand';
+import { EncodedCard } from '../models/card';
+import { alovaInstance } from './core';
 import { Response } from './core/interface';
 
 export interface AddGameParams {
@@ -9,13 +11,23 @@ export interface AddGameParams {
   comment: string;
 }
 
+type GameRecordVO = Omit<GameRecord, 'handRecords'> & {
+  handRecords: Array<
+    Omit<HandRecord, 'boardCards' | 'actions'> & {
+      boardCards: EncodedCard[];
+      actions: any[];
+    }
+  >;
+};
+
 /**
  * Create new GameRecord
  * @returns
  */
 export const useAddGameAPI = () => {
   return useRequest(
-    (params: AddGameParams) => alovaInstance.Post<Response<GameRecord>>('/api/game', { ...params }),
+    (params: AddGameParams) =>
+      alovaInstance.Post<Response<GameRecordVO>>('/api/game', { ...params }),
     { immediate: false },
   );
 };
@@ -25,7 +37,7 @@ export const useAddGameAPI = () => {
  * @returns
  */
 export const useGetGameListAPI = () => {
-  return useRequest(alovaInstance.Get<Response<GameRecord[]>>('/api/game'), {
+  return useRequest(alovaInstance.Get<Response<GameRecordVO[]>>('/api/game'), {
     force: (force: boolean) => !!force,
   });
 };
@@ -35,5 +47,7 @@ export const useGetGameListAPI = () => {
  * @returns
  */
 export const useGetGameDetailAPI = (gameId: string) => {
-  return useRequest(alovaInstance.Get<Response<GameRecord>>(`/api/game/${gameId}`));
+  return useRequest(alovaInstance.Get<Response<GameRecordVO>>(`/api/game/${gameId}`), {
+    force: (force: boolean) => !!force,
+  });
 };

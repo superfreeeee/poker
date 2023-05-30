@@ -1,5 +1,5 @@
 import { useRequest } from 'alova';
-import { alovaInstance } from './core/alova';
+import { alovaInstance } from './core';
 import { Response } from './core/interface';
 
 interface AddBuyInPlayer {

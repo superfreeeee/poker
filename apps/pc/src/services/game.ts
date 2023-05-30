@@ -1,17 +1,16 @@
-import { useMemo } from 'react';
 import { AddGameParams, useAddGameAPI, useGetGameDetailAPI, useGetGameListAPI } from '../api/game';
-import { isSuccess } from './utils';
+import { isSuccess, useResponseData } from './utils';
 
 /**
  * Query game records
  * @returns
  */
 export const useGameListService = () => {
-  const { data: res, send } = useGetGameListAPI();
+  const { data: res, send: getGameListAPI } = useGetGameListAPI();
 
-  const gameList = useMemo(() => (isSuccess(res) ? res.data : []), [res]);
+  const gameList = useResponseData(res, []);
 
-  const updateGameList = () => send(true);
+  const updateGameList = () => getGameListAPI(true);
 
   return { gameList, updateGameList };
 };
@@ -21,11 +20,13 @@ export const useGameListService = () => {
  * @returns
  */
 export const useGameDetailService = (gameId: string) => {
-  const { data: res, loading } = useGetGameDetailAPI(gameId);
+  const { data: res, loading, send: getGameDetailAPI } = useGetGameDetailAPI(gameId);
 
-  const gameDetail = useMemo(() => (isSuccess(res) ? res.data : null), [res]);
+  const gameDetail = useResponseData(res, null);
 
-  return { loading, gameDetail };
+  const reloadGameDetail = () => getGameDetailAPI(true);
+
+  return { loading, gameDetail, reloadGameDetail };
 };
 
 /**
