@@ -14,11 +14,7 @@ $color-match: #c2d7ef;
     width: 45%;
   }
 
-  > div:nth-child(1) {
-    margin-bottom: 20px;
-  }
-
-  > div:nth-child(2) {
+  > div:nth-child(-n+2) {
     margin-bottom: 20px;
   }
 
@@ -89,7 +85,7 @@ $color-match: #c2d7ef;
   color: gray;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1000px) {
   .container {
     flex-direction: column;
     justify-content: center;

@@ -1,46 +1,9 @@
-import React, { FC, ChangeEvent, ReactNode } from 'react';
+import React, { FC, ChangeEvent } from 'react';
 import { Input, message } from 'antd';
 import { RedEnvelopeOutlined, UserOutlined } from '@ant-design/icons';
-import classNames from 'classnames';
 import { BuyInPlayer } from '../../../../models/buyIn';
+import FormulaWithLabel from '../FormulaWithLabel';
 import playerContentStyles from '../PlayerHand/index.module.scss';
-import styles from './index.module.scss';
-
-interface IFormulaItem {
-  label: string;
-  value: number | ReactNode;
-}
-
-interface IFormulaWithLabelProps {
-  x: IFormulaItem;
-  sign: string;
-  y: IFormulaItem;
-  z: IFormulaItem;
-}
-
-const FormulaWithLabel: FC<IFormulaWithLabelProps> = ({ x, sign, y, z }) => {
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(5, auto)',
-        alignItems: 'center',
-      }}
-    >
-      <span>{x.label}</span>
-      <span>{sign}</span>
-      <span>{y.label}</span>
-      <span>=</span>
-      <span>{z.label}</span>
-
-      <span>{x.value}</span>
-      <span>{sign}</span>
-      <span>{y.value}</span>
-      <span>=</span>
-      <span>{z.value}</span>
-    </div>
-  );
-};
 
 interface IPlayerResultProps {
   player: BuyInPlayer;
@@ -85,34 +48,36 @@ const PlayResult: FC<IPlayerResultProps> = ({
         y={{ label: 'Amount per hand', value: amountPerhand }}
         z={{ label: 'Total buy-in', value: hands * amountPerhand }}
       />
-      <div className={playerContentStyles.textContiner}>
-        <div>
-          <div className={playerContentStyles.title}>Amount</div>
-          <div className={playerContentStyles.calcText}>{player.hands * amountPerhand}</div>
-        </div>
-        <div>
-          <div className={playerContentStyles.title}>=</div>
-          <div className={playerContentStyles.otherText}>=</div>
-        </div>
-        <div>
-          <div className={playerContentStyles.title}>HANDS</div>
-          <div className={playerContentStyles.calcText}>{hands}</div>
-        </div>
-        <div>
-          <div className={playerContentStyles.title}>*</div>
-          <div className={playerContentStyles.otherText}>*</div>
-        </div>
-        <div>
-          <div className={playerContentStyles.title}>一手金额</div>
-          <div className={playerContentStyles.calcText}>{amountPerhand}</div>
-        </div>
-      </div>
 
+      {isEditable ? (
+        <FormulaWithLabel
+          x={{
+            label: 'Rest',
+            value: (
+              <Input
+                bordered={false}
+                value={rest}
+                onChange={onRestChange}
+              />
+            ),
+          }}
+          sign="*"
+          y={{ label: 'Total buy-in', value: amountPerhand * hands }}
+          z={{ label: 'Profit', value: benefit }}
+        />
+      ) : (
+        <FormulaWithLabel
+          x={{ label: 'Rest', value: rest }}
+          sign="*"
+          y={{ label: 'Total buy-in', value: amountPerhand * hands }}
+          z={{ label: 'Profit', value: benefit }}
+        />
+      )}
+      {/* 
       <div className={playerContentStyles.textContiner}>
         {isEditable ? (
           <div className={classNames(playerContentStyles.inputForm, styles.input)}>
             <div className={playerContentStyles.title}>REST</div>
-            <Input bordered={false} value={rest} onChange={onRestChange} />
           </div>
         ) : (
           <div>
@@ -136,7 +101,7 @@ const PlayResult: FC<IPlayerResultProps> = ({
           <div className={playerContentStyles.title}>Profit and Loss</div>
           <div className={playerContentStyles.calcText}>{benefit}</div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

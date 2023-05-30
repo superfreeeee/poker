@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import Header from '../../../components/Header';
 import PlayResult from '../components/PlayResult';
 import TitleBar from '../components/TitleBar';
 import initialStyles from '../components/BuyInPrepare/index.module.scss';
@@ -20,7 +19,6 @@ const BuyInView = ({ data }: IBuyInViewProps) => {
 
   return (
     <>
-      <Header title="BuyIn Detail" back="/" style={{ alignSelf: 'stretch' }} />
       <div className={initialStyles.container}>
         <TitleBar
           isEditable={false}

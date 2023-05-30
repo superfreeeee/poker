@@ -8,6 +8,7 @@ import {
   MinusOutlined,
 } from '@ant-design/icons';
 import { BuyInPlayer } from '../../../../models/buyIn';
+import FormulaWithLabel from '../FormulaWithLabel';
 import { INIT_BUYIN_HANDS, MAX_BUYIN_HANDS } from '../../constants';
 import styles from './index.module.scss';
 
@@ -92,28 +93,12 @@ const PlayerHand: FC<IPlayerHandProps> = ({
         </div>
       )}
 
-      <div className={styles.textContiner}>
-        <div>
-          <div className={styles.title}>Amount</div>
-          <div className={styles.calcText}>{player.hands * amountPerhand}</div>
-        </div>
-        <div>
-          <div className={styles.title}>=</div>
-          <div className={styles.otherText}>=</div>
-        </div>
-        <div>
-          <div className={styles.title}>HANDS</div>
-          <div className={styles.calcText}>{hands}</div>
-        </div>
-        <div>
-          <div className={styles.title}>*</div>
-          <div className={styles.otherText}>*</div>
-        </div>
-        <div>
-          <div className={styles.title}>一手金额</div>
-          <div className={styles.calcText}>{amountPerhand}</div>
-        </div>
-      </div>
+      <FormulaWithLabel
+        x={{ label: 'Hands', value: hands }}
+        sign="*"
+        y={{ label: 'Amount per hand', value: amountPerhand }}
+        z={{ label: 'Total buy-in', value: hands * amountPerhand }}
+      />
       {isEditable ? (
         <div className={styles.btnList}>
           <div className={styles.numberBtnWrap}>
@@ -125,7 +110,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({
                 if (hands == 1) {
                   message.info('买入数量不能为0');
                 } else {
-                  onChange?.({ ...player, hands: hands - 1 })
+                  onChange?.({ ...player, hands: hands - 1 });
                 }
               }}
             ></Button>
@@ -136,7 +121,7 @@ const PlayerHand: FC<IPlayerHandProps> = ({
                 if (hands == 50) {
                   message.info('买入数量不能超过50');
                 } else {
-                  onChange?.({ ...player, hands: hands + 1 })
+                  onChange?.({ ...player, hands: hands + 1 });
                 }
               }}
             ></Button>
