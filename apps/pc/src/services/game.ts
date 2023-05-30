@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useAddGameAPI, useGetGameDetailAPI, useGetGameListAPI } from '../api/game';
+import { AddGameParams, useAddGameAPI, useGetGameDetailAPI, useGetGameListAPI } from '../api/game';
 
 /**
  * Query game records
@@ -34,7 +34,7 @@ export const useGameDetailService = (gameId: string) => {
 export const useAddGameService = () => {
   const { send: addGameAPI } = useAddGameAPI();
 
-  const addGameService = async (params) => {
+  const addGameService = async (params: AddGameParams) => {
     await addGameAPI(params);
     // const res = await addGameAPI(params);
     // console.log('addGame', res);

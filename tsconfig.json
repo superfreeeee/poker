@@ -9,9 +9,15 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "strictNullChecks": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "skipLibCheck": true
   },
   "include": ["apps/**/*", "packages/**/*"],
-  "exclude": ["**/coverage", "**/webpack.config.js", "apps/**/dist", "packages/**/lib"]
+  "exclude": [
+    "node_modules",
+    "**/coverage",
+    "**/webpack.config.js",
+    "apps/**/dist",
+    "packages/**/lib"
+  ]
 }
