@@ -1,3 +1,6 @@
+run:
+	pnpm start
+
 reinstall: clean-deps
 	pnpm i
 

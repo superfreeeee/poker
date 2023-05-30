@@ -10,7 +10,6 @@ import {
   getPlayerActionOptions,
   HandRecord,
   HandBlindRecord,
-  useLocalHandRecords,
 } from '../../../models/hand';
 import { Card } from '../../../models/card';
 import { PlayerSeat } from '../../../models/player';
@@ -177,15 +176,11 @@ const HandCreate = () => {
 
   const showdownOptions = playerStates.filter((state) => !state.fold && !state.showdown);
 
-  const { addRecord } = useLocalHandRecords();
-
   const navigate = useNavigate();
   const saveRecord = () => {
     const record: HandRecord = {
-      version: 'v1',
       id: nanoid(),
       players: [],
-      seatMap: {},
       blinds: actions
         .map((action): HandBlindRecord | null => {
           if (action.type === 'playerPayBlinds') {
@@ -198,11 +193,9 @@ const HandCreate = () => {
       boardCards: actions.reduce((res, action) => {
         return action.type === 'stageInfo' ? [...res, ...action.cards] : res;
       }, []),
-      winnerId: '',
       createTime: Date.now(),
     };
 
-    addRecord(record);
     navigate(`../hand/${record.id}`);
   };
 

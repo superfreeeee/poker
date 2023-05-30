@@ -1,16 +1,41 @@
 import { useRequest } from 'alova';
-import { HandRecord } from '../models/hand';
+import { Player } from '../models/player';
 import { EncodedCard } from '../models/card';
-import { alovaInstance } from './core';
 import { Response } from './core/interface';
+import { alovaInstance } from './core';
 
-export type AddHandParams = Pick<HandRecord, 'players' | 'blinds'> & {
+export interface AddHandParams {
   gameId: string;
+  players: Player[];
+  blinds: HandBlindVO[];
   boardCards: EncodedCard[];
-  actions: any[];
-};
+  actions: HandActionVO[];
+}
 
-type HandRecordVO = Omit<AddHandParams, 'gameId'>;
+interface HandBlindVO {
+  seat: string;
+  chips: number;
+}
+
+interface HandActionVO {
+  type: string;
+  players?: number;
+  stage?: string;
+  potSize?: number;
+  cards?: EncodedCard[] | null;
+  seat?: string;
+  chips?: number;
+  action?: string;
+}
+
+export interface HandVO {
+  id: string;
+  createTime: number;
+  players: Player[];
+  blinds: HandBlindVO[];
+  boardCards: EncodedCard[];
+  actions: HandActionVO[];
+}
 
 /**
  * Create new GameRecord
@@ -18,8 +43,7 @@ type HandRecordVO = Omit<AddHandParams, 'gameId'>;
  */
 export const useAddHandAPI = () => {
   return useRequest(
-    (params: AddHandParams) =>
-      alovaInstance.Post<Response<HandRecordVO>>('/api/hand', { ...params }),
+    (params: AddHandParams) => alovaInstance.Post<Response<HandVO>>('/api/hand', { ...params }),
     { immediate: false },
   );
 };

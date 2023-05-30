@@ -4,7 +4,7 @@ import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { createLogger } from '../../../common/commonLogger';
 import { renderCardText } from '../../../components/Card';
-import { HandRecord, useLocalHandRecords } from '../../../models/hand';
+import { HandRecord } from '../../../models/hand';
 import { useAddHandService } from '../../../services/hand';
 import { encodeCard } from '../../../models/card';
 import mockHandRecord from './mockHandRecord.json';
@@ -13,13 +13,12 @@ import styles from './index.module.scss';
 const logger = createLogger('pages/HandRecordList');
 
 interface IHandListProps {
-  data?: HandRecord[];
+  data: HandRecord[];
   reloadGameDetail: VoidFunction;
 }
 
 const HandList = ({ data, reloadGameDetail }: IHandListProps) => {
-  const { localRecords } = useLocalHandRecords();
-  const records = data ?? localRecords;
+  const records = data;
 
   const { gameId = '' } = useParams();
   const navigate = useNavigate();

@@ -1,9 +1,7 @@
 import { useRequest } from 'alova';
-import { GameRecord } from '../models/game/types';
-import { HandRecord } from '../models/hand';
-import { EncodedCard } from '../models/card';
-import { alovaInstance } from './core';
 import { Response } from './core/interface';
+import { alovaInstance } from './core';
+import { HandVO } from './hand';
 
 export interface AddGameParams {
   location: string;
@@ -11,14 +9,28 @@ export interface AddGameParams {
   comment: string;
 }
 
-type GameRecordVO = Omit<GameRecord, 'handRecords'> & {
-  handRecords: Array<
-    Omit<HandRecord, 'boardCards' | 'actions'> & {
-      boardCards: EncodedCard[];
-      actions: any[];
-    }
-  >;
-};
+interface BuyInPlayerVO {
+  id: string;
+  name: string;
+  buyInChips: number;
+  buyInHands: number;
+  restChips: number;
+}
+
+interface BuyInVO {
+  chipsPerHand: number;
+  players: BuyInPlayerVO[];
+}
+
+export interface GameVO {
+  id: string;
+  location: string;
+  date: number;
+  createTime: number;
+  comment: string | null;
+  buyInData: BuyInVO | null;
+  handRecords: HandVO[] | null;
+}
 
 /**
  * Create new GameRecord
@@ -26,8 +38,7 @@ type GameRecordVO = Omit<GameRecord, 'handRecords'> & {
  */
 export const useAddGameAPI = () => {
   return useRequest(
-    (params: AddGameParams) =>
-      alovaInstance.Post<Response<GameRecordVO>>('/api/game', { ...params }),
+    (params: AddGameParams) => alovaInstance.Post<Response<GameVO>>('/api/game', { ...params }),
     { immediate: false },
   );
 };
@@ -37,7 +48,7 @@ export const useAddGameAPI = () => {
  * @returns
  */
 export const useGetGameListAPI = () => {
-  return useRequest(alovaInstance.Get<Response<GameRecordVO[]>>('/api/game'), {
+  return useRequest(alovaInstance.Get<Response<GameVO[]>>('/api/game'), {
     force: (force: boolean) => !!force,
   });
 };
@@ -47,7 +58,7 @@ export const useGetGameListAPI = () => {
  * @returns
  */
 export const useGetGameDetailAPI = (gameId: string) => {
-  return useRequest(alovaInstance.Get<Response<GameRecordVO>>(`/api/game/${gameId}`), {
+  return useRequest(alovaInstance.Get<Response<GameVO>>(`/api/game/${gameId}`), {
     force: (force: boolean) => !!force,
   });
 };

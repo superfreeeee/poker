@@ -1,22 +1,5 @@
-import { logger } from '../common/commonLogger';
-
-export interface Player {
-  id: string;
-  name: string;
-}
-
-export enum PlayerSeat {
-  SB = 'SB', // Small blind
-  BB = 'BB', // Big blind
-  UTG = 'UTG', // Under the gun
-  UTG1 = 'UTG+1',
-  MP = 'MP', // Middle position
-  MP2 = 'MP2',
-  LJ = 'LJ', // Low jack
-  HJ = 'HJ', // High jack
-  CO = 'CO', // Cut off
-  BTN = 'BTN', // Button / Dealer
-}
+import { logger } from '../../common/commonLogger';
+import { PlayerSeat } from './types';
 
 const ALL_PLAYER_SEATS: PlayerSeat[] = [
   PlayerSeat.SB,
@@ -90,7 +73,7 @@ export const getPlayerSeats = (
         PlayerSeat.BTN,
       ];
     default:
-      logger.warn(`[getPlayerSeats] Invalid players = ${players}`);
+      logger.warn(`[getPlayerSeats] Invalid players = ${players}, use default`, ALL_PLAYER_SEATS);
 
     // eslint-disable-next-line no-fallthrough
     case 10:
@@ -98,10 +81,11 @@ export const getPlayerSeats = (
   }
 };
 
-export type PlayerState = {
-  seat: PlayerSeat;
-  fold: boolean;
-  actioned: boolean;
-  chips: number;
-  showdown: boolean;
+/**
+ * string => PlayerSeat
+ * @param maybeSeat
+ * @returns
+ */
+export const isPlayerSeat = (maybeSeat: string): maybeSeat is PlayerSeat => {
+  return (ALL_PLAYER_SEATS as string[]).includes(maybeSeat);
 };

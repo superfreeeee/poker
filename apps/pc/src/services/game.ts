@@ -1,5 +1,10 @@
+import { useMemo } from 'react';
 import { AddGameParams, useAddGameAPI, useGetGameDetailAPI, useGetGameListAPI } from '../api/game';
+import { GameRecord, transformGameVOToRecord } from '../models/game';
+import { createLogger } from '../common/commonLogger';
 import { isSuccess, useResponseData } from './utils';
+
+const gameServiceLogger = createLogger('services/game');
 
 /**
  * Query game records
@@ -8,7 +13,19 @@ import { isSuccess, useResponseData } from './utils';
 export const useGameListService = () => {
   const { data: res, send: getGameListAPI } = useGetGameListAPI();
 
-  const gameList = useResponseData(res, []);
+  const gameList = useMemo<GameRecord[]>(() => {
+    if (!isSuccess(res)) {
+      return [];
+    }
+
+    try {
+      const gameList = res.data.map(transformGameVOToRecord);
+      return gameList;
+    } catch (e) {
+      gameServiceLogger.error('useGameListService: transform error', e);
+      return [];
+    }
+  }, [res]);
 
   const updateGameList = () => getGameListAPI(true);
 
@@ -22,7 +39,18 @@ export const useGameListService = () => {
 export const useGameDetailService = (gameId: string) => {
   const { data: res, loading, send: getGameDetailAPI } = useGetGameDetailAPI(gameId);
 
-  const gameDetail = useResponseData(res, null);
+  const gameDetail = useMemo<GameRecord | null>(() => {
+    if (!isSuccess(res)) {
+      return null;
+    }
+    try {
+      return transformGameVOToRecord(res.data);
+    } catch (e) {
+      gameServiceLogger.error('useGameDetailService: transform error', e);
+      return null;
+    }
+  }, [res]);
+  useResponseData(res, null);
 
   const reloadGameDetail = () => getGameDetailAPI(true);
 
