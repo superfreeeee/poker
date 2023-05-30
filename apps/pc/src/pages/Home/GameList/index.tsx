@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { useAddGameService, useGameListService } from '../../../services/game';
 import { useCurrentUser } from '../../../models/user';
 import { useLoginCheck } from '../../../hooks/useLoginCheck';
@@ -37,8 +37,12 @@ const GameList = () => {
             location: '万科望尚庭',
             date: Date.now(),
             comment: `userId: ${currentUser?.id} at ${new Date().toLocaleString()}`,
-          }).then(() => {
-            updateGameList();
+          }).then((success) => {
+            if (success) {
+              updateGameList();
+            } else {
+              message.error('Add game fail');
+            }
           });
         }}
       >

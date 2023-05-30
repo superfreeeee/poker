@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { AddGameParams, useAddGameAPI, useGetGameDetailAPI, useGetGameListAPI } from '../api/game';
+import { isSuccess } from './utils';
 
 /**
  * Query game records
@@ -8,7 +9,7 @@ import { AddGameParams, useAddGameAPI, useGetGameDetailAPI, useGetGameListAPI } 
 export const useGameListService = () => {
   const { data: res, send } = useGetGameListAPI();
 
-  const gameList = useMemo(() => res?.data ?? [], [res]);
+  const gameList = useMemo(() => (isSuccess(res) ? res.data : []), [res]);
 
   const updateGameList = () => send(true);
 
@@ -22,7 +23,7 @@ export const useGameListService = () => {
 export const useGameDetailService = (gameId: string) => {
   const { data: res, loading } = useGetGameDetailAPI(gameId);
 
-  const gameDetail = useMemo(() => res?.data ?? null, [res]);
+  const gameDetail = useMemo(() => (isSuccess(res) ? res.data : null), [res]);
 
   return { loading, gameDetail };
 };
@@ -35,9 +36,8 @@ export const useAddGameService = () => {
   const { send: addGameAPI } = useAddGameAPI();
 
   const addGameService = async (params: AddGameParams) => {
-    await addGameAPI(params);
-    // const res = await addGameAPI(params);
-    // console.log('addGame', res);
+    const res = await addGameAPI(params);
+    return isSuccess(res);
   };
 
   return addGameService;

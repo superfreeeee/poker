@@ -14,9 +14,10 @@ export interface AddGameParams {
  * @returns
  */
 export const useAddGameAPI = () => {
-  return useRequest((params: AddGameParams) => alovaInstance.Post('/api/game', { ...params }), {
-    immediate: false,
-  });
+  return useRequest(
+    (params: AddGameParams) => alovaInstance.Post<Response<GameRecord>>('/api/game', { ...params }),
+    { immediate: false },
+  );
 };
 
 /**
