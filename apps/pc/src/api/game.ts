@@ -1,7 +1,7 @@
 import { useRequest } from 'alova';
 import { GameRecord } from '../models/game/types';
-import { alovaInstance } from './alova';
-import { Response } from './interface';
+import { alovaInstance } from './core/alova';
+import { Response } from './core/interface';
 
 /**
  * Create new GameRecord
