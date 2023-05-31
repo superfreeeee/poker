@@ -1,8 +1,10 @@
 import React, { useState, FC } from 'react';
 import { Button, message } from 'antd';
 import { DownCircleFilled } from '@ant-design/icons';
-import { BuyInData } from '../../../../../models/buyIn';
+import classNames from 'classnames';
+import { BuyInData } from '../../../../../../models/buyIn';
 import { useBuyInData } from '../../../model';
+import { validateBuyInPlayers } from '../../../utils';
 import PlayerHand from '../../PlayerHand';
 import TitleBar from '../../TitleBar';
 import initialStyles from '../../BuyInPrepare/index.module.scss';
@@ -30,16 +32,6 @@ const PlayingEditable: FC<IEditableProps> = ({
     changeBuyInData: changeEditBuyInData,
   } = useBuyInData({ buyInData: editBuyInData, setBuyInData: setEditBuyInPlayers });
 
-  const validateUserName = () => {
-    let hasNull = false;
-    editBuyInPlayers.forEach((player) => {
-      if (player.name === '') {
-        hasNull = true;
-      }
-    });
-    return !hasNull;
-  };
-
   /**
    * 判断当前用户是否可以删除
    * @param id
@@ -63,7 +55,7 @@ const PlayingEditable: FC<IEditableProps> = ({
             amountPerhand: amount,
           });
         }}
-      ></TitleBar>
+      />
       <div className={initialStyles.playerList}>
         {editBuyInPlayers.map((player, i) => (
           <PlayerHand
@@ -84,30 +76,20 @@ const PlayingEditable: FC<IEditableProps> = ({
         ))}
       </div>
       <div className={styles.buttonList}>
-        <Button
-          icon={<DownCircleFilled className={styles.btnSvg} />}
-          onClick={() => {
-            addEditPlayer();
-          }}
-        >
+        <Button icon={<DownCircleFilled className={styles.btnSvg} />} onClick={addEditPlayer}>
           Add more player
         </Button>
-        <Button
-          className={styles.bottomBtn}
-          onClick={() => {
-            onCancel();
-          }}
-        >
+        <Button className={styles.bottomBtn} onClick={onCancel}>
           Cancel Change
         </Button>
         <Button
-          className={`${styles.btn} ${styles.deepBtn}`}
+          className={classNames(styles.btn, styles.deepBtn)}
           onClick={() => {
-            if (validateUserName()) {
-              onConfirm(editBuyInData);
-            } else {
+            if (!validateBuyInPlayers(editBuyInPlayers)) {
               message.error('玩家名不能为空');
+              return;
             }
+            onConfirm(editBuyInData);
           }}
         >
           Confirm Change

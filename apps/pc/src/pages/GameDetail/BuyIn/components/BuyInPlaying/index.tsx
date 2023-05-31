@@ -44,8 +44,8 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
     resetHistory,
   } = useCreateBuyInDataHistory();
 
-  const backPrepare = async () => {
-    await confirmModal({
+  const backPrepare = () => {
+    confirmModal({
       title: 'Reset buyIn data',
       content: 'Are you sure to reset buy-in data?',
       onOk: () => {
@@ -53,7 +53,6 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
         enterPrevState();
       },
     });
-    return false;
   };
 
   return (

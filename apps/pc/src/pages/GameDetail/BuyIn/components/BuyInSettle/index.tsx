@@ -3,18 +3,17 @@ import { Button } from 'antd';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import TitleBar from '../TitleBar';
 import PlayResult from '../PlayResult';
-import Header from '../../../../components/Header';
-import { confirmModal } from '../../utils';
 import { useCreateBuyInData } from '../../model';
-import { useBuyInDataAddService } from '../../../../services/buyin';
-import { useGameDetailService } from '../../../../services/game';
-import { transformBuyInDataToGameBuyInDataVo } from '../../../../models/buyIn';
+import { invalidateGameDetail } from '../../../../../api/game';
+import { useBuyInDataAddService } from '../../../../../services/buyin';
+import { transformBuyInDataToGameBuyInDataVo } from '../../../../../models/buyIn';
 import initialStyles from '../BuyInPrepare/index.module.scss';
 import styles from './index.module.scss';
 
 interface IBuyInSettleProps {
   enterPrevState: () => void;
 }
+
 const BuyInSettle: FC<IBuyInSettleProps> = ({ enterPrevState }: IBuyInSettleProps) => {
   const {
     buyInData: { amountPerhand, players: buyInPlayers },
@@ -24,43 +23,27 @@ const BuyInSettle: FC<IBuyInSettleProps> = ({ enterPrevState }: IBuyInSettleProp
   } = useCreateBuyInData();
   const { gameId = '' } = useParams();
   const navigate = useNavigate();
-  const { reloadGameDetail } = useGameDetailService(gameId);
   const addBuyInDataService = useBuyInDataAddService();
 
-  async function waitReload() {
+  async function submitBuyInData() {
     await addBuyInDataService(
       transformBuyInDataToGameBuyInDataVo({
-        gameId: gameId,
-        buyInData: { amountPerhand: amountPerhand, players: buyInPlayers },
+        gameId,
+        buyInData: { amountPerhand, players: buyInPlayers },
       }),
     );
-    await reloadGameDetail();
+    invalidateGameDetail(gameId);
     navigate(generatePath('/game/:id', { id: gameId }));
   }
 
   return (
     <div className={initialStyles.container}>
-      <div><Header
-        title="BuyIn Settle"
-        back="/buyin/create"
-        beforeNavigate={async () => {
-          await confirmModal({
-            title: 'Back to playing',
-            content: 'Are you sure to go back to playing stage?',
-            onOk: () => {
-              enterPrevState();
-            },
-          });
-          return false;
-        }}
-        style={{ alignSelf: 'stretch' }}
-      /></div>
       <TitleBar
         isEditable={false}
         title="结算状态"
         amountPerhand={amountPerhand}
         statisticsData={statisticsData}
-      ></TitleBar>
+      />
       <div className={initialStyles.playerList}>
         {buyInPlayers.map((player, i) => (
           <PlayResult
@@ -69,24 +52,17 @@ const BuyInSettle: FC<IBuyInSettleProps> = ({ enterPrevState }: IBuyInSettleProp
             amountPerhand={amountPerhand}
             onChange={(player) => changePlayer(player, i)}
             isEditable={true}
-          ></PlayResult>
+          />
         ))}
       </div>
       <div className={styles.buttonList}>
+        <Button onClick={enterPrevState}>返回</Button>
         <div className={styles.resUnderLine}>最终盈余总计 {totalBenefit}</div>
         <div>
           <Button
             className={initialStyles.deepBtn}
             disabled={totalBenefit != 0}
-            onClick={() => {
-              // updateBuyInDataService(
-              //   transformBuyInDataToGameBuyInDataVo({
-              //     gameId: gameId,
-              //     buyInData: { amountPerhand: amountPerhand, players: buyInPlayers },
-              //   }),
-              // );
-              waitReload();
-            }}
+            onClick={submitBuyInData}
           >
             Show final result
           </Button>

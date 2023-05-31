@@ -10,8 +10,9 @@ interface ITitleBarProps {
   isEditable: boolean;
   amountPerhand: number;
   statisticsData: BuyInStatistics;
-  handleAmountPerhandChange?: (arg0: number) => void;
+  handleAmountPerhandChange?: (amount: number) => void;
 }
+
 const TitleBar = ({
   title,
   isEditable,

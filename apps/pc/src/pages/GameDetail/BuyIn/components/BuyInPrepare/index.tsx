@@ -1,9 +1,10 @@
 import React, { FC, useEffect } from 'react';
 import { Button, message } from 'antd';
 import { DownCircleFilled } from '@ant-design/icons';
-import { useCurrentUser } from '../../../../models/user';
+import { useCurrentUser } from '../../../../../models/user';
 import { useCreateBuyInData } from '../../model';
 import PlayerHand from '../PlayerHand';
+import { validateBuyInPlayers } from '../../utils';
 import TitleBar from '../TitleBar';
 import styles from './index.module.scss';
 
@@ -23,7 +24,7 @@ const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareP
   } = useCreateBuyInData();
 
   useEffect(() => {
-    if (currentUser !== undefined) {
+    if (currentUser) {
       changeBuyInData({
         amountPerhand: amountPerhand,
         players: [
@@ -38,18 +39,22 @@ const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareP
     }
   }, []);
 
-  const validateUserName = () => {
-    let hasNull = false;
-    buyInPlayers.forEach((player) => {
-      if (player.name === '') {
-        hasNull = true;
-      }
-    });
-    return !hasNull;
-  };
-
   const validateAmountPerhand = () => {
     return amountPerhand > 0;
+  };
+
+  const completePrepareStage = () => {
+    if (!validateBuyInPlayers(buyInPlayers)) {
+      message.error('玩家名不能为空');
+      return;
+    }
+
+    if (!validateAmountPerhand()) {
+      message.error('一手金额大于0');
+      return;
+    }
+
+    enterNextState();
   };
 
   return (
@@ -87,20 +92,7 @@ const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareP
         >
           Add more player
         </Button>
-        <Button
-          className={styles.deepBtn}
-          onClick={() => {
-            if (validateUserName()) {
-              if (validateAmountPerhand()) {
-                enterNextState();
-              } else {
-                message.error('一手金额大于0');
-              }
-            } else {
-              message.error('玩家名不能为空');
-            }
-          }}
-        >
+        <Button className={styles.deepBtn} onClick={completePrepareStage}>
           Start play
         </Button>
       </div>
