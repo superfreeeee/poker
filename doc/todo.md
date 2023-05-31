@@ -6,6 +6,7 @@
   - [ ] react-route-dom 记录跳转前路由，登陆后回到上次的路由
   - [ ] "" => "/game/detail" => "/login" => "/game/detail" ("/game/detail")
 - [ ] feat: 按设备记录 uuid -> clientId
+- [ ] feat: 各列表页添加页面内 reload，刷新到最新列表数据
 
 ## Login
 
@@ -84,7 +85,8 @@
   - [x] GET /api/user/{userId} => /api/user?uid=xxx
 - [x] feat: 新增 admin 请求域，区分管理员与普通用户
   - [x] GET /api/admin/users 查询所有用户列表
-- [ ] refact: 查询游戏接口 改成查询参数
+- [x] refact: 查询游戏接口 改成查询参数
+  - GET /api/game => /api/game/list
   - GET /api/game/{gameId} => /api/game?id=xxx
 - [ ] refact: 查询手牌接口 改成查询参数
   - GET /api/hand/{handId} => /api/hand?id=xxx

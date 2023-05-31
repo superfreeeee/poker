@@ -13,21 +13,10 @@ export { transformGameVOToRecord };
 const gameApiLogger = createLogger('api/game');
 
 /**
- * Create new GameRecord
- * @returns
- */
-export const useAddGameAPI = () => {
-  return useRequest(
-    (params: AddGameParams) => alovaInstance.Post<Response<GameVO>>('/api/game', { ...params }),
-    { immediate: false },
-  );
-};
-
-/**
  * Fetch game list
  * @returns
  */
-const gameListAPI = alovaInstance.Get<GameRecord[], Response<GameVO[]>>('/api/game', {
+const gameListAPI = alovaInstance.Get<GameRecord[], Response<GameVO[]>>('/api/game/list', {
   transformData: (res) => {
     if (isSuccess(res)) {
       try {
@@ -55,7 +44,8 @@ export const useGameListAPI = () => {
  * @returns
  */
 const gameDetailAPI = (gameId: string) =>
-  alovaInstance.Get<GameRecord | null, Response<GameVO>>(`/api/game/${gameId}`, {
+  alovaInstance.Get<GameRecord | null, Response<GameVO>>(`/api/game`, {
+    params: { id: gameId },
     transformData: (res) => {
       if (isSuccess(res)) {
         try {
@@ -76,4 +66,15 @@ export const useGameDetailAPI = (gameId: string) => {
     initialData: null,
     force: (force: boolean) => !!force,
   });
+};
+
+/**
+ * Create new GameRecord
+ * @returns
+ */
+export const useAddGameAPI = () => {
+  return useRequest(
+    (params: AddGameParams) => alovaInstance.Post<Response<GameVO>>('/api/game', { ...params }),
+    { immediate: false },
+  );
 };
