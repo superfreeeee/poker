@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { IS_DEV } from './common/env';
+import { createLogger } from './common/commonLogger';
 import Home from './pages/Home';
 import LogIn from './pages/LogIn';
 import { LazyBuyIn } from './pages/BuyIn/lazy';
@@ -9,9 +11,8 @@ import HandDetail from './pages/GameDetail/HandDetail';
 import BuyInCreate from './pages/BuyIn/BuyInCreate';
 import BuyInView from './pages/BuyIn/BuyInView';
 import RNG from './pages/RNG';
+import { LazyDevTool } from './components/Devtool/lazy';
 import Redirect from './components/Redirect';
-import { createLogger } from './common/commonLogger';
-import Devtool from './components/Devtool';
 
 const appLogger = createLogger('/App');
 
@@ -61,7 +62,7 @@ const App = () => {
           />
         </Routes>
       </BrowserRouter>
-      <Devtool />
+      {IS_DEV && <LazyDevTool />}
     </>
   );
 };
