@@ -27,24 +27,25 @@ export const useAddGameAPI = () => {
  * Fetch game list
  * @returns
  */
-const gameListAPI = alovaInstance.Get<Response<GameRecord[]>, Response<GameVO[]>>('/api/game', {
+const gameListAPI = alovaInstance.Get<GameRecord[], Response<GameVO[]>>('/api/game', {
   transformData: (res) => {
     if (isSuccess(res)) {
       try {
-        const gameRecords = res.data.map(transformGameVOToRecord);
-        return { ...res, data: gameRecords };
+        // gameRecords
+        return res.data.map(transformGameVOToRecord);
       } catch (e) {
         gameApiLogger.error('gameListAPI: transform error', e);
         return Promise.reject(new TypeError('response invalid GameVO[]'));
       }
     }
 
-    return { ...res, data: [] };
+    return Promise.reject(res);
   },
 });
 
 export const useGameListAPI = () => {
   return useRequest(gameListAPI, {
+    initialData: [],
     force: (force: boolean) => !!force,
   });
 };
@@ -54,23 +55,25 @@ export const useGameListAPI = () => {
  * @returns
  */
 const gameDetailAPI = (gameId: string) =>
-  alovaInstance.Get<Response<GameRecord | null>, Response<GameVO>>(`/api/game/${gameId}`, {
+  alovaInstance.Get<GameRecord | null, Response<GameVO>>(`/api/game/${gameId}`, {
     transformData: (res) => {
       if (isSuccess(res)) {
         try {
-          const gameRecord = transformGameVOToRecord(res.data);
-          return { ...res, data: gameRecord };
+          // gameRecord
+          return transformGameVOToRecord(res.data);
         } catch (e) {
           gameApiLogger.error('gameListAPI: transform error', e);
           return Promise.reject(new TypeError('response invalid GameVO'));
         }
       }
-      return { ...res, data: null };
+
+      return Promise.reject(res);
     },
   });
 
 export const useGameDetailAPI = (gameId: string) => {
   return useRequest(gameDetailAPI(gameId), {
+    initialData: null,
     force: (force: boolean) => !!force,
   });
 };

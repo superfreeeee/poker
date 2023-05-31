@@ -48,36 +48,34 @@ const GameDetail = () => {
               <BuyInView data={gameDetail.buyInData} />
             </div>
           ) : (
-            <>
-              <Button type="primary" icon={<PlusSquareOutlined />} onClick={goCreateBuyInPage}>
-                Append buy-in record
-              </Button>
-              {/* // TODO remove mock createBuyIn */}
-              <Divider />
-              <Button
-                type="primary"
-                icon={<PlusSquareOutlined />}
-                onClick={() => {
-                  fetch(`${BASE_URL}/api/buyin`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      gameId,
-                      chipsPerHand: 100,
-                      players: [
-                        { id: '1', name: 'user1', buyInChips: 300, restChips: 300 },
-                        { id: '2', name: 'user2', buyInChips: 100, restChips: 500 },
-                      ],
-                    }),
-                  }).then(() => {
-                    reloadGameDetail();
-                  });
-                }}
-              >
-                Mock: Append buy-in record
-              </Button>
-            </>
+            <Button type="primary" icon={<PlusSquareOutlined />} onClick={goCreateBuyInPage}>
+              Append buy-in record
+            </Button>
           )}
+          <Divider />
+          {/* // TODO remove mock createBuyIn */}
+          <Button
+            type="primary"
+            icon={<PlusSquareOutlined />}
+            onClick={() => {
+              fetch(`${BASE_URL}/api/buyin`, {
+                method: !gameDetail.buyInData ? 'POST' : 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  gameId,
+                  chipsPerHand: (gameDetail.buyInData?.amountPerhand ?? 0) + 100,
+                  players: [
+                    { id: '1', name: 'user1', buyInChips: 300, restChips: 300 },
+                    { id: '2', name: 'user2', buyInChips: 100, restChips: 500 },
+                  ],
+                }),
+              }).then(() => {
+                reloadGameDetail();
+              });
+            }}
+          >
+            {!gameDetail.buyInData ? 'Mock: Append buy-in record' : 'Mock: Update buy-in record'}
+          </Button>
           <Divider />
           {/* Hand records */}
           <HandList data={gameDetail.handRecords} reloadGameDetail={reloadGameDetail} />

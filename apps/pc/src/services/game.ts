@@ -2,7 +2,7 @@ import { message } from 'antd';
 import type { AddGameParams } from '../api/game';
 import { useAddGameAPI, useGameListAPI, useGameDetailAPI } from '../api/game';
 import { createLogger } from '../common/commonLogger';
-import { isSuccess, useResponseData } from './utils';
+import { isSuccess } from './utils';
 
 const gameServiceLogger = createLogger('services/game');
 
@@ -11,14 +11,12 @@ const gameServiceLogger = createLogger('services/game');
  * @returns
  */
 export const useGameListService = () => {
-  const { data: res, send: gameListAPI, onError } = useGameListAPI();
+  const { data: gameList, send: gameListAPI, onError } = useGameListAPI();
 
   onError((event) => {
     gameServiceLogger.error('useGameListService: request error', event);
     message.error('获取游戏列表失败');
   });
-
-  const gameList = useResponseData(res, []);
 
   const updateGameList = () => gameListAPI(true);
 
@@ -30,9 +28,7 @@ export const useGameListService = () => {
  * @returns
  */
 export const useGameDetailService = (gameId: string) => {
-  const { data: res, loading, send: gameDetailAPI } = useGameDetailAPI(gameId);
-
-  const gameDetail = useResponseData(res, null);
+  const { data: gameDetail, loading, send: gameDetailAPI } = useGameDetailAPI(gameId);
 
   const reloadGameDetail = () => gameDetailAPI(true);
 

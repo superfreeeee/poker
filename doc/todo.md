@@ -71,10 +71,14 @@
 - [x] 查询用户状态 API
   - GET /api/user/{userId}
   - response: { code: 200, data: User | null }
-- [ ] refact: 检查是否已有 buyin data 存在
-  - [ ] POST /api/buyin 接口
-- [ ] feat: 更新 BuyInData 接口
-  - [ ] PUT /api/buyin
+- [x] refact: 检查是否已有 buyin data 存在
+  - [x] POST /api/buyin 接口
+- [x] feat: 更新 BuyInData 接口
+  - [x] PUT /api/buyin
+- [x] refact: 查询用户接口参数从路由换成查询参数
+  - [x] GET /api/user/{userId} => /api/user
+- [x] feat: 新增 admin 请求域，区分管理员与普通用户
+  - [x] GET /api/admin/users 查询所有用户列表
 - [ ] feat: 删除 BuyInData 接口
   - [ ] DELETE /api/buyin
 - [ ] feat: 新增玩家接口
@@ -87,9 +91,5 @@
   - [ ] GET /api/user/recent
   - [ ] params: uuid
   - [ ] refact: 登陆接口新增 uuid 字段，记录设备与用户映射关系
-- [ ] refact: 查询用户接口参数从路由换成查询参数
-  - [ ] GET /api/user/{userId} => /api/user
-- [ ] feat: 新增 admin 请求域，区分管理员与普通用户
-  - [ ] GET /api/admin/users 查询所有用户列表
 - [ ] feat: 利用 ExceptionHandler 机制处理通用 error
 - [ ] feat: 返回对象从 ResponseVO 迁移到原始 ResponseEntity 上
