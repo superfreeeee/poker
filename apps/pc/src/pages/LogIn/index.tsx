@@ -24,7 +24,7 @@ const LogIn = () => {
     const user = await loginService({ name });
     if (user) {
       setCurrentUser(user);
-      navigate('/home');
+      navigate('/');
     }
   };
 

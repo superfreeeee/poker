@@ -1,4 +1,4 @@
-import { ILoginParams, useLoginAPI } from '../api/user';
+import { ILoginParams, useLoginAPI, useValidateLoginAPI } from '../api/user';
 import { createLogger } from '../common/commonLogger';
 import { isSuccess } from './utils';
 
@@ -25,4 +25,21 @@ export const useLoginService = () => {
   };
 
   return loginService;
+};
+
+export const useValidateLoginService = () => {
+  const { send: validateLoginAPI } = useValidateLoginAPI();
+
+  const validateLoginService = async (userId: string) => {
+    try {
+      userSerivceLogger.log('logHere');
+      await validateLoginAPI(userId);
+      return Promise.resolve('Valid User');
+    } catch {
+      userSerivceLogger.log('loginResult', 'invalid user');
+      return Promise.reject('Invalid User');
+    }
+  };
+
+  return validateLoginService;
 };
