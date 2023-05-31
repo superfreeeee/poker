@@ -15,6 +15,9 @@
 ## Home: GameList
 
 - [ ] bug: 登出之后重新登陆 GameList 没有刷新
+- [ ] feat: 按时间倒序
+- [ ] feat: 分几个 Tab 页：GameList、Stattistics、Utils、Setting
+- [ ] feat: Setting 下支持管理 Player
 
 ## HandCreate page
 
