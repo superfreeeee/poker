@@ -35,6 +35,7 @@
   - [ ] addAction 后自动滚动到最下记录
 - [x] potSize 不用输入框了 => do nothing at onChange
 - [x] 出现过的牌不能再选
+- [x] bug: hand create 关联接口
 - [ ] feat: 修改记录
 - [ ] feat: 回退一步
 - [ ] feat: BB check

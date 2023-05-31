@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { nanoid } from 'nanoid';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Radio } from 'antd';
 import {
   HandStage,
@@ -8,12 +7,12 @@ import {
   PlayerAction,
   SettingPlayerAction,
   getPlayerActionOptions,
-  HandRecord,
   HandBlindRecord,
 } from '../../../models/hand';
-import { Card } from '../../../models/card';
+import { Card, encodeCard } from '../../../models/card';
 import { PlayerSeat } from '../../../models/player';
 import { useWindowSize } from '../../../hooks/useWindowSize';
+import { useAddHandService } from '../../../services/hand';
 import Header from '../../../components/Header';
 import { CardSelectorModal } from '../../../components/CardSelectorModal';
 import HandActions from '../components/HandActions';
@@ -177,9 +176,11 @@ const HandCreate = () => {
   const showdownOptions = playerStates.filter((state) => !state.fold && !state.showdown);
 
   const navigate = useNavigate();
+  const addHandService = useAddHandService();
+  const { gameId = '' } = useParams();
   const saveRecord = () => {
-    const record: HandRecord = {
-      id: nanoid(),
+    addHandService({
+      gameId,
       players: [],
       blinds: actions
         .map((action): HandBlindRecord | null => {
@@ -189,14 +190,25 @@ const HandCreate = () => {
           return null;
         })
         .reduce((blinds, record) => (record ? [...blinds, record] : blinds), []),
-      actions,
-      boardCards: actions.reduce((res, action) => {
-        return action.type === 'stageInfo' ? [...res, ...action.cards] : res;
-      }, []),
-      createTime: Date.now(),
-    };
-
-    navigate(`../hand/${record.id}`);
+      actions: actions.map((action) => {
+        return {
+          ...action,
+          cards:
+            action.type === 'stageInfo' || action.type === 'playerShowdown'
+              ? action.cards.map(encodeCard)
+              : null,
+        };
+      }),
+      boardCards: actions
+        .reduce((res, action) => {
+          return action.type === 'stageInfo' ? [...res, ...action.cards] : res;
+        }, [])
+        .map(encodeCard),
+    }).then((res) => {
+      if (res) {
+        navigate(`../hand/${res.id}`);
+      }
+    });
   };
 
   const selectShowdown = (seat: PlayerSeat) => {

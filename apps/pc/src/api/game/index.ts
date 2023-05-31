@@ -1,4 +1,5 @@
-import { useRequest } from 'alova';
+// eslint-disable-next-line import/named
+import { invalidateCache, useRequest } from 'alova';
 import { GameRecord } from '../../models/game';
 import { isSuccess } from '../../services/utils';
 import { createLogger } from '../../common/commonLogger';
@@ -17,6 +18,8 @@ const gameApiLogger = createLogger('api/game');
  * @returns
  */
 const gameListAPI = alovaInstance.Get<GameRecord[], Response<GameVO[]>>('/api/game/list', {
+  // invalidate in 60s
+  localCache: 60 * 1000,
   transformData: (res) => {
     if (isSuccess(res)) {
       try {
@@ -60,6 +63,10 @@ const gameDetailAPI = (gameId: string) =>
       return Promise.reject(res);
     },
   });
+
+export const invalidateGameDetail = (gameId: string) => {
+  invalidateCache(gameDetailAPI(gameId));
+};
 
 export const useGameDetailAPI = (gameId: string) => {
   return useRequest(gameDetailAPI(gameId), {
