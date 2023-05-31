@@ -18,6 +18,8 @@ const gameApiLogger = createLogger('api/game');
  * @returns
  */
 const gameListAPI = alovaInstance.Get<GameRecord[], Response<GameVO[]>>('/api/game/list', {
+  // invalidate in 60s
+  localCache: 60 * 1000,
   transformData: (res) => {
     if (isSuccess(res)) {
       try {
