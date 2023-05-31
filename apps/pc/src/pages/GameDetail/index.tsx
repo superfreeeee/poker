@@ -5,7 +5,7 @@ import { PlusSquareOutlined } from '@ant-design/icons';
 import { BASE_URL } from '../../api/core';
 import { createLogger } from '../../common/commonLogger';
 import { useGameDetailService } from '../../services/game';
-import BuyInView from '../BuyIn/BuyInView';
+import BuyInDetail from '../BuyIn/BuyInDetail';
 import Header from '../../components/Header';
 import HandList from './HandList';
 import styles from './index.module.scss';
@@ -45,7 +45,7 @@ const GameDetail = () => {
           {gameDetail.buyInData ? (
             <div>
               {/* // TODO show buyInData Detail */}
-              <BuyInView data={gameDetail.buyInData} />
+              <BuyInDetail data={gameDetail.buyInData} />
             </div>
           ) : (
             <>

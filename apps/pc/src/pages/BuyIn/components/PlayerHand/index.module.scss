@@ -7,7 +7,6 @@ $color-match: #c2d7ef;
   align-content: center;
   border-radius: 10px;
   padding: 16px 30px;
-  margin-top: 20px;
   background-color: white;
 
   > div {
@@ -19,7 +18,7 @@ $color-match: #c2d7ef;
   }
 
   > div:nth-child(2n-1) {
-    margin-right: 50px;
+    margin-right: 10%;
   }
 }
 
@@ -85,7 +84,7 @@ $color-match: #c2d7ef;
   color: gray;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 800px) {
   .container {
     flex-direction: column;
     justify-content: center;

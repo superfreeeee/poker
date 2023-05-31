@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
 import BuyInPrepare from '../components/BuyInPrepare';
 import BuyInPlaying from '../components/BuyInPlaying';
 import BuyInSettle from '../components/BuyInSettle';
 // import { useBuyInDataAddService } from '../../../services/buyin';
 // import { useCreateBuyInData } from '../model';
-import '../../../mock/buyIn';
 
 enum BuyInStage {
   Prepare = 'buyInPrepare',
@@ -15,7 +13,6 @@ enum BuyInStage {
 
 const BuyInCreate = () => {
   const [buyInState, setBuyInState] = useState(BuyInStage.Prepare);
-  const navigate = useNavigate();
 
   return (
     <div>
@@ -38,11 +35,6 @@ const BuyInCreate = () => {
         <BuyInSettle
           enterPrevState={() => {
             setBuyInState(BuyInStage.Playing);
-          }}
-          enterNextState={() => {
-            // post
-            // fetch gamedetail
-            navigate(generatePath('/buyin/detail/:id', { id: '234567' }));
           }}
         ></BuyInSettle>
       )}

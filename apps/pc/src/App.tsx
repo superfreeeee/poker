@@ -7,7 +7,6 @@ import GameDetail from './pages/GameDetail';
 import HandCreate from './pages/GameDetail/HandCreate';
 import HandDetail from './pages/GameDetail/HandDetail';
 import BuyInCreate from './pages/BuyIn/BuyInCreate';
-import BuyInView from './pages/BuyIn/BuyInView';
 import RNG from './pages/RNG';
 import Redirect from './components/Redirect';
 import { createLogger } from './common/commonLogger';
@@ -40,7 +39,6 @@ const App = () => {
 
         {/* // TODO move to game detail page */}
         <Route path="/buyin" element={<LazyBuyIn />}>
-          <Route path="detail/:id" element={<BuyInView />} />
           <Route path="create" element={<BuyInCreate />} />
           <Route path="" element={<Redirect path="/buyin/create" />} />
         </Route>

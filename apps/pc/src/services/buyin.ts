@@ -1,24 +1,29 @@
-import { useAddBuyInDataAPI } from '../api/buyin';
+import { useAddBuyInDataRequest, useUpdateBuyInDataRequest } from '../api/buyin';
+import { AddBuyInParams } from '../api/buyin/type';
 import { createLogger } from '../common/commonLogger';
-import { BuyInData } from '../models/buyIn';
 import { isSuccess } from './utils';
 
 const buyInServiceLogger = createLogger('services/buyIn');
 
 export const useBuyInDataAddService = () => {
-  const { send: buyInAddAPI } = useAddBuyInDataAPI();
+  const { send: buyInAddAPI } = useAddBuyInDataRequest();
 
-  const buyInAddService = async (data: BuyInData) => {
-    try {
-      const res = await buyInAddAPI(data);
-      if (isSuccess(res) && res.data) {
-        return res.data;
-      }
-      return null;
-    } catch {
-      buyInServiceLogger.error('buyInDataAdd failed', data);
-      return null;
-    }
+  const buyInAddService = async (addBuyInData: AddBuyInParams) => {
+    buyInServiceLogger.log('after transform',addBuyInData)
+    const res = await buyInAddAPI(addBuyInData);
+    return isSuccess(res);
+  };
+
+  return buyInAddService;
+};
+
+export const useBuyInDataUpdateService = () => {
+  const { send: buyInUpdateAPI } = useUpdateBuyInDataRequest();
+
+  const buyInAddService = async (addBuyInData: AddBuyInParams) => {
+    buyInServiceLogger.log('after transform',addBuyInData)
+    const res = await buyInUpdateAPI(addBuyInData);
+    return isSuccess(res);
   };
 
   return buyInAddService;

@@ -53,13 +53,7 @@ const PlayResult: FC<IPlayerResultProps> = ({
         <FormulaWithLabel
           x={{
             label: 'Rest',
-            value: (
-              <Input
-                bordered={false}
-                value={rest}
-                onChange={onRestChange}
-              />
-            ),
+            value: <Input bordered={false} value={rest} onChange={onRestChange} />,
           }}
           sign="*"
           y={{ label: 'Total buy-in', value: amountPerhand * hands }}
@@ -68,40 +62,11 @@ const PlayResult: FC<IPlayerResultProps> = ({
       ) : (
         <FormulaWithLabel
           x={{ label: 'Rest', value: rest }}
-          sign="*"
+          sign="-"
           y={{ label: 'Total buy-in', value: amountPerhand * hands }}
           z={{ label: 'Profit', value: benefit }}
         />
       )}
-      {/* 
-      <div className={playerContentStyles.textContiner}>
-        {isEditable ? (
-          <div className={classNames(playerContentStyles.inputForm, styles.input)}>
-            <div className={playerContentStyles.title}>REST</div>
-          </div>
-        ) : (
-          <div>
-            <div className={playerContentStyles.title}>REST</div>
-            <div className={playerContentStyles.calcText}>{player.rest}</div>
-          </div>
-        )}
-        <div>
-          <div className={playerContentStyles.title}>-</div>
-          <div className={playerContentStyles.otherText}>-</div>
-        </div>
-        <div>
-          <div className={playerContentStyles.title}>Amount</div>
-          <div className={playerContentStyles.calcText}>{amountPerhand * hands}</div>
-        </div>
-        <div>
-          <div className={playerContentStyles.title}>=</div>
-          <div className={playerContentStyles.otherText}>=</div>
-        </div>
-        <div>
-          <div className={playerContentStyles.title}>Profit and Loss</div>
-          <div className={playerContentStyles.calcText}>{benefit}</div>
-        </div>
-      </div> */}
     </div>
   );
 };

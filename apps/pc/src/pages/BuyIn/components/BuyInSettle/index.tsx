@@ -1,27 +1,42 @@
 import React, { FC } from 'react';
 import { Button } from 'antd';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import Header from '../../../../components/Header';
 import TitleBar from '../TitleBar';
-import { useCreateBuyInData } from '../../model';
 import PlayResult from '../PlayResult';
+import { useCreateBuyInData } from '../../model';
+import { useBuyInDataAddService } from '../../../../services/buyin';
+import { useGameDetailService } from '../../../../services/game';
+import { transformBuyInDataToGameBuyInDataVo } from '../../../../models/buyIn';
 import initialStyles from '../BuyInPrepare/index.module.scss';
 import { confirmModal } from '../../utils';
 import styles from './index.module.scss';
 
 interface IBuyInSettleProps {
   enterPrevState: () => void;
-  enterNextState: () => void;
 }
-const BuyInSettle: FC<IBuyInSettleProps> = ({
-  enterPrevState,
-  enterNextState,
-}: IBuyInSettleProps) => {
+const BuyInSettle: FC<IBuyInSettleProps> = ({ enterPrevState }: IBuyInSettleProps) => {
   const {
     buyInData: { amountPerhand, players: buyInPlayers },
     statisticsData,
     totalBenefit,
     changePlayer,
   } = useCreateBuyInData();
+  const { gameId = '' } = useParams();
+  const navigate = useNavigate();
+  const { reloadGameDetail } = useGameDetailService(gameId);
+  const addBuyInDataService = useBuyInDataAddService();
+
+  async function waitReload() {
+    await addBuyInDataService(
+      transformBuyInDataToGameBuyInDataVo({
+        gameId: gameId,
+        buyInData: { amountPerhand: amountPerhand, players: buyInPlayers },
+      }),
+    );
+    await reloadGameDetail();
+    navigate(generatePath('/game/:id', { id: gameId }));
+  }
 
   return (
     <>
@@ -63,8 +78,16 @@ const BuyInSettle: FC<IBuyInSettleProps> = ({
           <div>
             <Button
               className={initialStyles.deepBtn}
-              onClick={() => enterNextState()}
               disabled={totalBenefit != 0}
+              onClick={() => {
+                // updateBuyInDataService(
+                //   transformBuyInDataToGameBuyInDataVo({
+                //     gameId: gameId,
+                //     buyInData: { amountPerhand: amountPerhand, players: buyInPlayers },
+                //   }),
+                // );
+                waitReload();
+              }}
             >
               Show final result
             </Button>

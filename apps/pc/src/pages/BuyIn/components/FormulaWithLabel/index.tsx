@@ -21,7 +21,9 @@ const FormulaWithLabel: FC<IFormulaWithLabelProps> = ({ x, sign, y, z }) => {
       <span>{y.label}</span>
       <span>=</span>
       <span>{z.label}</span>
-      <span className={typeof x.value !== 'number' ? styles.input : ''}>{x.value}</span>
+      <span className={typeof x.value === 'number' || x.value == null ? '' : styles.input}>
+        {x.value}
+      </span>
       <span>{sign}</span>
       <span>{y.value}</span>
       <span>=</span>
