@@ -16,7 +16,7 @@ import { PlayerSeat } from '../../../models/player';
 import { useWindowSize } from '../../../hooks/useWindowSize';
 import Header from '../../../components/Header';
 import { CardSelectorModal } from '../../../components/CardSelectorModal';
-import HandActions from '../../../components/HandActions';
+import HandActions from '../components/HandActions';
 import CompactInput from './components/CompactInput';
 import StageSetting, { IStageSettingProps } from './components/StageSetting';
 import { usePlayerStates } from './hooks/usePlayerStates';

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { createLogger } from '../../../common/commonLogger';
 import { renderCardText } from '../../../components/Card';
 import { HandRecord } from '../../../models/hand';
-import HandActions from '../../../components/HandActions';
+import HandActions from '../components/HandActions';
 import Header from '../../../components/Header';
 import styles from './index.module.scss';
 

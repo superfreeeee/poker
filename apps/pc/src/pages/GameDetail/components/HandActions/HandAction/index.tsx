@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import classNames from 'classnames';
-import { renderCardText } from '../../Card';
-import { HandStage, HandAction as IHandAction } from '../../../models/hand';
+import { renderCardText } from '../../../../../components/Card';
+import { HandStage, HandAction as IHandAction } from '../../../../../models/hand';
 import styles from './index.module.scss';
 
 interface IHandActionProps {
