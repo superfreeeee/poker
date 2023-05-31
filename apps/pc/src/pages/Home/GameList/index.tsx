@@ -31,6 +31,7 @@ const GameList = () => {
 
   return (
     <div>
+      {/* // TODO remove mock entry */}
       <Button
         onClick={() => {
           addGameService({

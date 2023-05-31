@@ -1,8 +1,5 @@
-import { useRequest } from 'alova';
-import { Player } from '../models/player';
-import { EncodedCard } from '../models/card';
-import { Response } from './core/interface';
-import { alovaInstance } from './core';
+import type { EncodedCard } from '../../models/card';
+import type { Player } from '../../models/player';
 
 export interface AddHandParams {
   gameId: string;
@@ -36,14 +33,3 @@ export interface HandVO {
   boardCards: EncodedCard[];
   actions: HandActionVO[];
 }
-
-/**
- * Create new GameRecord
- * @returns
- */
-export const useAddHandAPI = () => {
-  return useRequest(
-    (params: AddHandParams) => alovaInstance.Post<Response<HandVO>>('/api/hand', { ...params }),
-    { immediate: false },
-  );
-};

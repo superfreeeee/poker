@@ -1,14 +1,5 @@
-import { HandVO } from '../../api/hand';
-import { decodeCard } from '../card';
-import { PlayerState, isPlayerSeat } from '../player';
-import {
-  ALL_PLAYER_ACTIONS,
-  HandAction,
-  HandBlindRecord,
-  HandRecord,
-  PlayerAction,
-  SettingPlayerAction,
-} from './types';
+import { PlayerState } from '../player';
+import { ALL_PLAYER_ACTIONS, PlayerAction, SettingPlayerAction } from './types';
 
 interface IGetPlayerActionsProps {
   currentBetSize: number;
@@ -41,22 +32,4 @@ export const getPlayerActionOptions = ({
         (currentBetSize === 0 && action === PlayerAction.Call),
     };
   });
-};
-
-export const transformHandVOToRecord = (handVO: HandVO): HandRecord => {
-  const { id, createTime, players, blinds, boardCards, actions } = handVO;
-
-  return {
-    id,
-    createTime,
-    players,
-    blinds: blinds.map(({ seat, chips }): HandBlindRecord => {
-      if (!isPlayerSeat(seat)) {
-        throw new SyntaxError(`Invalid seat literal: ${seat}`);
-      }
-      return { seat, chips };
-    }),
-    boardCards: boardCards.map(decodeCard),
-    actions: actions as HandAction[],
-  };
 };

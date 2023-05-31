@@ -2,6 +2,7 @@ import { Alert, Button, Divider } from 'antd';
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PlusSquareOutlined } from '@ant-design/icons';
+import { BASE_URL } from '../../api/core';
 import { createLogger } from '../../common/commonLogger';
 import { useGameDetailService } from '../../services/game';
 import BuyInView from '../BuyIn/BuyInView';
@@ -57,7 +58,7 @@ const GameDetail = () => {
                 type="primary"
                 icon={<PlusSquareOutlined />}
                 onClick={() => {
-                  fetch('http://124.221.113.80:8080/api/buyin', {
+                  fetch(`${BASE_URL}/api/buyin`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -68,6 +69,8 @@ const GameDetail = () => {
                         { id: '2', name: 'user2', buyInChips: 100, restChips: 500 },
                       ],
                     }),
+                  }).then(() => {
+                    reloadGameDetail();
                   });
                 }}
               >
