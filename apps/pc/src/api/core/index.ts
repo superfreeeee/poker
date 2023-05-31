@@ -2,9 +2,9 @@ import { createAlova } from 'alova';
 import GlobalFetch from 'alova/GlobalFetch';
 import ReactHook from 'alova/react';
 import { createLogger } from '../../common/commonLogger';
-import { IS_DEV } from '../../common/env';
+import { USING_LOCAL_SERVER } from '../../common/env';
 
-export const BASE_URL = IS_DEV ? 'http://localhost:8080' : 'http://124.221.113.80:8080';
+export const BASE_URL = USING_LOCAL_SERVER ? 'http://localhost:8080' : 'http://124.221.113.80:8080';
 
 const apiLogger = createLogger('api/alova');
 
