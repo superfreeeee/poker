@@ -1,4 +1,5 @@
-import { useRequest } from 'alova';
+// eslint-disable-next-line import/named
+import { invalidateCache, useRequest } from 'alova';
 import { GameRecord } from '../../models/game';
 import { isSuccess } from '../../services/utils';
 import { createLogger } from '../../common/commonLogger';
@@ -60,6 +61,10 @@ const gameDetailAPI = (gameId: string) =>
       return Promise.reject(res);
     },
   });
+
+export const invalidateGameDetail = (gameId: string) => {
+  invalidateCache(gameDetailAPI(gameId));
+};
 
 export const useGameDetailAPI = (gameId: string) => {
   return useRequest(gameDetailAPI(gameId), {
