@@ -1,4 +1,4 @@
-import { AddHandParams, useAddHandAPI } from '../api/hand';
+import { AddHandParams, useAddHandAPI, useHandDetailAPI } from '../api/hand';
 import { isSuccess } from './utils';
 
 /**
@@ -14,4 +14,10 @@ export const useAddHandService = () => {
   };
 
   return addHandService;
+};
+
+export const useHandDetailService = (gameId: string, handId: string) => {
+  const { data: handDetail } = useHandDetailAPI(gameId, handId);
+
+  return { handDetail };
 };
