@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { message } from 'antd';
 import { AddGameParams, useAddGameAPI, useGetGameDetailAPI, useGetGameListAPI } from '../api/game';
 import { GameRecord, transformGameVOToRecord } from '../models/game';
 import { createLogger } from '../common/commonLogger';
@@ -11,7 +12,12 @@ const gameServiceLogger = createLogger('services/game');
  * @returns
  */
 export const useGameListService = () => {
-  const { data: res, send: getGameListAPI } = useGetGameListAPI();
+  const { data: res, send: getGameListAPI, onError } = useGetGameListAPI();
+
+  onError((event) => {
+    gameServiceLogger.error('useGameListService: request error', event);
+    message.error('获取游戏列表失败');
+  });
 
   const gameList = useMemo<GameRecord[]>(() => {
     if (!isSuccess(res)) {
