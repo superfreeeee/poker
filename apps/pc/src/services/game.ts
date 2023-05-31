@@ -1,7 +1,6 @@
-import { useMemo } from 'react';
 import { message } from 'antd';
-import { AddGameParams, useAddGameAPI, useGetGameDetailAPI, useGetGameListAPI } from '../api/game';
-import { GameRecord, transformGameVOToRecord } from '../models/game';
+import type { AddGameParams } from '../api/game';
+import { useAddGameAPI, useGameListAPI, useGameDetailAPI } from '../api/game';
 import { createLogger } from '../common/commonLogger';
 import { isSuccess, useResponseData } from './utils';
 
@@ -12,28 +11,16 @@ const gameServiceLogger = createLogger('services/game');
  * @returns
  */
 export const useGameListService = () => {
-  const { data: res, send: getGameListAPI, onError } = useGetGameListAPI();
+  const { data: res, send: gameListAPI, onError } = useGameListAPI();
 
   onError((event) => {
     gameServiceLogger.error('useGameListService: request error', event);
     message.error('获取游戏列表失败');
   });
 
-  const gameList = useMemo<GameRecord[]>(() => {
-    if (!isSuccess(res)) {
-      return [];
-    }
+  const gameList = useResponseData(res, []);
 
-    try {
-      const gameList = res.data.map(transformGameVOToRecord);
-      return gameList;
-    } catch (e) {
-      gameServiceLogger.error('useGameListService: transform error', e);
-      return [];
-    }
-  }, [res]);
-
-  const updateGameList = () => getGameListAPI(true);
+  const updateGameList = () => gameListAPI(true);
 
   return { gameList, updateGameList };
 };
@@ -43,22 +30,11 @@ export const useGameListService = () => {
  * @returns
  */
 export const useGameDetailService = (gameId: string) => {
-  const { data: res, loading, send: getGameDetailAPI } = useGetGameDetailAPI(gameId);
+  const { data: res, loading, send: gameDetailAPI } = useGameDetailAPI(gameId);
 
-  const gameDetail = useMemo<GameRecord | null>(() => {
-    if (!isSuccess(res)) {
-      return null;
-    }
-    try {
-      return transformGameVOToRecord(res.data);
-    } catch (e) {
-      gameServiceLogger.error('useGameDetailService: transform error', e);
-      return null;
-    }
-  }, [res]);
-  useResponseData(res, null);
+  const gameDetail = useResponseData(res, null);
 
-  const reloadGameDetail = () => getGameDetailAPI(true);
+  const reloadGameDetail = () => gameDetailAPI(true);
 
   return { loading, gameDetail, reloadGameDetail };
 };
