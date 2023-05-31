@@ -2,8 +2,8 @@ import React, { useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { DeleteOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import Header from '../../components/Header';
-import { useDocumentTitle } from '../../hooks/useDocumentTitle';
+import Header from '../../../components/Header';
+import { useDocumentTitle } from '../../../hooks/useDocumentTitle';
 import { useRng } from './useRng';
 import styles from './index.module.scss';
 
