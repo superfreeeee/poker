@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { Steps } from 'antd';
 import BuyInPrepare from '../components/BuyInPrepare';
 import BuyInPlaying from '../components/BuyInPlaying';
 import BuyInSettle from '../components/BuyInSettle';
 import Header from '../../../../components/Header';
-import styles from "./index.module.scss"
+import styles from './index.module.scss';
 
 enum BuyInStage {
   Prepare = 'buyInPrepare',
@@ -13,46 +12,45 @@ enum BuyInStage {
   Settle = 'buyInSettle',
 }
 
-const stepInfo = [
-  { title: BuyInStage.Prepare },
-  { title: BuyInStage.Playing },
-  { title: BuyInStage.Settle },
-];
+const stageTitleMap = {
+  [BuyInStage.Prepare]: '起手买入',
+  [BuyInStage.Playing]: '游戏中',
+  [BuyInStage.Settle]: '结算',
+};
+
+const steps = [BuyInStage.Prepare, BuyInStage.Playing, BuyInStage.Settle];
+
+const stepsInfo = steps.map((step) => ({ title: stageTitleMap[step] }));
 
 const BuyInCreate = () => {
-  const [buyInState, setBuyInState] = useState(BuyInStage.Prepare);
-  const { gameId } = useParams();
+  const [stage, setStage] = useState(BuyInStage.Prepare);
 
   return (
     <div>
-      <Header title="BuyIn Create" back={gameId ? '..' : true} style={{ alignSelf: 'stretch' }} />
-      <Steps
-        className={styles.step}
-        current={stepInfo.findIndex((stage) => stage.title == buyInState)}
-        items={stepInfo}
-      ></Steps>
-      {buyInState == BuyInStage.Prepare ? (
+      <Header title="BuyIn Create" back={'..'} style={{ alignSelf: 'stretch' }} />
+      <Steps className={styles.step} current={steps.indexOf(stage)} items={stepsInfo} />
+      {stage === BuyInStage.Prepare ? (
         <BuyInPrepare
           enterNextState={() => {
-            setBuyInState(BuyInStage.Playing);
+            setStage(BuyInStage.Playing);
           }}
-        ></BuyInPrepare>
-      ) : buyInState == BuyInStage.Playing ? (
+        />
+      ) : stage === BuyInStage.Playing ? (
         <BuyInPlaying
           enterNextState={() => {
-            setBuyInState(BuyInStage.Settle);
+            setStage(BuyInStage.Settle);
           }}
           enterPrevState={() => {
-            setBuyInState(BuyInStage.Prepare);
+            setStage(BuyInStage.Prepare);
           }}
-        ></BuyInPlaying>
-      ) : (
+        />
+      ) : stage === BuyInStage.Settle ? (
         <BuyInSettle
           enterPrevState={() => {
-            setBuyInState(BuyInStage.Playing);
+            setStage(BuyInStage.Playing);
           }}
-        ></BuyInSettle>
-      )}
+        />
+      ) : null}
     </div>
   );
 };
