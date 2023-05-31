@@ -10,7 +10,7 @@ import HandCreate from './pages/GameDetail/HandCreate';
 import HandDetail from './pages/GameDetail/HandDetail';
 import BuyInCreate from './pages/BuyIn/BuyInCreate';
 import BuyInView from './pages/BuyIn/BuyInView';
-import RNG from './pages/RNG';
+import RNG from './pages/Toolkits/RNG';
 import { LazyDevTool } from './components/Devtool/lazy';
 import Redirect from './components/Redirect';
 
@@ -36,8 +36,21 @@ const App = () => {
           </Route>
 
           {/* 2.2 Statistic */}
-          {/* 2.3 Utils */}
-          <Route path="/rng" element={<RNG />} />
+          {/* 2.3 Toolkits */}
+          <Route path="/toolkit">
+            <Route path="rng" element={<RNG />} />
+            <Route
+              path="*"
+              element={
+                <Redirect
+                  path="/?tab=Toolkits"
+                  beforeRedirect={(path) => {
+                    appLogger.warn(`unknown toolkit: ${path}, redirect to "/?tab=toolkits"`);
+                  }}
+                />
+              }
+            />
+          </Route>
 
           {/* 2.4 Setting */}
 
