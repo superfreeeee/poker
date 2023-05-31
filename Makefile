@@ -4,6 +4,9 @@ run:
 reinstall: clean-deps
 	pnpm i
 
+todo:
+	@cat doc/todo.md | grep "\- \[ \]"
+
 ############### cleans ###############
 clean-deps:
 # remove root node_modules
