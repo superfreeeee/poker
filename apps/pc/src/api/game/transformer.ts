@@ -1,7 +1,7 @@
-import { GameVO } from '../../api/game';
-import { BuyInPlayer } from '../buyIn';
+import type { BuyInPlayer } from '../../models/buyIn';
+import type { GameRecord } from '../../models/game';
 import { transformHandVOToRecord } from '../hand';
-import { GameRecord } from './types';
+import type { GameVO } from './types';
 
 /**
  * GameVO => GameRecord

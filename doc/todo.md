@@ -1,5 +1,9 @@
 # TODO = Bugs + Feat
 
+## Login
+
+- [ ] 记录登录过用户
+
 ## HandCreate page
 
 - [x] 玩家动作【UserAction】后自动跳下一个位置
@@ -13,25 +17,21 @@
 - [x] Call 平应禁用 User Action 直到 stage 切换
 - [x] Blinds：Input 盲注结构
 - [x] Showdown：摊牌选择
-- [ ] 修改记录
-- [ ] 回退一步
-- [ ] 出现过的牌不能再选
 - [x] 选完之后的 Generate => 改成 Save + 自动跳转到 HandDetail
 - [x] 适配手机端 UI
   - [ ] Mobile 的 CardSelector 使用抽屉
   - [ ] addAction 后自动滚动到最下记录
 - [x] potSize 不用输入框了 => do nothing at onChange
-- [ ] BB check
-
-## HandRecordList
-
-- [x] 加 create 入口
-- [x] 列表 UI 加 gap
-- [x] 适配手机端 UI
+- [x] 出现过的牌不能再选
+- [ ] feat: 修改记录
+- [ ] feat: 回退一步
+- [ ] feat: BB check
+- [ ] feat: 用户 Input 简化，区分受控模式与非受控模式
 
 ## HandDetail
 
-- [ ] 基础信息展示
+- [x] 基础信息展示
+- [ ] feat: 对接 handDetail 接口
 
 ## BuyIn
 
@@ -58,14 +58,38 @@
 
 ## Common (multi-page utils)
 
-- [ ] 检查当前用户登录态，未登陆 / 登陆 ID 无效 => go Login page
+- [ ] feat: 检查当前用户登录态，未登陆 / 登陆 ID 无效 => go Login page
   - [ ] react-route-dom 记录跳转前路由，登陆后回到上次的路由
   - [ ] "" => "/game/detail" => "/login" => "/game/detail" ("/game/detail")
 
 # Backend API
 
-- [ ] POST /api/buyin
+- [x] 增加 buyIn data 接口
+  - POST /api/buyin
   - body: { gameId, buyInData: BuyInData }
   - response: { code: 200, data: null }
-- [ ] GET /api/user/{userId}
+- [x] 查询用户状态 API
+  - GET /api/user/{userId}
   - response: { code: 200, data: User | null }
+- [ ] refact: 检查是否已有 buyin data 存在
+  - [ ] POST /api/buyin 接口
+- [ ] feat: 更新 BuyInData 接口
+  - [ ] PUT /api/buyin
+- [ ] feat: 删除 BuyInData 接口
+  - [ ] DELETE /api/buyin
+- [ ] feat: 新增玩家接口
+  - [ ] POST /api/player
+  - [ ] body: { uid, player }
+- [ ] feat: 查询玩家接口
+  - [ ] GET /api/player
+  - [ ] params: uid
+- [ ] feat: 查询登陆过用户接口
+  - [ ] GET /api/user/recent
+  - [ ] params: uuid
+  - [ ] refact: 登陆接口新增 uuid 字段，记录设备与用户映射关系
+- [ ] refact: 查询用户接口参数从路由换成查询参数
+  - [ ] GET /api/user/{userId} => /api/user
+- [ ] feat: 新增 admin 请求域，区分管理员与普通用户
+  - [ ] GET /api/admin/users 查询所有用户列表
+- [ ] feat: 利用 ExceptionHandler 机制处理通用 error
+- [ ] feat: 返回对象从 ResponseVO 迁移到原始 ResponseEntity 上

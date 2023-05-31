@@ -4,7 +4,7 @@ import ReactHook from 'alova/react';
 import { createLogger } from '../../common/commonLogger';
 import { IS_DEV } from '../../common/env';
 
-const BASE_URL = IS_DEV ? 'http://localhost:8080' : 'http://124.221.113.80:8080';
+export const BASE_URL = IS_DEV ? 'http://localhost:8080' : 'http://124.221.113.80:8080';
 
 const apiLogger = createLogger('api/alova');
 
