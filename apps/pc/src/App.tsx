@@ -4,11 +4,10 @@ import { IS_DEV } from './common/env';
 import { createLogger } from './common/commonLogger';
 import Home from './pages/Home';
 import LogIn from './pages/LogIn';
-import { LazyBuyIn } from './pages/BuyIn/lazy';
 import GameDetail from './pages/GameDetail';
 import HandCreate from './pages/GameDetail/HandCreate';
 import HandDetail from './pages/GameDetail/HandDetail';
-import BuyInCreate from './pages/BuyIn/BuyInCreate';
+import BuyInCreate from './pages/GameDetail/BuyIn/BuyInCreate';
 import RNG from './pages/Toolkits/RNG';
 import { LazyDevTool } from './components/Devtool/lazy';
 import Redirect from './components/Redirect';
@@ -23,7 +22,7 @@ const App = () => {
           {/* 1. Login */}
           <Route path="/login" element={<LogIn />} />
 
-          {/* 2. GameList / Statistic / Setting */}
+          {/* 2. Home */}
           <Route path="/" element={<Home />} />
 
           {/* 2.1 GameDetail */}
@@ -35,6 +34,7 @@ const App = () => {
           </Route>
 
           {/* 2.2 Statistic */}
+
           {/* 2.3 Toolkits */}
           <Route path="/toolkit">
             <Route path="rng" element={<RNG />} />
@@ -52,12 +52,6 @@ const App = () => {
           </Route>
 
           {/* 2.4 Setting */}
-
-          {/* // TODO move to game detail page */}
-          <Route path="/buyin" element={<LazyBuyIn />}>
-            <Route path="create" element={<BuyInCreate />} />
-            <Route path="" element={<Redirect path="/buyin/create" />} />
-          </Route>
 
           {/* default: redirect to Home */}
           <Route

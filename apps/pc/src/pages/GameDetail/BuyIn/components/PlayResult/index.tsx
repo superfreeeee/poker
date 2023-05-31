@@ -1,7 +1,7 @@
 import React, { FC, ChangeEvent } from 'react';
 import { Input, message } from 'antd';
 import { RedEnvelopeOutlined, UserOutlined } from '@ant-design/icons';
-import { BuyInPlayer } from '../../../../models/buyIn';
+import { BuyInPlayer } from '../../../../../models/buyIn';
 import FormulaWithLabel from '../FormulaWithLabel';
 import playerContentStyles from '../PlayerHand/index.module.scss';
 

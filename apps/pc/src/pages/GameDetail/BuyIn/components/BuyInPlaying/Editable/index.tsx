@@ -1,7 +1,7 @@
 import React, { useState, FC } from 'react';
 import { Button, message } from 'antd';
 import { DownCircleFilled } from '@ant-design/icons';
-import { BuyInData } from '../../../../../models/buyIn';
+import { BuyInData } from '../../../../../../models/buyIn';
 import { useBuyInData } from '../../../model';
 import PlayerHand from '../../PlayerHand';
 import TitleBar from '../../TitleBar';

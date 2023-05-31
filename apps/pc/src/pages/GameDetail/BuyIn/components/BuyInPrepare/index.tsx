@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { Button, message } from 'antd';
 import { DownCircleFilled } from '@ant-design/icons';
-import { useCurrentUser } from '../../../../models/user';
+import { useCurrentUser } from '../../../../../models/user';
 import { useCreateBuyInData } from '../../model';
 import PlayerHand from '../PlayerHand';
 import TitleBar from '../TitleBar';

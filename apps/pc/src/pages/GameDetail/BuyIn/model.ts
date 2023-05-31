@@ -2,7 +2,7 @@ import { atom, useAtom, useAtomValue } from 'jotai';
 import { useMemo, useState } from 'react';
 import { message } from 'antd';
 import { nanoid } from 'nanoid';
-import { BuyInData, BuyInPlayer } from '../../models/buyIn';
+import { BuyInData, BuyInPlayer } from '../../../models/buyIn';
 import { INIT_BUYIN_HANDS } from './constants';
 
 /**

@@ -3,7 +3,7 @@ import PlayResult from '../components/PlayResult';
 import TitleBar from '../components/TitleBar';
 import initialStyles from '../components/BuyInPrepare/index.module.scss';
 import { calcStatisticsData } from '../model';
-import { BuyInData } from '../../../models/buyIn';
+import { BuyInData } from '../../../../models/buyIn';
 import styles from './index.module.scss';
 
 interface IBuyInDetailProps {

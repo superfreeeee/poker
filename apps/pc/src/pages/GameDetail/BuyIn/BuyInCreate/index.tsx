@@ -4,7 +4,7 @@ import { Steps } from 'antd';
 import BuyInPrepare from '../components/BuyInPrepare';
 import BuyInPlaying from '../components/BuyInPlaying';
 import BuyInSettle from '../components/BuyInSettle';
-import Header from '../../../components/Header';
+import Header from '../../../../components/Header';
 import styles from "./index.module.scss"
 
 enum BuyInStage {

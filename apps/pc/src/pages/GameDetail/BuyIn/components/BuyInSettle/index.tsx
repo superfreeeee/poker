@@ -3,12 +3,12 @@ import { Button } from 'antd';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import TitleBar from '../TitleBar';
 import PlayResult from '../PlayResult';
-import Header from '../../../../components/Header';
+import Header from '../../../../../components/Header';
 import { confirmModal } from '../../utils';
 import { useCreateBuyInData } from '../../model';
-import { useBuyInDataAddService } from '../../../../services/buyin';
-import { useGameDetailService } from '../../../../services/game';
-import { transformBuyInDataToGameBuyInDataVo } from '../../../../models/buyIn';
+import { useBuyInDataAddService } from '../../../../../services/buyin';
+import { useGameDetailService } from '../../../../../services/game';
+import { transformBuyInDataToGameBuyInDataVo } from '../../../../../models/buyIn';
 import initialStyles from '../BuyInPrepare/index.module.scss';
 import styles from './index.module.scss';
 
