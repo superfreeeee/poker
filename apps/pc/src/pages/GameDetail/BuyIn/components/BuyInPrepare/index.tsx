@@ -26,7 +26,7 @@ const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareP
   useEffect(() => {
     if (currentUser) {
       changeBuyInData({
-        amountPerhand: amountPerhand,
+        amountPerhand,
         players: [
           {
             id: currentUser.id,
