@@ -3,16 +3,18 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { createLogger } from '../../../common/commonLogger';
 import { renderCardText } from '../../../components/Card';
+import Header from '../../../components/Header';
 import { HandRecord } from '../../../models/hand';
 import HandActions from '../components/HandActions';
-import Header from '../../../components/Header';
+import { useHandDetailService } from '../../../services/hand';
 import styles from './index.module.scss';
 
 const logger = createLogger('pages/HandDetail');
 
 const HandDetail = () => {
-  const { handId = '' } = useParams();
-  const record: HandRecord | null = null as any;
+  const { gameId = '', handId = '' } = useParams();
+  const { handDetail } = useHandDetailService(gameId, handId);
+  const record: HandRecord | null = handDetail;
 
   useEffect(() => {
     logger.log('record', record);

@@ -43,7 +43,7 @@
 ## HandDetail
 
 - [x] 基础信息展示
-- [ ] feat: 对接 handDetail 接口
+- [x] feat: 对接 handDetail 接口
 
 ## BuyIn
 
@@ -88,9 +88,9 @@
 - [x] refact: 查询游戏接口 改成查询参数
   - GET /api/game => /api/game/list
   - GET /api/game/{gameId} => /api/game?id=xxx
-- [ ] refact: 查询手牌接口 改成查询参数
+- [x] refact: 查询手牌接口 改成查询参数
   - GET /api/hand/{handId} => /api/hand?id=xxx
-- [ ] feat: 添加手牌接口
+- [x] feat: 添加手牌接口
   - POST /api/hand
   - body: HandRecord
 - [ ] feat: 查询登陆过用户接口
