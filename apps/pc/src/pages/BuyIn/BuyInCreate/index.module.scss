@@ -1,0 +1,22 @@
+.step {
+  margin: 10px 120px;
+  width: auto !important;
+
+  :global {
+    .ant-steps-item-container{
+        display: flex;
+    }
+    
+    .ant-steps-item-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+@media screen and (max-width:800px) {
+    .step{
+        margin: 10px 30px;
+    }
+}

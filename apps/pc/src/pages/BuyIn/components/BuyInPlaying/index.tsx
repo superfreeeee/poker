@@ -9,7 +9,6 @@ import {
   ClockCircleOutlined,
 } from '@ant-design/icons';
 import classNames from 'classnames';
-import Header from '../../../../components/Header';
 import PlayerHand from '../PlayerHand';
 import TitleBar from '../TitleBar';
 import { useCreateBuyInDataHistory } from '../../model';
@@ -59,12 +58,6 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
 
   return (
     <div>
-      <Header
-        title="BuyIn Playing"
-        back="/buyin/create"
-        beforeNavigate={backPrepare}
-        style={{ alignSelf: 'stretch' }}
-      />
       {isEdit ? (
         <PlayingEditable
           defaultBuyInData={viewBuyInData}
