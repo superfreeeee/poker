@@ -68,9 +68,11 @@
 - [x] fix: Playing 的按钮名称可以简化一点
 - [x] fix: History 下文案：上一步、下一步、取消、确认，进入按钮 icon
 - [x] feat: 宽度 400px 下 UI 正常
-- [ ] Final Result(BuyInView) => GameDetail
-  - [ ] Post 请求更新到服务端
-  - [ ] fetch 要求 getGameDetail 接口重新请求
+- [ ] fix: 换行
+- [x] Final Result(BuyInView) => GameDetail
+  - [x] Post 请求更新到服务端
+  - [x] fetch 要求 getGameDetail 接口重新请求
+
 
 # Backend API
 

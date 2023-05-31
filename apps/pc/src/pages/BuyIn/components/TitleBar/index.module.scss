@@ -14,7 +14,6 @@ $color-match: #c2d7ef;
     justify-content: start;
     align-items: flex-start;
     gap: 10px;
-    margin-right: 50px;
 
     :global {
       .ant-form-item {
@@ -26,18 +25,10 @@ $color-match: #c2d7ef;
 
 .inputForm {
   border-bottom: 1px solid black;
-  width: 200px;
+  width: 150px;
   overflow: hidden;
 
   input {
     margin-left: 15px;
-  }
-}
-
-@media screen and (max-width: 400px) {
-  .header {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
   }
 }

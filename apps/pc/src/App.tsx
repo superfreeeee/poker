@@ -9,7 +9,6 @@ import GameDetail from './pages/GameDetail';
 import HandCreate from './pages/GameDetail/HandCreate';
 import HandDetail from './pages/GameDetail/HandDetail';
 import BuyInCreate from './pages/BuyIn/BuyInCreate';
-import BuyInView from './pages/BuyIn/BuyInView';
 import RNG from './pages/Toolkits/RNG';
 import { LazyDevTool } from './components/Devtool/lazy';
 import Redirect from './components/Redirect';
@@ -56,7 +55,6 @@ const App = () => {
 
           {/* // TODO move to game detail page */}
           <Route path="/buyin" element={<LazyBuyIn />}>
-            <Route path="detail/:id" element={<BuyInView />} />
             <Route path="create" element={<BuyInCreate />} />
             <Route path="" element={<Redirect path="/buyin/create" />} />
           </Route>

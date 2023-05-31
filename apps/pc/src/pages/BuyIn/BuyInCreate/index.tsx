@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Steps } from 'antd';
 import BuyInPrepare from '../components/BuyInPrepare';
 import BuyInPlaying from '../components/BuyInPlaying';
 import BuyInSettle from '../components/BuyInSettle';
-// import { useBuyInDataAddService } from '../../../services/buyin';
-// import { useCreateBuyInData } from '../model';
-import '../../../mock/buyIn';
+import Header from '../../../components/Header';
+import styles from "./index.module.scss"
 
 enum BuyInStage {
   Prepare = 'buyInPrepare',
@@ -13,12 +13,24 @@ enum BuyInStage {
   Settle = 'buyInSettle',
 }
 
+const stepInfo = [
+  { title: BuyInStage.Prepare },
+  { title: BuyInStage.Playing },
+  { title: BuyInStage.Settle },
+];
+
 const BuyInCreate = () => {
   const [buyInState, setBuyInState] = useState(BuyInStage.Prepare);
-  const navigate = useNavigate();
+  const { gameId } = useParams();
 
   return (
     <div>
+      <Header title="BuyIn Create" back={gameId ? '..' : true} style={{ alignSelf: 'stretch' }} />
+      <Steps
+        className={styles.step}
+        current={stepInfo.findIndex((stage) => stage.title == buyInState)}
+        items={stepInfo}
+      ></Steps>
       {buyInState == BuyInStage.Prepare ? (
         <BuyInPrepare
           enterNextState={() => {
@@ -38,11 +50,6 @@ const BuyInCreate = () => {
         <BuyInSettle
           enterPrevState={() => {
             setBuyInState(BuyInStage.Playing);
-          }}
-          enterNextState={() => {
-            // post
-            // fetch gamedetail
-            navigate(generatePath('/buyin/detail/:id', { id: '234567' }));
           }}
         ></BuyInSettle>
       )}

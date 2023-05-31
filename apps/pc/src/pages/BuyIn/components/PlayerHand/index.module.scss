@@ -7,23 +7,18 @@ $color-match: #c2d7ef;
   align-content: center;
   border-radius: 10px;
   padding: 16px 30px;
-  margin-top: 20px;
   background-color: white;
 
   > div {
     width: 45%;
   }
 
-  > div:nth-child(1) {
-    margin-bottom: 20px;
-  }
-
-  > div:nth-child(2) {
+  > div:nth-child(-n+2) {
     margin-bottom: 20px;
   }
 
   > div:nth-child(2n-1) {
-    margin-right: 50px;
+    margin-right: 10%;
   }
 }
 

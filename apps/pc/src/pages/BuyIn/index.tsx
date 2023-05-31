@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { Outlet } from 'react-router-dom';
 import { BuyInData } from '../../models/buyIn';
-import styles from './index.module.scss';
 
 interface IBuyInProps {
   data?: BuyInData;
@@ -9,7 +8,7 @@ interface IBuyInProps {
 
 const BuyIn: FC<IBuyInProps> = () => {
   return (
-    <div className={styles.container}>
+    <div>
       <Outlet />
     </div>
   );

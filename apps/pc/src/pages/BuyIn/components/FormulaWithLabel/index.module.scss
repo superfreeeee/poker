@@ -1,0 +1,17 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  column-gap: 10px;
+  justify-items: flex-start;
+  align-items: stretch;
+
+  span:nth-child(-n + 5) {
+    font-weight: 600;
+    color: gray;
+  }
+}
+
+.input {
+  width: 80px;
+  border-bottom: 1px solid black;
+}
