@@ -91,3 +91,5 @@
   - [ ] GET /api/user/{userId} => /api/user
 - [ ] feat: 新增 admin 请求域，区分管理员与普通用户
   - [ ] GET /api/admin/users 查询所有用户列表
+- [ ] feat: 利用 ExceptionHandler 机制处理通用 error
+- [ ] feat: 返回对象从 ResponseVO 迁移到原始 ResponseEntity 上
