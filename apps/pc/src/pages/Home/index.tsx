@@ -1,30 +1,35 @@
-import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Divider } from 'antd';
-import { ArrowRightOutlined } from '@ant-design/icons';
+import React from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { Tabs, TabsProps } from 'antd';
 import { useLoginCheck } from '../../hooks/useLoginCheck';
 import GameList from './GameList';
 import UserProfile from './UserProfile';
 import styles from './index.module.scss';
+import Toolkits from './Toolkits';
 
-interface IPageLinkProps {
-  title: string;
-  path: string;
+enum HomeTab {
+  GameList = 'GameList',
+  Statistics = 'Statistics',
+  Toolkits = 'Toolkits',
+  Setting = 'Setting',
 }
-
-const PageLink: FC<IPageLinkProps> = ({ title, path }) => {
-  const navigate = useNavigate();
-
-  return (
-    <Button size="large" onClick={() => navigate(path)}>
-      {title}
-      <ArrowRightOutlined />
-    </Button>
-  );
-};
 
 const Home = () => {
   useLoginCheck();
+
+  const tabItems: TabsProps['items'] = [
+    { key: HomeTab.GameList, label: HomeTab.GameList, children: <GameList /> },
+    { key: HomeTab.Statistics, label: HomeTab.Statistics, children: <div>Statistics page</div> },
+    { key: HomeTab.Toolkits, label: HomeTab.Toolkits, children: <Toolkits /> },
+    { key: HomeTab.Setting, label: HomeTab.Setting, children: <div>Setting page</div> },
+  ];
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const onTabChange = (activeKey: HomeTab) => {
+    searchParams.set('tab', activeKey);
+    setSearchParams(searchParams);
+  };
 
   return (
     <div className={styles.container}>
@@ -33,15 +38,12 @@ const Home = () => {
         <UserProfile />
       </div>
       <div className={styles.content}>
-        <h3>Game List</h3>
-        <GameList />
-        <Divider />
-        <h3>Dev Navigation</h3>
-        <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <h3>Pages:</h3>
-          <PageLink title="BuyIn" path="/buyin/create" />
-          <PageLink title="RNG" path="/rng" />
-        </div>
+        <Tabs
+          activeKey={searchParams.get('tab') ?? HomeTab.GameList}
+          items={tabItems}
+          onChange={onTabChange}
+          style={{ height: '100%' }}
+        />
       </div>
     </div>
   );

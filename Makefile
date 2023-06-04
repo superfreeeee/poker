@@ -4,6 +4,13 @@ run:
 reinstall: clean-deps
 	pnpm i
 
+todo:
+	@cat doc/todo.md | grep "\- \[ \]"
+
+catch-up:
+	git fetch
+	git merge origin/main
+
 ############### cleans ###############
 clean-deps:
 # remove root node_modules

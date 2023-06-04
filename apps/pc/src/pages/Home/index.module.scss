@@ -6,6 +6,7 @@
 }
 
 .header {
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,22 +14,13 @@
   height: 60px;
   margin: 0 100px;
   transition: margin 750ms;
-
-  .profile {
-    padding: 4px 8px;
-    user-select: none;
-  }
-}
-
-.profileDetail {
-  display: flex;
-  align-items: center;
-  gap: 12px;
 }
 
 .content {
+  flex: 1;
   margin: 0 100px;
   transition: margin 750ms;
+  overflow: hidden;
 }
 
 @media screen and (max-width: 800px) {

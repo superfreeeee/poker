@@ -7,7 +7,7 @@ import {
   PlusOutlined,
   MinusOutlined,
 } from '@ant-design/icons';
-import { BuyInPlayer } from '../../../../models/buyIn';
+import { BuyInPlayer } from '../../../../../models/buyIn';
 import FormulaWithLabel from '../FormulaWithLabel';
 import { INIT_BUYIN_HANDS, MAX_BUYIN_HANDS } from '../../constants';
 import styles from './index.module.scss';

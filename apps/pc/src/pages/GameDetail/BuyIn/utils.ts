@@ -1,4 +1,5 @@
 import { Modal } from 'antd';
+import { BuyInPlayer } from '../../../models/buyIn';
 
 interface ConfirmModalOptions {
   title: string;
@@ -42,4 +43,19 @@ export const confirmModal = ({
       },
     });
   });
+};
+
+/**
+ * 校验 BuyInPlayer[]
+ * @param players
+ * @returns true: 校验通过
+ */
+export const validateBuyInPlayers = (players: BuyInPlayer[]) => {
+  return players.every(
+    (player) =>
+      // 名字不为空
+      player.name !== '' &&
+      // 至少买入一手
+      player.hands > 0,
+  );
 };

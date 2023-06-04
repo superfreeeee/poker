@@ -3,6 +3,12 @@ import React, { lazy, ComponentProps, Suspense } from 'react';
 
 type DynamicImport<T> = () => Promise<T>;
 
+/**
+ * Wrap Component with React.lazy
+ * @param loader
+ * @param key
+ * @returns
+ */
 const lazyComponent = <Module extends Record<string, any>, Key extends keyof Module>(
   loader: () => Promise<Module>,
   key: Key,
@@ -13,6 +19,12 @@ const lazyComponent = <Module extends Record<string, any>, Key extends keyof Mod
   });
 };
 
+/**
+ * Create lazy HOC for async component
+ * @param loader
+ * @param key
+ * @returns
+ */
 export const lazyComponentFactory = <Module extends Record<string, any>, Key extends keyof Module>(
   loader: DynamicImport<Module>,
   key: Key,

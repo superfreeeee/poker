@@ -30,7 +30,7 @@ const GameList = () => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       {/* // TODO remove mock entry */}
       <Button
         onClick={() => {

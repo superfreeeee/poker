@@ -2,11 +2,10 @@ import { Alert, Button, Divider } from 'antd';
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PlusSquareOutlined } from '@ant-design/icons';
-import { BASE_URL } from '../../api/core';
 import { createLogger } from '../../common/commonLogger';
 import { useGameDetailService } from '../../services/game';
-import BuyInDetail from '../BuyIn/BuyInDetail';
 import Header from '../../components/Header';
+import BuyInDetail from './BuyIn/BuyInDetail';
 import HandList from './HandList';
 import styles from './index.module.scss';
 
@@ -43,40 +42,11 @@ const GameDetail = () => {
           <Divider />
           {/* BuyIn data */}
           {gameDetail.buyInData ? (
-            <div>
-              {/* // TODO show buyInData Detail */}
-              <BuyInDetail data={gameDetail.buyInData} />
-            </div>
+            <BuyInDetail data={gameDetail.buyInData} />
           ) : (
-            <>
-              <Button type="primary" icon={<PlusSquareOutlined />} onClick={goCreateBuyInPage}>
-                Append buy-in record
-              </Button>
-              {/* // TODO remove mock createBuyIn */}
-              <Divider />
-              <Button
-                type="primary"
-                icon={<PlusSquareOutlined />}
-                onClick={() => {
-                  fetch(`${BASE_URL}/api/buyin`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      gameId,
-                      chipsPerHand: 100,
-                      players: [
-                        { id: '1', name: 'user1', buyInChips: 300, restChips: 300 },
-                        { id: '2', name: 'user2', buyInChips: 100, restChips: 500 },
-                      ],
-                    }),
-                  }).then(() => {
-                    reloadGameDetail();
-                  });
-                }}
-              >
-                Mock: Append buy-in record
-              </Button>
-            </>
+            <Button type="primary" icon={<PlusSquareOutlined />} onClick={goCreateBuyInPage}>
+              Append buy-in record
+            </Button>
           )}
           <Divider />
           {/* Hand records */}

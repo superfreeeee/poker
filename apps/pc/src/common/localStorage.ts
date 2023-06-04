@@ -1,17 +1,18 @@
+import { useCallback, useEffect, useState } from 'react';
 import type { IUser } from '../models/user';
 import { createLogger } from './commonLogger';
 
 const logger = createLogger('common/localStorage');
 
 export enum ELocalStorageKey {
-  Dev = 'development',
+  LocalServer = 'using_local_server',
   Me = 'current_user',
   UserList = 'user_list',
   HandRecordList = 'hand_record_list',
 }
 
 type ILocalStorage = {
-  [ELocalStorageKey.Dev]: boolean;
+  [ELocalStorageKey.LocalServer]: boolean;
   [ELocalStorageKey.Me]: IUser;
   [ELocalStorageKey.UserList]: IUser[];
   [ELocalStorageKey.HandRecordList]: string[];
@@ -52,3 +53,29 @@ export const setItem = <K extends ELocalStorageKey>(key: K, data?: ILocalStorage
     logger.error('setItem failed', { key, data });
   }
 };
+
+export function useStorageState<K extends ELocalStorageKey>(
+  key: K,
+): [ILocalStorage[K] | undefined, (nextValue: ILocalStorage[K]) => void];
+export function useStorageState<K extends ELocalStorageKey>(
+  key: K,
+  initValue: ILocalStorage[K],
+): [ILocalStorage[K], (nextValue: ILocalStorage[K]) => void];
+export function useStorageState<K extends ELocalStorageKey>(key: K, initValue?: ILocalStorage[K]) {
+  const [state, setState] = useState(initValue);
+
+  const wrapSetState = useCallback(
+    (nextValue: ILocalStorage[K]) => {
+      setItem(key, nextValue);
+      setState(nextValue);
+    },
+    [key],
+  );
+
+  useEffect(() => {
+    const currentState = getItem(key);
+    setState(currentState);
+  }, [key]);
+
+  return [state, wrapSetState];
+}
