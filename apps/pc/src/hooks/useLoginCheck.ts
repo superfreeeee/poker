@@ -8,13 +8,21 @@ export const useLoginCheck = () => {
   const validateLogion = useValidateLoginService();
   const navigate = useNavigate();
   const location = useLocation();
+
   useEffect(() => {
+    let expired = false;
+
     if (!currentUser) {
       navigate('/login', { replace: true, state: { ...location } });
     } else {
       validateLogion(currentUser.id).catch(() => {
+        if (expired) return;
         navigate('/login', { replace: true, state: { ...location } });
       });
     }
-  }, [currentUser, navigate]);
+
+    return () => {
+      expired = true;
+    };
+  }, [currentUser]);
 };
