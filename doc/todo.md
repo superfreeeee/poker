@@ -5,7 +5,7 @@
 - [x] feat: 检查当前用户登录态，未登陆 / 登陆 ID 无效 => go Login page
   - [x] react-route-dom 记录跳转前路由，登陆后回到上次的路由
   - [x] "" => "/game/detail" => "/login" => "/game/detail" ("/game/detail")
-- [ ] feat: 按设备记录 uuid -> clientId
+- [x] feat: 按设备记录 uuid -> clientId
 - [ ] feat: 各列表页添加页面内 reload，刷新到最新列表数据
 - [x] fix: race-condition 处理
 - [x] 开发环境工具箱：Debug组件

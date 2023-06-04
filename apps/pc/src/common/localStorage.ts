@@ -5,6 +5,7 @@ import { createLogger } from './commonLogger';
 const logger = createLogger('common/localStorage');
 
 export enum ELocalStorageKey {
+  Uuid = 'uuid',
   LocalServer = 'using_local_server',
   Me = 'current_user',
   UserList = 'user_list',
@@ -13,6 +14,7 @@ export enum ELocalStorageKey {
 }
 
 type ILocalStorage = {
+  [ELocalStorageKey.Uuid]: string;
   [ELocalStorageKey.LocalServer]: boolean;
   [ELocalStorageKey.Me]: IUser;
   [ELocalStorageKey.UserList]: IUser[];
