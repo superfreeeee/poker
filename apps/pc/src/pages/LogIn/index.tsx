@@ -1,5 +1,5 @@
 import React, { SyntheticEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Input, Space } from 'antd';
 import { createLogger } from '../../common/commonLogger';
 import { useInput } from '../../hooks/useInput';
@@ -14,6 +14,7 @@ const LogIn = () => {
   const [name, onNameChange] = useInput(currentUser?.name);
 
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   const loginService = useLoginService();
 
@@ -21,10 +22,11 @@ const LogIn = () => {
     if ((e.nativeEvent as KeyboardEvent)?.isComposing) return;
 
     loginPageLogger.log(`login: name = ${name}`);
+    loginPageLogger.log('login prev', state);
     const user = await loginService({ name });
     if (user) {
       setCurrentUser(user);
-      navigate('/');
+      state ? navigate(state, { replace: true }) : navigate('/home');
     }
   };
 
