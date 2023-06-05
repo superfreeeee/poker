@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Popover, Tooltip } from 'antd';
 import { CaretDownOutlined, CheckOutlined, CopyOutlined } from '@ant-design/icons';
 import { useCurrentUser } from '../../../models/user';
-import { ELocalStorageKey } from '../../../common/localStorage';
+import { ELocalStorageKey, removeItem } from '../../../common/localStorage';
 import styles from './index.module.scss';
 
 const COPY_DELAY = 1500;
@@ -28,7 +28,7 @@ const UserProfile = () => {
   };
 
   const switchUser = () => {
-    localStorage.removeItem(ELocalStorageKey.Me);
+    removeItem(ELocalStorageKey.Me);
     navigate('/login');
   };
 

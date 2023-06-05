@@ -1,11 +1,8 @@
 import { useRequest } from 'alova';
 import { IUser } from '../models/user';
-import { createLogger } from '../common/commonLogger';
 import { isSuccess } from '../services/utils';
 import { alovaInstance } from './core';
 import { Response } from './core/interface';
-
-const validLogger = createLogger('user');
 
 export interface ILoginParams {
   name: string;
@@ -25,7 +22,6 @@ export const useGetLoginInfoAPI = () => {
       alovaInstance.Get<Response<IUser | null>, Response<IUser>>(`/api/user`, {
         params: { uid: userId },
         transformData: (res) => {
-          validLogger.log('user/get', res);
           if (isSuccess(res)) {
             return res;
           } else {

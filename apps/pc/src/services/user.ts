@@ -29,20 +29,19 @@ export const useLoginService = () => {
 };
 
 export const useValidateLoginService = () => {
-  const { send: validateLoginAPI } = useGetLoginInfoAPI();
+  const { send: getLoginInfoAPI } = useGetLoginInfoAPI();
 
   const validateLoginService = useCallback(
     async (userId: string) => {
       try {
-        userSerivceLogger.log('logHere');
-        await validateLoginAPI(userId);
+        await getLoginInfoAPI(userId);
         return Promise.resolve('Valid User');
       } catch {
         userSerivceLogger.log('loginResult', 'invalid user');
         return Promise.reject('Invalid User');
       }
     },
-    [validateLoginAPI],
+    [getLoginInfoAPI],
   );
 
   return validateLoginService;

@@ -15,7 +15,7 @@
 - [x] fix: validateAPI => getUser / getUserInfo
 - [ ] bug: 区分请求失败 还是 (查出用户不存在 => 1001=用户不存在:"用户不存在，请重新登入", 1002=登陆态失效:"登入已过期，请重新登入")
 - [ ] refact: 抽出公共 commonApiTransformer 方法
-- [ ] feat: 记录登录过用户（写在 localStorage） => 点击直接登入
+- [x] feat: 记录登录过用户（写在 localStorage） => 点击直接登入
 
 ## Home: GameList
 
@@ -60,7 +60,7 @@
 - [x] Detail 页面把 buyInData.id 加到 url
 - [x] Detail 页面把 数据源与 create 页分开
 - [x] currentBuyInData => createBuyInData => 把 Create 页与 Detail 页的状态管理区分开来
-- [x] Detail 页面多展示每个人计算后的总买入totalBuyIn
+- [x] Detail 页面多展示每个人计算后的总买入 totalBuyIn
 - [x] Settle 页面改变 UI（hands x amount = totalBuyIn; _rest_ - totalBuyIn = profit）
 - [x] PlayResult、PlayResultView 抽成一个组件
 - [x] Header 返回逻辑
@@ -82,7 +82,16 @@
 - 体验优化
 
 - [ ] 列出优化不良的点，尝试提出解决方案
-
+  - [] fix: button 高度不够（包括控制页面跳转的按钮和操作 hands 的按钮）
+    - 调高高度
+  - [] bug: button 不居中（控制页面跳转的按钮）
+    - 调整布局
+  - [] 输入框太窄, 字体太小
+    - 调高输入框，字体调大
+  - [] 输入时自动放大，但是取消输入并不会自动放缩
+    - 测试一下 判断是否是浏览器自身原因
+  - [] bug: settle 页面的控制按钮排布间距不等、显示结果和按钮的排列不合理
+    - 重新调整布局
 
 # Backend API
 
