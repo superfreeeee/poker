@@ -2,17 +2,17 @@
 
 ## Common (cross-page utils)
 
-- [ ] feat: 检查当前用户登录态，未登陆 / 登陆 ID 无效 => go Login page
-  - [ ] react-route-dom 记录跳转前路由，登陆后回到上次的路由
-  - [ ] "" => "/game/detail" => "/login" => "/game/detail" ("/game/detail")
+- [x] feat: 检查当前用户登录态，未登陆 / 登陆 ID 无效 => go Login page
+  - [x] react-route-dom 记录跳转前路由，登陆后回到上次的路由
+  - [x] "" => "/game/detail" => "/login" => "/game/detail" ("/game/detail")
 - [ ] feat: 按设备记录 uuid -> clientId
 - [ ] feat: 各列表页添加页面内 reload，刷新到最新列表数据
 - [x] fix: race-condition 处理
 
 ## Login
 
-- [ ] bug: Switch User 时需要清理 localStorage 登录态
-- [ ] fix: validateAPI => getUser / getUserInfo
+- [x] bug: Switch User 时需要清理 localStorage 登录态
+- [x] fix: validateAPI => getUser / getUserInfo
 - [ ] bug: 区分请求失败 还是 (查出用户不存在 => 1001=用户不存在:"用户不存在，请重新登入", 1002=登陆态失效:"登入已过期，请重新登入")
 - [ ] refact: 抽出公共 commonApiTransformer 方法
 - [ ] feat: 记录登录过用户（写在 localStorage） => 点击直接登入

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { ILoginParams, useLoginAPI, useValidateLoginAPI } from '../api/user';
+import { ILoginParams, useLoginAPI, useGetLoginInfoAPI } from '../api/user';
 import { createLogger } from '../common/commonLogger';
 import { isSuccess } from './utils';
 
@@ -29,18 +29,21 @@ export const useLoginService = () => {
 };
 
 export const useValidateLoginService = () => {
-  const { send: validateLoginAPI } = useValidateLoginAPI();
+  const { send: validateLoginAPI } = useGetLoginInfoAPI();
 
-  const validateLoginService = useCallback(async (userId: string) => {
-    try {
-      userSerivceLogger.log('logHere');
-      await validateLoginAPI(userId);
-      return Promise.resolve('Valid User');
-    } catch {
-      userSerivceLogger.log('loginResult', 'invalid user');
-      return Promise.reject('Invalid User');
-    }
-  }, [validateLoginAPI]);
+  const validateLoginService = useCallback(
+    async (userId: string) => {
+      try {
+        userSerivceLogger.log('logHere');
+        await validateLoginAPI(userId);
+        return Promise.resolve('Valid User');
+      } catch {
+        userSerivceLogger.log('loginResult', 'invalid user');
+        return Promise.reject('Invalid User');
+      }
+    },
+    [validateLoginAPI],
+  );
 
   return validateLoginService;
 };

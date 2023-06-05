@@ -55,7 +55,7 @@ const PlayResult: FC<IPlayerResultProps> = ({
             label: 'Rest',
             value: <Input bordered={false} value={rest} onChange={onRestChange} />,
           }}
-          sign="*"
+          sign="-"
           y={{ label: 'Total buy-in', value: amountPerhand * hands }}
           z={{ label: 'Profit', value: benefit }}
         />
