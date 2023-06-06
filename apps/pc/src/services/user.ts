@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { message } from 'antd';
 import { ILoginParams, useLoginAPI, useGetUserInfoAPI } from '../api/user';
 import { createLogger } from '../common/commonLogger';
 import { isSuccess } from './utils';
@@ -36,9 +37,15 @@ export const useValidateLoginService = () => {
       try {
         await getLoginInfoAPI(userId);
         return Promise.resolve('Valid User');
-      } catch {
-        userSerivceLogger.log('loginResult', 'invalid user');
-        return Promise.reject('Invalid User');
+      } catch (e) {
+        if (e.code == 1001) {
+          message.error('用户不存在，请重新登入');
+          return Promise.reject('User does not exist');
+        } else if (e.code == 1002) {
+          message.error('登入已过期，请重新登入');
+          return Promise.reject('Current state is expired');
+        }
+        return Promise.reject('Invalid user');
       }
     },
     [getLoginInfoAPI],
