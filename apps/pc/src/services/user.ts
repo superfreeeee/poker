@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { ILoginParams, useLoginAPI, useGetLoginInfoAPI } from '../api/user';
+import { ILoginParams, useLoginAPI, useGetUserInfoAPI } from '../api/user';
 import { createLogger } from '../common/commonLogger';
 import { isSuccess } from './utils';
 
@@ -29,7 +29,7 @@ export const useLoginService = () => {
 };
 
 export const useValidateLoginService = () => {
-  const { send: getLoginInfoAPI } = useGetLoginInfoAPI();
+  const { send: getLoginInfoAPI } = useGetUserInfoAPI();
 
   const validateLoginService = useCallback(
     async (userId: string) => {

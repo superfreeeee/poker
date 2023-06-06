@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import type { IUser } from '../models/user';
-import type { ILoggedUser } from '../models/loggedUser';
+import type { IUser, ILoggedUser } from '../models/user';
 import { createLogger } from './commonLogger';
 
 const logger = createLogger('common/localStorage');
@@ -58,14 +57,9 @@ export const setItem = <K extends ELocalStorageKey>(key: K, data?: ILocalStorage
 
 export const removeItem = <K extends ELocalStorageKey>(key: K): void => {
   try {
-    const content = localStorage.getItem(key);
-    if (content == null) {
-      throw `Key does not exist!`;
-    } else {
-      localStorage.removeItem(key);
-    }
-  } catch (e) {
-    logger.error(e, { key });
+    localStorage.removeItem(key);
+  } catch {
+    logger.error('removeItem failed', { key });
   }
 };
 

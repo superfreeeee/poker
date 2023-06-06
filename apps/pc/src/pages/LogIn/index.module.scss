@@ -19,11 +19,11 @@
   top: 450px;
   padding: 10px;
   border-radius: 10px;
-  border: 1px solid #1677ff;
   width: 350px;
   max-height: 250px;
   overflow: auto;
   background-color: white;
+  user-select: none;
 
   .title {
     position: sticky;
@@ -48,6 +48,7 @@
 
   &:hover {
     background-color: whitesmoke;
+    cursor: pointer;
   }
 
   .icon {

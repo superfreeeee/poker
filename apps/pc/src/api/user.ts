@@ -16,7 +16,7 @@ export const useLoginAPI = () => {
   );
 };
 
-export const useGetLoginInfoAPI = () => {
+export const useGetUserInfoAPI = () => {
   return useRequest(
     (userId: string) =>
       alovaInstance.Get<Response<IUser | null>, Response<IUser>>(`/api/user`, {
