@@ -14,13 +14,12 @@ export { transformGameVOToRecord };
  * Fetch game list
  * @returns
  */
-const gameListAPI = alovaInstance.Get<GameRecord[], Response<GameVO[]>>('/api/game/list', {
+const gameListAPI = alovaInstance.Get('/api/game/list', {
   // invalidate in 60s
   localCache: 60 * 1000,
-  transformData: (res) =>
-    typeTransformer(res, (data) => {
-      return data.map(transformGameVOToRecord);
-    }),
+  transformData: typeTransformer((data: GameVO[]) => {
+    return data.map(transformGameVOToRecord);
+  }),
 });
 
 export const useGameListAPI = () => {
@@ -37,7 +36,7 @@ export const useGameListAPI = () => {
 const gameDetailAPI = (gameId: string) =>
   alovaInstance.Get<GameRecord | null, Response<GameVO>>(`/api/game`, {
     params: { id: gameId },
-    transformData: (res) => typeTransformer(res, transformGameVOToRecord),
+    transformData: typeTransformer(transformGameVOToRecord),
   });
 
 export const invalidateGameDetail = (gameId: string) => {
