@@ -13,7 +13,7 @@
 
 - [x] bug: Switch User 时需要清理 localStorage 登录态
 - [x] fix: validateAPI => getUser / getUserInfo
-- [ ] bug: 区分请求失败 还是 (查出用户不存在 => 1001=用户不存在:"用户不存在，请重新登入", 1002=登陆态失效:"登入已过期，请重新登入")
+- [x] bug: 区分请求失败 还是 (查出用户不存在 => 1001=用户不存在:"用户不存在，请重新登入", 1002=登陆态失效:"登入已过期，请重新登入")
 - [ ] refact: 抽出公共 commonApiTransformer 方法
 - [x] feat: 记录登录过用户（写在 localStorage） => 点击直接登入
 

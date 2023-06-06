@@ -12,3 +12,8 @@ const updateBuyInDataAPI = (params: AddBuyInParams) =>
   alovaInstance.Put<Response<void>>('/api/buyin', params);
 
 export const useUpdateBuyInDataRequest = () => useRequest(updateBuyInDataAPI, { immediate: false });
+
+const removeBuyInDataAPI = (gameId: string) =>
+  alovaInstance.Post<Response<void>>('/api/buyin/remove', { gameId: gameId });
+
+export const useRemoveBuyInDataRequest = () => useRequest(removeBuyInDataAPI, { immediate: false });

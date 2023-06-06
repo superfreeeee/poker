@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, message } from 'antd';
+import { Input, message, Button } from 'antd';
 import { TransactionOutlined } from '@ant-design/icons';
 import { BuyInStatistics } from '../../model';
 import StatisticsDataView from '../StatisticsDataView';
@@ -11,6 +11,7 @@ interface ITitleBarProps {
   amountPerhand: number;
   statisticsData: BuyInStatistics;
   handleAmountPerhandChange?: (amount: number) => void;
+  enableRemove?: VoidFunction;
 }
 
 const TitleBar = ({
@@ -18,12 +19,20 @@ const TitleBar = ({
   isEditable,
   amountPerhand,
   statisticsData,
+  enableRemove,
   handleAmountPerhandChange,
 }: ITitleBarProps) => {
   return (
     <div className={styles.header}>
       <div className={styles.leftWrap}>
-        <div style={{ fontSize: 20 }}>{title}</div>
+        <div className={styles.title}>
+          {title}
+          {enableRemove && (
+            <Button onClick={enableRemove} className={styles.removeBtn}>
+              删除
+            </Button>
+          )}
+        </div>
         {isEditable ? (
           <div className={styles.inputForm}>
             <div>一手金额</div>

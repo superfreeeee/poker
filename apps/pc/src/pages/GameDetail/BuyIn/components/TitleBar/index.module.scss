@@ -32,3 +32,16 @@ $color-match: #c2d7ef;
     margin-left: 15px;
   }
 }
+
+.title {
+  display: flex;
+  align-items: center;
+  font-size: 26px;
+}
+
+.removeBtn {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  font-size: 16px;
+}
