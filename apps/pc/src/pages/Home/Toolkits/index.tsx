@@ -2,9 +2,11 @@ import { ArrowRightOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLoginCheck } from '../../../hooks/useLoginCheck';
 
 const Toolkits = () => {
   const navigate = useNavigate();
+  useLoginCheck();
 
   return (
     <div>

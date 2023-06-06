@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Radio } from 'antd';
+import 'default-passive-events';
 import {
   HandStage,
   HandAction,

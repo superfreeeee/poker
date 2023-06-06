@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { PlusSquareOutlined } from '@ant-design/icons';
 import { createLogger } from '../../common/commonLogger';
 import { useGameDetailService } from '../../services/game';
+import { useLoginCheck } from '../../hooks/useLoginCheck';
 import Header from '../../components/Header';
 import BuyInDetail from './BuyIn/BuyInDetail';
 import HandList from './HandList';
@@ -18,6 +19,7 @@ const GameDetail = () => {
 
   const { loading, gameDetail, reloadGameDetail } = useGameDetailService(gameId);
 
+  useLoginCheck();
   useEffect(() => {
     logger.log('gameDetail', gameDetail);
   }, [gameDetail]);

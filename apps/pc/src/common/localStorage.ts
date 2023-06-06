@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import type { IUser } from '../models/user';
+import type { IUser, ILoggedUser } from '../models/user';
 import { createLogger } from './commonLogger';
 
 const logger = createLogger('common/localStorage');
@@ -9,6 +9,7 @@ export enum ELocalStorageKey {
   Me = 'current_user',
   UserList = 'user_list',
   HandRecordList = 'hand_record_list',
+  LoggedUserList = 'logged_user_list',
 }
 
 type ILocalStorage = {
@@ -16,6 +17,7 @@ type ILocalStorage = {
   [ELocalStorageKey.Me]: IUser;
   [ELocalStorageKey.UserList]: IUser[];
   [ELocalStorageKey.HandRecordList]: string[];
+  [ELocalStorageKey.LoggedUserList]: ILoggedUser[];
 };
 
 /**
@@ -31,7 +33,6 @@ export const getItem = <K extends ELocalStorageKey>(key: K): ILocalStorage[K] | 
     }
     return JSON.parse(content) as ILocalStorage[K];
   } catch {
-    logger.error('getItem failed', { key });
     return undefined;
   }
 };
@@ -51,6 +52,14 @@ export const setItem = <K extends ELocalStorageKey>(key: K, data?: ILocalStorage
     }
   } catch {
     logger.error('setItem failed', { key, data });
+  }
+};
+
+export const removeItem = <K extends ELocalStorageKey>(key: K): void => {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    logger.error('removeItem failed', { key });
   }
 };
 
