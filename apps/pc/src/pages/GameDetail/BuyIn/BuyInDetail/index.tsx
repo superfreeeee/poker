@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import { confirmModal } from '../utils';
 import PlayResult from '../components/PlayResult';
 import TitleBar from '../components/TitleBar';
 import { useBuyInDataRemoveService } from '../../../../services/buyin';
@@ -19,9 +20,16 @@ const BuyInDetail = ({ data }: IBuyInDetailProps) => {
   const statisticsData = useMemo(() => calcStatisticsData(data), [data]);
   const buyInRemoveService = useBuyInDataRemoveService();
 
-  const handleBuyInDataRemove = async () => {
-    await buyInRemoveService(gameId);
-    invalidateGameDetail(gameId);
+  const removePrepare = () => {
+    confirmModal({
+      title: 'Remove buyIn detail',
+      content: 'Are you sure to remove buy-in detail?',
+      okText: 'Confirm',
+      onOk: async () => {
+        await buyInRemoveService(gameId);
+        invalidateGameDetail(gameId);
+      },
+    });
   };
 
   return (
@@ -31,7 +39,7 @@ const BuyInDetail = ({ data }: IBuyInDetailProps) => {
         title="结算状态"
         amountPerhand={amountPerhand}
         statisticsData={statisticsData}
-        enableRemove={handleBuyInDataRemove}
+        enableRemove={removePrepare}
       ></TitleBar>
       <div className={initialStyles.playerList}>
         {buyInPlayers.map((player) => (
