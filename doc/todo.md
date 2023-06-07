@@ -5,9 +5,14 @@
 - [x] feat: 检查当前用户登录态，未登陆 / 登陆 ID 无效 => go Login page
   - [x] react-route-dom 记录跳转前路由，登陆后回到上次的路由
   - [x] "" => "/game/detail" => "/login" => "/game/detail" ("/game/detail")
-- [ ] feat: 按设备记录 uuid -> clientId
+- [x] feat: 按设备记录 uuid -> clientId
 - [ ] feat: 各列表页添加页面内 reload，刷新到最新列表数据
 - [x] fix: race-condition 处理
+- [x] 开发环境工具箱：Debug组件
+
+## Devtool 开发工具
+
+- [x] logger切换
 
 ## Login
 
@@ -73,7 +78,7 @@
 - [x] fix: Playing 的按钮名称可以简化一点
 - [x] fix: History 下文案：上一步、下一步、取消、确认，进入按钮 icon
 - [x] feat: 宽度 400px 下 UI 正常
-- [ ] fix: 换行
+- [x] fix: 换行
 - [x] Final Result(BuyInView) => GameDetail
   - [x] Post 请求更新到服务端
   - [x] fetch 要求 getGameDetail 接口重新请求
