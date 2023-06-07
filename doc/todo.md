@@ -10,6 +10,10 @@
 - [x] fix: race-condition 处理
 - [x] 开发环境工具箱：Debug组件
 
+## Devtool 开发工具
+
+- [x] logger切换
+
 ## Login
 
 - [x] bug: Switch User 时需要清理 localStorage 登录态
