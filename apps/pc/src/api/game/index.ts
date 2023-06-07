@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/named
 import { invalidateCache, useRequest } from 'alova';
-import { GameRecord } from '../../models/game';
 import { Response } from '../core/interface';
 import { alovaInstance } from '../core';
 import { typeTransformer } from '../../common/commonApiTransformer';
@@ -14,13 +13,12 @@ export { transformGameVOToRecord };
  * Fetch game list
  * @returns
  */
-const gameListAPI = alovaInstance.Get<GameRecord[], Response<GameVO[]>>('/api/game/list', {
+const gameListAPI = alovaInstance.Get('/api/game/list', {
   // invalidate in 60s
   localCache: 60 * 1000,
-  transformData: (res) =>
-    typeTransformer(res, (data) => {
-      return data.map(transformGameVOToRecord);
-    }),
+  transformData: typeTransformer((data: GameVO[]) => {
+    return data.map(transformGameVOToRecord);
+  }),
 });
 
 export const useGameListAPI = () => {
@@ -35,9 +33,9 @@ export const useGameListAPI = () => {
  * @returns
  */
 const gameDetailAPI = (gameId: string) =>
-  alovaInstance.Get<GameRecord | null, Response<GameVO>>(`/api/game`, {
+  alovaInstance.Get(`/api/game`, {
     params: { id: gameId },
-    transformData: (res) => typeTransformer(res, transformGameVOToRecord),
+    transformData: typeTransformer(transformGameVOToRecord),
   });
 
 export const invalidateGameDetail = (gameId: string) => {

@@ -19,9 +19,9 @@ export const useLoginAPI = () => {
 export const useGetUserInfoAPI = () => {
   return useRequest(
     (userId: string) =>
-      alovaInstance.Get<Response<IUser | null>>(`/api/user`, {
+      alovaInstance.Get(`/api/user`, {
         params: { uid: userId },
-        transformData: (res:Response<IUser|null>) => baseTransformer(res),
+        transformData: baseTransformer,
       }),
     { immediate: false },
   );

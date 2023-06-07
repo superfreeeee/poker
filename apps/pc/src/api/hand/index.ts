@@ -1,5 +1,4 @@
 import { useRequest } from 'alova';
-import { HandRecord } from '../../models/hand';
 import type { Response } from '../core/interface';
 import { alovaInstance } from '../core';
 import { typeTransformer } from '../../common/commonApiTransformer';
@@ -28,9 +27,9 @@ export const useAddHandAPI = () => {
  */
 export const useHandDetailAPI = (gameId: string, handId: string) => {
   return useRequest(
-    alovaInstance.Get<HandRecord | null, Response<HandVO>>('/api/hand', {
+    alovaInstance.Get('/api/hand', {
       params: { gameId, handId },
-      transformData: (res) => typeTransformer(res, transformHandVOToRecord),
+      transformData: typeTransformer(transformHandVOToRecord),
     }),
   );
 };
