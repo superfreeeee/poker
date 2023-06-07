@@ -5,7 +5,7 @@ export const baseTransformer = <T>(res: Response<T>) => {
   if (isSuccess(res)) {
     return res.data;
   }
-  return Promise.reject(res);
+  throw res;
 };
 
 export const typeTransformer = <T1, T2>(transformer: (data: T1) => T2) => {
@@ -14,9 +14,9 @@ export const typeTransformer = <T1, T2>(transformer: (data: T1) => T2) => {
       try {
         return transformer(res.data);
       } catch (e) {
-        return Promise.reject(new TypeError('response invalid type'));
+        throw new TypeError('response invalid type');
       }
     }
-    return Promise.reject(res);
+    throw res;
   };
 };

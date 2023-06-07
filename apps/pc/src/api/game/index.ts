@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/named
 import { invalidateCache, useRequest } from 'alova';
-import { GameRecord } from '../../models/game';
 import { Response } from '../core/interface';
 import { alovaInstance } from '../core';
 import { typeTransformer } from '../../common/commonApiTransformer';
@@ -34,7 +33,7 @@ export const useGameListAPI = () => {
  * @returns
  */
 const gameDetailAPI = (gameId: string) =>
-  alovaInstance.Get<GameRecord | null, Response<GameVO>>(`/api/game`, {
+  alovaInstance.Get(`/api/game`, {
     params: { id: gameId },
     transformData: typeTransformer(transformGameVOToRecord),
   });
