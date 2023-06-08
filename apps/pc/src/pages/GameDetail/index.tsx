@@ -6,8 +6,8 @@ import { createLogger } from '../../common/commonLogger';
 import { useGameDetailService } from '../../services/game';
 import { useLoginCheck } from '../../hooks/useLoginCheck';
 import Header from '../../components/Header';
-import BuyInDetail from './BuyIn/BuyInDetail';
-import HandList from './HandList';
+import BuyInDetail from './buyin/BuyInDetail';
+import HandList from './hand/HandList';
 import styles from './index.module.scss';
 
 const logger = createLogger('pages/GameDetail');

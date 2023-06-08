@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { FC } from 'react';
 import { HandAction } from '../../../../models/hand';
-import HandActionUI from './HandAction';
+import HandActionUI from '../HandAction';
 import styles from './index.module.scss';
 
 interface IHandActionsProps {
