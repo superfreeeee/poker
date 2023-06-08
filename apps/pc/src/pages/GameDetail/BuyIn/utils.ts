@@ -4,6 +4,7 @@ import { BuyInPlayer } from '../../../models/buyIn';
 interface ConfirmModalOptions {
   title: string;
   content: string;
+  okText?: string;
   onOk?: VoidFunction;
   onCancel?: VoidFunction;
 }
@@ -16,6 +17,7 @@ interface ConfirmModalOptions {
 export const confirmModal = ({
   title,
   content,
+  okText = 'Reset',
   onOk,
   onCancel,
 }: ConfirmModalOptions): Promise<boolean> => {
@@ -32,7 +34,7 @@ export const confirmModal = ({
         type: 'primary',
         danger: true,
       },
-      okText: 'Reset',
+      okText,
       onOk: () => {
         onOk?.();
         resolve(true);
