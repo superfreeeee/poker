@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { createLogger } from '../../../common/commonLogger';
-import { renderCardText } from '../../../components/Card';
-import { HandRecord } from '../../../models/hand';
-import { useAddHandService } from '../../../services/hand';
-import { encodeCard } from '../../../models/card';
+import { createLogger } from '../../../../common/commonLogger';
+import { renderCardText } from '../../../../components/Card';
+import { HandRecord } from '../../../../models/hand';
+import { useAddHandService } from '../../../../services/hand';
+import { encodeCard } from '../../../../models/card';
 import mockHandRecord from './mockHandRecord.json';
 import styles from './index.module.scss';
 

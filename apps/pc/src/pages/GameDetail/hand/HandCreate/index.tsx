@@ -9,14 +9,14 @@ import {
   SettingPlayerAction,
   getPlayerActionOptions,
   HandBlindRecord,
-} from '../../../models/hand';
-import { Card, encodeCard } from '../../../models/card';
-import { PlayerSeat } from '../../../models/player';
-import { useWindowSize } from '../../../hooks/useWindowSize';
-import { useAddHandService } from '../../../services/hand';
-import Header from '../../../components/Header';
-import { CardSelectorModal } from '../../../components/CardSelectorModal';
-import HandActions from '../components/HandActions';
+} from '../../../../models/hand';
+import { Card, encodeCard } from '../../../../models/card';
+import { PlayerSeat } from '../../../../models/player';
+import { useWindowSize } from '../../../../hooks/useWindowSize';
+import { useAddHandService } from '../../../../services/hand';
+import Header from '../../../../components/Header';
+import { CardSelectorModal } from '../../../../components/CardSelectorModal';
+import HandActions from '../HandActions';
 import CompactInput from './components/CompactInput';
 import StageSetting, { IStageSettingProps } from './components/StageSetting';
 import { usePlayerStates } from './hooks/usePlayerStates';

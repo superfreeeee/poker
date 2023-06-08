@@ -6,8 +6,8 @@ import { createLogger } from '../../common/commonLogger';
 import { useGameDetailService } from '../../services/game';
 import { useLoginCheck } from '../../hooks/useLoginCheck';
 import Header from '../../components/Header';
-import BuyInDetail from './BuyIn/BuyInDetail';
-import HandList from './HandList';
+import BuyInResult from './buyin/BuyInResult';
+import HandList from './hand/HandList';
 import styles from './index.module.scss';
 
 const logger = createLogger('pages/GameDetail');
@@ -41,16 +41,18 @@ const GameDetail = () => {
             <h4>{new Date(gameDetail.date).toLocaleString()}</h4>
             {/* <div style={{ wordBreak: 'break-all' }}>{JSON.stringify(gameDetail)}</div> */}
           </div>
-          <Divider />
+
+          <Divider style={{ margin: '10px 0' }} />
           {/* BuyIn data */}
           {gameDetail.buyInData ? (
-            <BuyInDetail data={gameDetail.buyInData} />
+            <BuyInResult data={gameDetail.buyInData} />
           ) : (
             <Button type="primary" icon={<PlusSquareOutlined />} onClick={goCreateBuyInPage}>
               Append buy-in record
             </Button>
           )}
-          <Divider />
+
+          <Divider style={{ margin: '0 0 10px' }} />
           {/* Hand records */}
           <HandList data={gameDetail.handRecords} reloadGameDetail={reloadGameDetail} />
         </div>

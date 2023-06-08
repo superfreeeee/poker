@@ -1,12 +1,12 @@
 import { Alert } from 'antd';
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { createLogger } from '../../../common/commonLogger';
-import { renderCardText } from '../../../components/Card';
-import Header from '../../../components/Header';
-import { HandRecord } from '../../../models/hand';
-import HandActions from '../components/HandActions';
-import { useHandDetailService } from '../../../services/hand';
+import { createLogger } from '../../../../common/commonLogger';
+import { renderCardText } from '../../../../components/Card';
+import Header from '../../../../components/Header';
+import { HandRecord } from '../../../../models/hand';
+import HandActions from '../HandActions';
+import { useHandDetailService } from '../../../../services/hand';
 import styles from './index.module.scss';
 
 const logger = createLogger('pages/HandDetail');

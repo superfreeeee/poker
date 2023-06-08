@@ -1,0 +1,74 @@
+.banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .totalBuyIn {
+    font-size: 10px;
+    color: gray;
+  }
+}
+
+.container .buyInPlayer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 8px 0;
+
+  // info
+  .playerName {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 16px;
+
+    > .icon {
+      padding: 0 4px;
+      font-size: 20px;
+      color: gray;
+    }
+  }
+
+  .playerDetail {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-top: 4px;
+
+    font-size: 12px;
+  }
+
+  .playerId,
+  .playerBuyIn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .playerId > .label {
+    background-color: #eee;
+    padding: 0 8px;
+    border-radius: 4px;
+  }
+
+  .playerBuyIn > .icon {
+    color: gray;
+    font-size: 16px;
+  }
+
+  // profit
+  .profit {
+    font-size: 20px;
+    color: gray;
+
+    &.win {
+      color: red;
+    }
+
+    &.loss {
+      color: green;
+    }
+  }
+}
