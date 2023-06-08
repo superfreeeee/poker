@@ -29,6 +29,31 @@ const HandList = ({ data, reloadGameDetail }: IHandListProps) => {
 
   const addHandService = useAddHandService();
 
+  const mockAddHand = () => {
+    const { players, blinds, boardCards, actions } = mockHandRecord as HandRecord;
+    if (gameId) {
+      addHandService({
+        gameId,
+        players,
+        blinds,
+        boardCards: boardCards.map(encodeCard),
+        actions: actions.map((action) => {
+          return {
+            ...action,
+            cards:
+              action.type === 'stageInfo' || action.type === 'playerShowdown'
+                ? action.cards.map(encodeCard)
+                : null,
+          };
+        }),
+      }).then((success) => {
+        if (success) {
+          reloadGameDetail();
+        }
+      });
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.banner}>
@@ -36,34 +61,7 @@ const HandList = ({ data, reloadGameDetail }: IHandListProps) => {
         <Button type="primary" icon={<PlusOutlined />} onClick={() => navigate('./hand/create')}>
           New Record
         </Button>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => {
-            const { players, blinds, boardCards, actions } = mockHandRecord as HandRecord;
-            if (gameId) {
-              addHandService({
-                gameId,
-                players,
-                blinds,
-                boardCards: boardCards.map(encodeCard),
-                actions: actions.map((action) => {
-                  return {
-                    ...action,
-                    cards:
-                      action.type === 'stageInfo' || action.type === 'playerShowdown'
-                        ? action.cards.map(encodeCard)
-                        : null,
-                  };
-                }),
-              }).then((success) => {
-                if (success) {
-                  reloadGameDetail();
-                }
-              });
-            }
-          }}
-        >
+        <Button type="primary" icon={<PlusOutlined />} onClick={mockAddHand}>
           Mock: New Record
         </Button>
       </div>
