@@ -1,16 +1,12 @@
 import { useRequest } from 'alova';
-import { createLogger } from '../../common/commonLogger';
-import { isSuccess } from '../../services/utils';
-import { HandRecord } from '../../models/hand';
 import type { Response } from '../core/interface';
 import { alovaInstance } from '../core';
+import { typeTransformer } from '../../common/commonApiTransformer';
 import type { AddHandParams, HandVO } from './types';
 import { transformHandVOToRecord } from './transformer';
 
 export * from './types';
 export { transformHandVOToRecord } from './transformer';
-
-const handApiLogger = createLogger('api/hand');
 
 /**
  * Create new GameRecord
@@ -31,21 +27,9 @@ export const useAddHandAPI = () => {
  */
 export const useHandDetailAPI = (gameId: string, handId: string) => {
   return useRequest(
-    alovaInstance.Get<HandRecord | null, Response<HandVO>>('/api/hand', {
+    alovaInstance.Get('/api/hand', {
       params: { gameId, handId },
-      transformData: (res) => {
-        if (isSuccess(res)) {
-          try {
-            // HandRecord
-            return transformHandVOToRecord(res.data);
-          } catch (e) {
-            handApiLogger.error('useHandDetailAPI: transform error', e);
-            return Promise.reject(new TypeError('response invalid HandVO'));
-          }
-        }
-
-        return Promise.reject(res);
-      },
+      transformData: typeTransformer(transformHandVOToRecord),
     }),
   );
 };
