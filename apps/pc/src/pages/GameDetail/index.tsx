@@ -52,7 +52,7 @@ const GameDetail = () => {
             </Button>
           )}
 
-          <Divider style={{ margin: '10px 0' }} />
+          <Divider style={{ margin: '0 0 10px' }} />
           {/* Hand records */}
           <HandList data={gameDetail.handRecords} reloadGameDetail={reloadGameDetail} />
         </div>
