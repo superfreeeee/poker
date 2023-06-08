@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, List } from 'antd';
 import classNames from 'classnames';
@@ -83,4 +83,4 @@ const BuyInResult: FC<IProps> = ({ data }) => {
   );
 };
 
-export default BuyInResult;
+export default memo(BuyInResult);
