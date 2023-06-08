@@ -2,12 +2,13 @@ import { createAlova } from 'alova';
 import GlobalFetch from 'alova/GlobalFetch';
 import ReactHook from 'alova/react';
 import { createLogger } from '../../common/commonLogger';
-import { USING_LOCAL_SERVER } from '../../common/env';
+import { USING_LOCAL_SERVER, getClientId } from '../../common/env';
 
 export const BASE_URL = USING_LOCAL_SERVER ? 'http://localhost:8080' : 'http://124.221.113.80:8080';
 
 const apiLogger = createLogger('api/alova');
 
+// uid
 let _uid: string | null = null;
 
 export const setUid = (uid: string | null) => {
@@ -21,7 +22,8 @@ export const alovaInstance = createAlova({
   beforeRequest: (options) => {
     options.config.credentials = 'include';
     options.config.headers['Content-Type'] = 'application/json';
-    _uid && (options.config.headers['token'] = _uid);
+    _uid && (options.config.headers.token = _uid);
+    options.config.headers.uuid = getClientId();
 
     apiLogger.log('request', options);
   },

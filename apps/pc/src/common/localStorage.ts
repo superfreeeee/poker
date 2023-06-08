@@ -5,6 +5,8 @@ import { createLogger } from './commonLogger';
 const logger = createLogger('common/localStorage');
 
 export enum ELocalStorageKey {
+  Debug = 'debug',
+  Uuid = 'uuid',
   LocalServer = 'using_local_server',
   Me = 'current_user',
   UserList = 'user_list',
@@ -12,7 +14,9 @@ export enum ELocalStorageKey {
   LoggedUserList = 'logged_user_list',
 }
 
-type ILocalStorage = {
+export type ILocalStorage = {
+  [ELocalStorageKey.Debug]: string;
+  [ELocalStorageKey.Uuid]: string;
   [ELocalStorageKey.LocalServer]: boolean;
   [ELocalStorageKey.Me]: IUser;
   [ELocalStorageKey.UserList]: IUser[];
@@ -25,11 +29,17 @@ type ILocalStorage = {
  * @param key
  * @returns
  */
-export const getItem = <K extends ELocalStorageKey>(key: K): ILocalStorage[K] | undefined => {
+export const getItem = <K extends ELocalStorageKey>(
+  key: K,
+  plain = false,
+): ILocalStorage[K] | undefined => {
   try {
     const content = localStorage.getItem(key);
     if (!content) {
       return undefined;
+    }
+    if (plain) {
+      return content as ILocalStorage[K];
     }
     return JSON.parse(content) as ILocalStorage[K];
   } catch {
@@ -42,14 +52,14 @@ export const getItem = <K extends ELocalStorageKey>(key: K): ILocalStorage[K] | 
  * @param key
  * @param data
  */
-export const setItem = <K extends ELocalStorageKey>(key: K, data?: ILocalStorage[K]): void => {
+export const setItem = <K extends ELocalStorageKey>(
+  key: K,
+  data?: ILocalStorage[K],
+  plain = false,
+): void => {
   try {
-    if (data === undefined) {
-      localStorage.removeItem(key);
-    } else {
-      const content = JSON.stringify(data);
-      localStorage.setItem(key, content);
-    }
+    const content = (plain ? data : JSON.stringify(data)) as string;
+    localStorage.setItem(key, content);
   } catch {
     logger.error('setItem failed', { key, data });
   }
