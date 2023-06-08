@@ -34,7 +34,7 @@ export const confirmModal = ({
         type: 'primary',
         danger: true,
       },
-      okText: okText,
+      okText,
       onOk: () => {
         onOk?.();
         resolve(true);
