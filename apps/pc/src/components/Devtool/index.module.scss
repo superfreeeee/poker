@@ -8,8 +8,30 @@
   align-items: center;
   gap: 4px;
 
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(1px);
+
   button {
     height: unset;
     padding: 0;
+  }
+}
+
+:global(.ant-list-sm .ant-list-item).loggerOption {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  user-select: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #eee;
+  }
+
+  .unchecked {
+    width: 14px;
   }
 }
