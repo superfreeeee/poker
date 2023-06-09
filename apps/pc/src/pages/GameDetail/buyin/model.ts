@@ -1,16 +1,107 @@
-import { atom, useAtom } from 'jotai';
 import { useMemo, useState } from 'react';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import { message } from 'antd';
 import { nanoid } from 'nanoid';
 import { BuyInData, BuyInPlayer } from '../../../models/buyIn';
-import { INIT_BUYIN_HANDS } from './constants';
+import { DEFAULT_AMOUNT_PER_HAND, DEFAULT_BUYIN_HANDS } from './constants';
+
+const createBuyInPlayer = (amountPerHand: number): BuyInPlayer => {
+  return {
+    id: undefined,
+    name: '',
+    hands: DEFAULT_BUYIN_HANDS,
+    chips: DEFAULT_BUYIN_HANDS * amountPerHand,
+    rest: 0,
+  };
+};
 
 /**
  * 初始记录
  */
+const createBuyInDataAtoms = {
+  amountPerHand: atom(DEFAULT_AMOUNT_PER_HAND),
+  players: atom<BuyInPlayer[]>([createBuyInPlayer(DEFAULT_AMOUNT_PER_HAND)]),
+};
+
 const initialBuyInData: BuyInData = {
-  amountPerhand: 0,
-  players: [],
+  amountPerHand: DEFAULT_AMOUNT_PER_HAND,
+  players: [createBuyInPlayer(DEFAULT_AMOUNT_PER_HAND)],
+};
+
+const newCreateBuyInData = atom<BuyInData>((get) => {
+  const amountPerHand = get(createBuyInDataAtoms.amountPerHand);
+  const players = get(createBuyInDataAtoms.players);
+  return { amountPerHand, players };
+});
+
+export const useNewCreateBuyInData = () => {
+  const [amountPerHand, setAmountPerHand] = useAtom(createBuyInDataAtoms.amountPerHand);
+  const [players, setPlayers] = useAtom(createBuyInDataAtoms.players);
+
+  const onAmountPerHandChange = (amount: number) => {
+    setAmountPerHand(amount);
+    setPlayers(
+      players.map((player) => {
+        return { ...player, chips: player.hands * amount };
+      }),
+    );
+  };
+
+  const addPlayer = () => {
+    setPlayers([...players, createBuyInPlayer(amountPerHand)]);
+  };
+
+  const removePlayer = (index: number) => {
+    setPlayers(players.filter((_, i) => i !== index));
+  };
+
+  const toggleBuyInType = (index: number) => {
+    setPlayers(
+      players.map((player, i) => {
+        if (index === i) {
+          return { ...player, type: player.type === 'chips' ? 'hands' : 'chips' };
+        } else {
+          return player;
+        }
+      }),
+    );
+  };
+
+  const onPlayerChange = ({ name, id }: { name: string; id?: string }, index: number) => {
+    setPlayers(
+      players.map((player, i) => {
+        if (index === i) {
+          return { ...player, name, id };
+        } else {
+          return player;
+        }
+      }),
+    );
+  };
+
+  const onBuyInChange = (type: 'hands' | 'chips', value: number, index: number) => {
+    setPlayers(
+      players.map((player, i) => {
+        if (index === i) {
+          const hands = type === 'hands' ? value : value / amountPerHand;
+          const chips = type === 'chips' ? value : value * amountPerHand;
+          return { ...player, hands, chips };
+        } else {
+          return player;
+        }
+      }),
+    );
+  };
+
+  return {
+    buyInData: useAtomValue(newCreateBuyInData),
+    onAmountPerHandChange,
+    addPlayer,
+    removePlayer,
+    toggleBuyInType,
+    onPlayerChange,
+    onBuyInChange,
+  };
 };
 
 const createBuyInDataHistoryAtom = atom<BuyInData[]>([initialBuyInData]);
@@ -152,7 +243,8 @@ const useBuyInDataActions = ([buyInData, setBuyInData]: BuyInDataEntry) => {
         {
           id: nanoid(),
           name: '',
-          hands: INIT_BUYIN_HANDS,
+          hands: DEFAULT_BUYIN_HANDS,
+          chips: 0,
           rest: 0,
         },
       ],
@@ -205,8 +297,11 @@ export interface BuyInStatistics {
  * @param param0
  * @returns
  */
-export const calcStatisticsData = ({ amountPerhand, players }: BuyInData): BuyInStatistics => {
-  const totalHands = players.reduce((sum, player) => sum + player.hands, 0);
+export const calcStatisticsData = ({
+  amountPerHand: amountPerhand,
+  players,
+}: BuyInData): BuyInStatistics => {
+  const totalHands = players.reduce((sum, player) => sum + (player.hands ?? 0), 0);
   const statisticsData: BuyInStatistics = {
     totalPlayer: players.length,
     totalHands: totalHands,
@@ -220,6 +315,9 @@ export const calcStatisticsData = ({ amountPerhand, players }: BuyInData): BuyIn
  * @param param0
  * @returns 总盈利
  */
-const calcBenfit = ({ amountPerhand, players }: BuyInData): number => {
-  return players.reduce((sum, player) => sum + player.rest - player.hands * amountPerhand, 0);
+const calcBenfit = ({ amountPerHand: amountPerhand, players }: BuyInData): number => {
+  return players.reduce(
+    (sum, player) => sum + player.rest - (player.hands ?? 0) * amountPerhand,
+    0,
+  );
 };

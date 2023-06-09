@@ -98,6 +98,8 @@ const config = {
     historyApiFallback: true,
     open: true,
   },
+
+  stats: 'errors-warnings',
 };
 
 module.exports = config;

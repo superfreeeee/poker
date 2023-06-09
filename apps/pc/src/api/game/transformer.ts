@@ -19,12 +19,13 @@ export const transformGameVOToRecord = (gameVO: GameVO): GameRecord => {
     comment,
     buyInData: buyInData
       ? {
-          amountPerhand: buyInData.chipsPerHand,
+          amountPerHand: buyInData.chipsPerHand,
           players: buyInData.players.map((player): BuyInPlayer => {
             return {
               id: player.id,
               name: player.name,
               hands: player.buyInHands,
+              chips: player.buyInChips,
               rest: player.restChips,
             };
           }),

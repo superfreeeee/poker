@@ -13,7 +13,7 @@ import PlayerHand from '../PlayerHand';
 import TitleBar from '../TitleBar';
 import { useCreateBuyInDataHistory } from '../../model';
 import { confirmModal } from '../../utils';
-import initialStyles from '../BuyInPrepare/index.module.scss';
+import initialStyles from './buyInPrepare.module.scss';
 import PlayingEditable from './Editable';
 import styles from './index.module.scss';
 
@@ -30,7 +30,7 @@ const BuyInPlaying: FC<IBuyInPlayingProps> = ({
   const [isHistoryVisible, setHistoryVisibile] = useState<boolean>(false);
   const {
     viewBuyInData, // history[index]
-    viewBuyInData: { amountPerhand: amoutPerhand, players: buyInPlayers },
+    viewBuyInData: { amountPerHand: amoutPerhand, players: buyInPlayers },
     viewStatisticData,
     stepIndex: { viewIndex, totalData },
     historyLength,

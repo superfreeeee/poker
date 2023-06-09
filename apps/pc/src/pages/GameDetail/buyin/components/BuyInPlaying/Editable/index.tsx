@@ -7,7 +7,7 @@ import { useBuyInData } from '../../../model';
 import { validateBuyInPlayers } from '../../../utils';
 import PlayerHand from '../../PlayerHand';
 import TitleBar from '../../TitleBar';
-import initialStyles from '../../BuyInPrepare/index.module.scss';
+import initialStyles from '../buyInPrepare.module.scss';
 import styles from './index.module.scss';
 
 interface IEditableProps {
@@ -24,7 +24,7 @@ const PlayingEditable: FC<IEditableProps> = ({
   const [editBuyInData, setEditBuyInPlayers] = useState(defaultBuyInData);
 
   const {
-    buyInData: { amountPerhand: editAmoutPerhand, players: editBuyInPlayers },
+    buyInData: { amountPerHand: editAmoutPerhand, players: editBuyInPlayers },
     statisticsData,
     addPlayer: addEditPlayer,
     removePlayer: removeEditPlayer,
@@ -52,7 +52,7 @@ const PlayingEditable: FC<IEditableProps> = ({
         handleAmountPerhandChange={(amount) => {
           changeEditBuyInData({
             players: editBuyInPlayers,
-            amountPerhand: amount,
+            amountPerHand: amount,
           });
         }}
       />
@@ -67,7 +67,7 @@ const PlayingEditable: FC<IEditableProps> = ({
               defaultBuyInData.players.find((defaultPlayer) => defaultPlayer.id === player.id)
                 ?.hands
             }
-            enableDelete={enableDelete(player.id)}
+            enableDelete={enableDelete(player.id ?? '')}
             onRemove={removeEditPlayer}
             onChange={(targetPlayer) => {
               changeEditPlayer(targetPlayer, i);

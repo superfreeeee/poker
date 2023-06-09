@@ -1,15 +1,11 @@
-$color-match: #c2d7ef;
-
 .container {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   margin: 0 100px;
   padding-bottom: 32px;
   border: 0;
   border-radius: 10px;
-  background-color: whitesmoke;
 }
 
 .playerList {
@@ -26,12 +22,15 @@ $color-match: #c2d7ef;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  width: 60%;
 
   button {
     border-radius: 10px;
     height: 40px;
-    width: 45%;
+    width: 100%;
+  }
+
+  button + button {
+    margin-top: 8px;
   }
 }
 
@@ -39,17 +38,4 @@ $color-match: #c2d7ef;
   .container {
     margin: 0 10px;
   }
-
-  .buttonList > button {
-    width: 80%;
-    margin-bottom: 10px;
-  }
-}
-
-.btnSvg {
-  color: $color-match;
-}
-
-.deepBtn {
-  background-color: $color-match;
 }

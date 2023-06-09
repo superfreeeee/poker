@@ -14,7 +14,7 @@ interface IProps {
 
 const BuyInResult: FC<IProps> = ({ data }) => {
   const totalBuyIn = data.players.reduce(
-    (total, player) => total + player.hands * data.amountPerhand,
+    (total, player) => total + player.hands * data.amountPerHand,
     0,
   );
 
@@ -46,7 +46,7 @@ const BuyInResult: FC<IProps> = ({ data }) => {
       <List
         dataSource={data.players}
         renderItem={(player) => {
-          const playerBuyIn = player.hands * data.amountPerhand;
+          const playerBuyIn = player.hands * data.amountPerHand;
           const profit = player.rest - playerBuyIn;
 
           return (
@@ -59,7 +59,7 @@ const BuyInResult: FC<IProps> = ({ data }) => {
                 <div className={styles.playerDetail}>
                   <div className={styles.playerId}>
                     <span className={styles.label}>ID</span>
-                    {player.id.substring(0, 6)}
+                    {player.id?.substring(0, 6)}
                   </div>
                   <div className={styles.playerBuyIn}>
                     <MoneyCollectOutlined className={styles.icon} />

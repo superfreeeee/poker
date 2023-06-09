@@ -1,50 +1,45 @@
-import React, { FC, useEffect } from 'react';
-import { Button, message } from 'antd';
-import { DownCircleFilled } from '@ant-design/icons';
-import { useCurrentUser } from '../../../../../models/user';
-import { useCreateBuyInData } from '../../model';
-import PlayerHand from '../PlayerHand';
+import React, { FC } from 'react';
+import { Button, Divider, Input, List, Space, message } from 'antd';
+import {
+  DeleteOutlined,
+  MinusOutlined,
+  PlusOutlined,
+  SwapOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
+import { useNewCreateBuyInData } from '../../model';
 import { validateBuyInPlayers } from '../../utils';
-import TitleBar from '../TitleBar';
-import styles from './index.module.scss';
+import {
+  NameWrapper,
+  BuyInPlayerWrapper,
+  Container,
+  BuyInWrapper,
+  BuyInChipsWrapper,
+  BuyInHandsWrapper,
+  BuyInSwitcherWrapper,
+} from './style';
 
 interface IBuyInPrepareProps {
   enterNextState: () => void;
 }
 
 const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareProps) => {
-  const currentUser = useCurrentUser();
   const {
-    buyInData: { amountPerhand, players: buyInPlayers },
-    statisticsData,
+    buyInData,
+    onAmountPerHandChange,
     addPlayer,
     removePlayer,
-    changePlayer,
-    changeBuyInData,
-  } = useCreateBuyInData();
-
-  useEffect(() => {
-    if (currentUser) {
-      changeBuyInData({
-        amountPerhand,
-        players: [
-          {
-            id: currentUser.id,
-            name: currentUser.name,
-            hands: 1,
-            rest: 0,
-          },
-        ],
-      });
-    }
-  }, []);
+    toggleBuyInType,
+    onPlayerChange,
+    onBuyInChange,
+  } = useNewCreateBuyInData();
 
   const validateAmountPerhand = () => {
-    return amountPerhand > 0;
+    return buyInData.amountPerHand > 0;
   };
 
   const completePrepareStage = () => {
-    if (!validateBuyInPlayers(buyInPlayers)) {
+    if (!validateBuyInPlayers(buyInData.players)) {
       message.error('玩家名不能为空');
       return;
     }
@@ -58,45 +53,113 @@ const BuyInPrepare: FC<IBuyInPrepareProps> = ({ enterNextState }: IBuyInPrepareP
   };
 
   return (
-    <div className={styles.container}>
-      <TitleBar
-        title="初始状态"
-        isEditable={true}
-        amountPerhand={amountPerhand}
-        statisticsData={statisticsData}
-        handleAmountPerhandChange={(amount) => {
-          changeBuyInData({
-            players: buyInPlayers,
-            amountPerhand: amount,
-          });
+    <Container>
+      <Input
+        value={buyInData.amountPerHand}
+        onChange={(e) => {
+          const amount = Number(e.target.value);
+          onAmountPerHandChange(amount);
         }}
-      ></TitleBar>
-      <div className={styles.playerList}>
-        {buyInPlayers.map((player, i) => (
-          <PlayerHand
-            key={player.id}
-            isEditable={true}
-            amountPerhand={amountPerhand}
-            enableDelete={buyInPlayers.length > 1}
-            player={player}
-            onRemove={removePlayer}
-            onChange={(player) => changePlayer(player, i)}
-          ></PlayerHand>
-        ))}
-      </div>
-      <div className={styles.buttonList}>
-        <Button
-          className={styles.addBtn}
-          icon={<DownCircleFilled className={styles.btnSvg} />}
-          onClick={addPlayer}
-        >
-          Add more player
-        </Button>
-        <Button className={styles.deepBtn} onClick={completePrepareStage}>
-          Start play
-        </Button>
-      </div>
-    </div>
+      />
+      <List
+        dataSource={buyInData.players}
+        renderItem={(player, i) => {
+          const { name, hands, chips, type } = player;
+          const useHands = type !== 'chips';
+
+          return (
+            <List.Item>
+              <BuyInPlayerWrapper>
+                <NameWrapper>
+                  <div>Player name</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <Input
+                      addonBefore={<UserOutlined />}
+                      value={name}
+                      placeholder="Input player name"
+                      size="large"
+                      maxLength={30}
+                      showCount
+                      allowClear
+                      onChange={(e) => {
+                        onPlayerChange({ name: e.target.value }, i);
+                      }}
+                    />
+                    <Button
+                      size="large"
+                      danger
+                      icon={<DeleteOutlined />}
+                      onClick={() => removePlayer(i)}
+                    />
+                  </div>
+                </NameWrapper>
+                <BuyInWrapper>
+                  <BuyInHandsWrapper>
+                    <div>Buy-in hands</div>
+                    <Space>
+                      <Space.Compact size="large">
+                        <Button
+                          icon={<MinusOutlined />}
+                          disabled={!useHands || hands <= 1}
+                          onClick={() => {
+                            onBuyInChange('hands', hands - 1, i);
+                          }}
+                        />
+                        <Input
+                          type="number"
+                          disabled={!useHands}
+                          value={hands}
+                          onChange={(e) => {
+                            const hands = Number(e.target.value);
+                            onBuyInChange('hands', hands, i);
+                          }}
+                        />
+                        <Button
+                          icon={<PlusOutlined />}
+                          disabled={!useHands}
+                          onClick={() => {
+                            onBuyInChange('hands', hands + 1, i);
+                          }}
+                        />
+                      </Space.Compact>
+                    </Space>
+                  </BuyInHandsWrapper>
+                  <BuyInSwitcherWrapper>
+                    <Button
+                      size="large"
+                      icon={<SwapOutlined />}
+                      onClick={() => toggleBuyInType(i)}
+                    />
+                  </BuyInSwitcherWrapper>
+                  <BuyInChipsWrapper>
+                    <div>Total Buy-in</div>
+                    <Input
+                      size="large"
+                      disabled={useHands}
+                      value={chips}
+                      onChange={(e) => {
+                        const chips = Number(e.target.value);
+                        onBuyInChange('chips', chips, i);
+                      }}
+                    />
+                  </BuyInChipsWrapper>
+                </BuyInWrapper>
+              </BuyInPlayerWrapper>
+            </List.Item>
+          );
+        }}
+      />
+
+      <Divider />
+      <Button size="large" icon={<PlusOutlined />} onClick={addPlayer}>
+        Add more player
+      </Button>
+
+      <Divider />
+      <Button type="primary" size="large" onClick={completePrepareStage}>
+        Start play
+      </Button>
+    </Container>
   );
 };
 

@@ -7,7 +7,7 @@ import { useCreateBuyInData } from '../../model';
 import { invalidateGameDetail } from '../../../../../api/game';
 import { useBuyInDataAddService } from '../../../../../services/buyin';
 import { transformBuyInDataToGameBuyInDataVo } from '../../../../../models/buyIn';
-import initialStyles from '../BuyInPrepare/index.module.scss';
+import initialStyles from '../BuyInPlaying/buyInPrepare.module.scss';
 import styles from './index.module.scss';
 
 interface IBuyInSettleProps {
@@ -16,7 +16,7 @@ interface IBuyInSettleProps {
 
 const BuyInSettle: FC<IBuyInSettleProps> = ({ enterPrevState }: IBuyInSettleProps) => {
   const {
-    buyInData: { amountPerhand, players: buyInPlayers },
+    buyInData: { amountPerHand: amountPerhand, players: buyInPlayers },
     statisticsData,
     totalBenefit,
     changePlayer,
@@ -29,7 +29,7 @@ const BuyInSettle: FC<IBuyInSettleProps> = ({ enterPrevState }: IBuyInSettleProp
     await addBuyInDataService(
       transformBuyInDataToGameBuyInDataVo({
         gameId,
-        buyInData: { amountPerhand, players: buyInPlayers },
+        buyInData: { amountPerHand: amountPerhand, players: buyInPlayers },
       }),
     );
     invalidateGameDetail(gameId);

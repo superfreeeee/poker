@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons';
 import { BuyInPlayer } from '../../../../../models/buyIn';
 import FormulaWithLabel from '../FormulaWithLabel';
-import { INIT_BUYIN_HANDS, MAX_BUYIN_HANDS } from '../../constants';
+import { DEFAULT_BUYIN_HANDS, MAX_BUYIN_HANDS } from '../../constants';
 import styles from './index.module.scss';
 
 interface IPlayerHandProps {
@@ -26,12 +26,12 @@ const PlayerHand: FC<IPlayerHandProps> = ({
   isEditable,
   amountPerhand,
   player,
-  initHands = INIT_BUYIN_HANDS,
+  initHands = DEFAULT_BUYIN_HANDS,
   enableDelete = true,
   onRemove,
   onChange,
 }: IPlayerHandProps) => {
-  const { id, name, hands } = player;
+  const { id = '', name, hands = 0 } = player;
 
   const onNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange?.({
